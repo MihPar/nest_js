@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
-import { Like } from 'src/likes/likes.class';
+import { Like } from 'src/api/likes/likes.class';
 import { CommentViewModel } from './comment.type';
 import { CommentsDB } from './comment.class';
 import { CommentsModel, LikesModel } from 'src/db/db';

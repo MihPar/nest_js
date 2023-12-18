@@ -1,7 +1,7 @@
 import { PostsModel } from "src/db/db";
 import { PostsDB } from "./posts.class";
 import { ObjectId } from "mongodb";
-import { LikeStatusEnum } from "src/likes/likes.emun";
+import { LikeStatusEnum } from "src/api/likes/likes.emun";
 
 export class PostsRepositories {
   async createNewPosts(newPost: PostsDB) {
@@ -62,5 +62,10 @@ export class PostsRepositories {
   async deletedPostById(id: string) {
     const result = await PostsModel.deleteOne({ _id: new ObjectId(id) });
     return result.deletedCount === 1;
+  }
+
+  async deleteRepoPosts() {
+	const deletedAll = await PostsModel.deleteMany({});
+    return deletedAll.acknowledged;
   }
 }

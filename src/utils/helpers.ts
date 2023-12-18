@@ -1,6 +1,6 @@
-import { CommentsDB } from "src/comment/comment.class";
-import { CommentViewModel } from "src/comment/comment.type";
-import { LikeStatusEnum } from "src/likes/likes.emun";
+import { CommentsDB } from "src/api/comment/comment.class";
+import { CommentViewModel } from "src/api/comment/comment.type";
+import { LikeStatusEnum } from "src/api/likes/likes.emun";
 
 export const commentDBToView = (item: CommentsDB, myStatus: LikeStatusEnum | null): CommentViewModel => {
 	return {

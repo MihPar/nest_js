@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { ObjectId } from "mongodb";
 import { LikesModel, PostsModel } from "src/db/db";
-import { LikeStatusEnum } from "src/likes/likes.emun";
+import { LikeStatusEnum } from "src/api/likes/likes.emun";
 import { Posts, PostsDB } from "./posts.class";
 import { PaginationType } from "src/types/pagination.types";
 

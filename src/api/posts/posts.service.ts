@@ -2,12 +2,12 @@ import { Injectable } from "@nestjs/common"
 import { PostsDB } from "./posts.class";
 import { LikesModel, PostsModel } from "src/db/db";
 import { PostsRepositories } from "./posts.repository";
-import { LikeStatusEnum } from "src/likes/likes.emun";
+import { LikeStatusEnum } from "src/api/likes/likes.emun";
 import { ObjectId } from "mongodb";
-import { likesRepositories } from "src/likes/likes.repository";
+import { likesRepositories } from "src/api/likes/likes.repository";
 
 @Injectable()
-export class postsService {
+export class PostsService {
 	constructor(
 		protected postsRepositories: PostsRepositories,
 		protected likesRepositories: likesRepositories
@@ -83,5 +83,9 @@ export class postsService {
 
 	async deletePostId(postId: string) {
 		return await this.postsRepositories.deletedPostById(postId);
+	}
+
+	async deleteAllPosts() {
+		return await this.postsRepositories.deleteRepoPosts();
 	}
 }

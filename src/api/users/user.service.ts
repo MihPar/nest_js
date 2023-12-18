@@ -1,11 +1,12 @@
 import { ObjectId } from "mongodb";
-import { UserViewType, Users } from "./user.type";
+import { UserViewType} from "./user.type";
 import bcrypt from "bcrypt";
 import {v4 as uuidv4} from "uuid"
 import { UserRepository } from "./user.repository";
 import { Injectable } from "@nestjs/common";
 import { add } from "date-fns";
-import { EmailManager } from "src/manager/email.manager";
+import { EmailManager } from "src/api/manager/email.manager";
+import { Users } from "./user.class";
 
 @Injectable()
 export class UserService {
@@ -64,5 +65,9 @@ export class UserService {
   async deleteUserById(userId: string) {
     const deleteId: boolean = await this.userRepository.deleteById(userId);
     return deleteId;
+  }
+
+  async deleteAllUsers() {
+	return await this.userRepository.deleteAll();
   }
 }

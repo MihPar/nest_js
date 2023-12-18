@@ -1,13 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { PostsQueryRepositories } from "./postQuery.repository";
 import { PaginationType } from "src/types/pagination.types";
-import { CommentViewModel, inputModeContentType } from "src/comment/comment.type";
-import { CommentQueryRepositories } from "src/comment/comment.queryRepository";
+import { CommentViewModel, inputModeContentType } from "src/api/comment/comment.type";
+import { CommentQueryRepositories } from "src/api/comment/comment.queryRepository";
 import { Posts } from "./posts.class";
-import { CommentService } from "src/comment/comment.service";
+import { CommentService } from "src/api/comment/comment.service";
 import { inputModelPostType } from "./posts.type";
 import { postsService } from "./posts.service";
-import { likeStatusType } from "src/likes/likes.type";
+import { likeStatusType } from "src/api/likes/likes.type";
 
 @Controller("comments")
 export class PostController {

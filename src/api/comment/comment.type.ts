@@ -1,4 +1,4 @@
-import { likeInfoType } from "src/likes/likes.type"
+import { likeInfoType } from "src/api/likes/likes.type"
 
 export type CommentViewModel = {
 	id: string

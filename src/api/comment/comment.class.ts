@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { CommentViewModel, CommentatorInfo } from "./comment.type";
-import { LikeStatusEnum } from "src/likes/likes.emun";
+import { LikeStatusEnum } from "src/api/likes/likes.emun";
 
 export class CommentsDB extends Comment {
 	public _id: ObjectId;
