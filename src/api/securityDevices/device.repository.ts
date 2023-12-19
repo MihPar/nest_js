@@ -29,4 +29,9 @@ export class DeviceRepositories {
       { $set: { lastActiveDate: newLastActiveDate } },
     );
   }
+
+  async logoutDevice(deviceId: string) {
+	const decayResult = await DevicesModel.deleteOne({deviceId})
+	return decayResult.deletedCount === 1
+  }
 }

@@ -137,4 +137,32 @@ export class UserService {
     const result = await this.usersRepository.updateConfirmation(user!._id);
     return result;
   }
+
+  async confirmEmailResendCode(email: string): Promise<boolean | null> {
+    const user: Users | null =
+      await this.usersQueryRepository.findByLoginOrEmail(email);
+    if (!user) return null;
+    if (user.emailConfirmation.isConfirmed) {
+      return null;
+    }
+    const newConfirmationCode = uuidv4();
+    const newExpirationDate = add(new Date(), {
+      hours: 1,
+      minutes: 10,
+    });
+    await this.usersRepository.updateUserConfirmation(
+      user!._id,
+      newConfirmationCode,
+      newExpirationDate
+    );
+    try {
+      await this.emailManager.sendEamilConfirmationMessage(
+        user.accountData.email,
+        newConfirmationCode
+      );
+    } catch (error) {
+      return null;
+    }
+    return true;
+  }
 }

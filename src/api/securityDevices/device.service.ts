@@ -70,4 +70,18 @@ export class DeviceService {
 		);
 		return;
 	  }
+
+	  async logoutDevice(refreshToken: string) {
+		const payload = await this.jwtService.decodeRefreshToken(refreshToken);
+		if (!payload) {
+		  return null;
+		}
+		const logoutDevice = await this.deviceRepositories.logoutDevice(
+		  payload.deviceId
+		);
+		if (!logoutDevice) {
+		  return null;
+		}
+		return true;
+	  }
 }

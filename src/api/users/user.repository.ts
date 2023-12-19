@@ -54,4 +54,21 @@ export class UsersRepository {
     );
     return result.matchedCount === 1;
   }
+
+  async updateUserConfirmation(
+    _id: ObjectId,
+    confirmationCode: string,
+    newExpirationDate: Date
+  ): Promise<boolean> {
+    const result = await UsersModel.updateOne(
+      { _id },
+      {
+        $set: {
+          "emailConfirmation.confirmationCode": confirmationCode,
+          "emailConfirmation.expirationDate": newExpirationDate,
+        },
+      }
+    );
+    return result.matchedCount === 1;
+  }
 }

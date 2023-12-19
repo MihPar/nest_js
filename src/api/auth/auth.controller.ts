@@ -118,4 +118,28 @@ export class AuthController {
 	// 	return res.sendStatus(HTTP_STATUS.NO_CONTENT_204);
 	//   }
   }
+
+  @Post()
+  async createRegistrationEmailResending(@Body() inputDataModel: EmailResending) {
+	const confirmUser = await this.userService.confirmEmailResendCode(
+		inputDataModel.email
+	  );
+	//   if (!confirmUser) {
+	// 	return res.sendStatus(HTTP_STATUS.BAD_REQUEST_400);
+	//   } else {
+	// 	return res.sendStatus(HTTP_STATUS.NO_CONTENT_204);
+	//   }
+	}
+
+	@Post()
+	async createLogout() {
+		const refreshToken: string = req.cookies.refreshToken;
+		const isDeleteDevice = await this.deviceService.logoutDevice(refreshToken);
+		if (!isDeleteDevice) {
+			// res.sendStatus(HTTP_STATUS.NOT_AUTHORIZATION_401);
+			return;
+		}
+		// res.clearCookie("refreshToken").sendStatus(HTTP_STATUS.NO_CONTENT_204);
+		// return;
+	}
 }
