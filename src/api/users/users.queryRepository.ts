@@ -2,11 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { UsersModel } from 'src/db/db';
 import { UserViewType} from './user.type';
 import { Users } from './user.class';
+import { WithId } from 'mongodb';
 
 @Injectable()
 export class UsersQueryRepository {
-  constructor() {}
-
   async getAllUsers(
     sortBy: string,
     sortDirection: string,
@@ -48,5 +47,32 @@ export class UsersQueryRepository {
 			  createdAt: user.accountData.createdAt,
 		  })),
 	  };
+  }
+
+  async findUserByEmail(email: string) {
+    return UsersModel.findOne({ "accountData.email": email }, {__v: 0}).lean();
+  }
+
+  async findUserByCode(recoveryCode: string): Promise<WithId<Users> | null> {
+    return UsersModel.findOne({
+      "emailConfirmation.confirmationCode": recoveryCode,
+    }, {__v: 0}).lean();
+  }
+
+  async findByLoginOrEmail(loginOrEmail: string): Promise<Users | null> {
+    const user: Users | null = await UsersModel.findOne({
+      $or: [
+        { "accountData.email": loginOrEmail },
+        { "accountData.userName": loginOrEmail },
+      ],
+    }, {__v: 0}).lean(); 
+    return user;
+  }
+
+  async findUserByConfirmation(code: string): Promise<Users | null> {
+    const user: Users | null = await UsersModel.findOne({
+      "emailConfirmation.confirmationCode": code,
+    }, {__v: 0}).lean();
+    return user;
   }
 }
