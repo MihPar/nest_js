@@ -23,4 +23,8 @@ export class DeviceService {
     }
     return true;
 	}
+
+	async deleteAllDevices() {
+		return await this.deviceRepositories.deleteAllDevices()
+	}
 }

@@ -7,7 +7,7 @@ import { CommentsModel, LikesModel } from 'src/db/db';
 import { commentDBToView } from 'src/utils/helpers';
 
 @Injectable()
-export class CommentQueryRepositories {
+export class CommentQueryRepository {
   async findCommentByPostId(
     postId: string,
     pageNumber: string,
@@ -47,5 +47,30 @@ export class CommentQueryRepositories {
       totalCount: totalCount,
       items,
     };
+  }
+
+  async findCommentByCommentId(commentId: string) {
+	const commentById: CommentsDB | null = await CommentsModel.findOne({_id: new ObjectId(commentId)});
+	  return commentById
+  }
+
+  async findLikeCommentByUser(commentId: string, userId: ObjectId) {
+	const likeModel = LikesModel.findOne({$and: [{userId: userId}, {commentId: commentId}]})
+	return likeModel
+  }
+
+  async findCommentById( commentId: string, userId: string) {
+	try {
+		const commentById: CommentsDB | null = await CommentsModel.findOne({
+		  _id: new ObjectId(commentId),
+		});
+		if (!commentById) {
+		  return null;
+		}
+		const findLike = await this.findLikeCommentByUser(commentId, new ObjectId(userId))
+		return commentDBToView(commentById, findLike?.myStatus ?? null);
+	  } catch (e) {
+		return null;
+	  }
   }
 }

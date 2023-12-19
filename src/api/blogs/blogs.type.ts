@@ -6,3 +6,9 @@ export type BlogsViewType = {
 	createdAt: string
 	isMembership: boolean
   };
+
+  export type bodyBlogsModel = {
+	name: string
+    description: string
+    websiteUrl: string
+}

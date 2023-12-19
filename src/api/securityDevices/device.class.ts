@@ -10,3 +10,12 @@ export class Devices {
 	  public lastActiveDate: string
 	) {}
   }
+
+  export class DeviceView {
+	constructor(
+	  public ip: string,
+	  public title: string,
+	  public deviceId: string,
+	  public lastActiveDate: string
+	) {}
+  }

@@ -7,4 +7,9 @@ export class DeviceRepositories {
 		const deleteOne = await DevicesModel.deleteOne({deviceId});
 		return deleteOne.deletedCount === 1;
 	}
+
+	async deleteAllDevices() {
+		const deletedAll = await DevicesModel.deleteMany({})
+		return deletedAll.acknowledged;
+	}
 }

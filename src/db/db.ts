@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { CollectionIP } from "src/api/api.collection.ts/api.collection.class";
+import { CollectioInIPSchema } from "src/api/api.collection.ts/api.collection.schema";
 import { BlogsDB } from "src/api/blogs/blogs.class";
 import { BlogsSchema } from "src/api/blogs/blogs.schema";
 import { CommentsDB } from "src/api/comment/comment.class";
@@ -35,3 +37,4 @@ export const PostsModel = mongoose.model<PostsDB>('posts', PostSchema)
 export const LikesModel = mongoose.model<Like>('like-dislike', LikesInfoSchema)
 export const CommentsModel = mongoose.model<CommentsDB>('comment', CommentSchema)
 export const BlogsModel = mongoose.model<BlogsDB>('blogs', BlogsSchema)
+export const IPCollectionModel = mongoose.model<CollectionIP>('IP', CollectioInIPSchema)
