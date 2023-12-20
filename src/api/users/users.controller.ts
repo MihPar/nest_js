@@ -2,13 +2,13 @@ import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/commo
 import { UsersQueryRepository } from './users.queryRepository';
 import { UserService } from './user.service';
 
-@Controller()
+@Controller('api')
 export class UsersController {
   constructor(
 	protected usersQueryRepository: UsersQueryRepository,
 	protected userService: UserService
 	) {}
-  @Get()
+  @Get('users')
   async getAllUsers(
     @Query()
     query: {
@@ -31,13 +31,13 @@ export class UsersController {
 	return users
   }
 
-  @Post()
+  @Post('users')
   async createUser(@Body() login: string, password: string, email: string) {
 	const createUser = await this.userService.createNewUser(login, password, email)
 	return createUser
   }
 
-  @Delete(':id')
+  @Delete('user/:id')
   async deleteUserById(@Param('id') userId: string) {
 	const deleteUserById = await this.userService.deleteUserById(userId)
   }

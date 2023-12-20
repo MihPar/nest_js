@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UsersModel } from 'src/db/db';
 import { UserViewType} from './user.type';
 import { Users } from './user.class';
-import { WithId } from 'mongodb';
+import { ObjectId, WithId } from 'mongodb';
 
 @Injectable()
 export class UsersQueryRepository {
@@ -73,6 +73,11 @@ export class UsersQueryRepository {
     const user: Users | null = await UsersModel.findOne({
       "emailConfirmation.confirmationCode": code,
     }, {__v: 0}).lean();
+    return user;
+  }
+
+  async findUserById(userId: ObjectId): Promise<Users | null> {
+    let user = await UsersModel.findOne({ _id: new ObjectId(userId) }, {__v: 0}).lean();
     return user;
   }
 }

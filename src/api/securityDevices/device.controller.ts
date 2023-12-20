@@ -4,7 +4,7 @@ import { deviceQueryRepository } from "./deviceQuery.repository";
 import { DeviceService } from './device.service';
 import { DeviceRepositories } from './device.repository';
 
-@Controller()
+@Controller('api')
 export class SecurityDevice {
 	constructor(
 		protected deviceQueryRepository: deviceQueryRepository,
@@ -12,13 +12,13 @@ export class SecurityDevice {
 		protected deviceService: DeviceService,
 		protected deviceRepositories: DeviceRepositories
 	) {}
-	@Get()
+	@Get('security/devices')
 	async getDevicesUser() {
 		const userId = req.user._id.toString();
 		return await this.deviceQueryRepository.getAllDevicesUser(userId)
 	}
 
-	@Delete()
+	@Delete('security/devices')
 	async terminateCurrentSession() {
 		const userId = req.user._id.toString();
 		const refreshToken = req.cookies.refreshToken;
@@ -27,7 +27,7 @@ export class SecurityDevice {
 			await this.deviceService.terminateAllCurrentSessions(userId, payload.deviceId);
 	}
 
-	@Delete(":id")
+	@Delete("security/devices/:deviceId")
 	async terminateSessionById(@Param("deviceId") deviceId: string) {
 		await this.deviceRepositories.terminateSession(deviceId);
 	}

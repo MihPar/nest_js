@@ -11,7 +11,7 @@ import { PostsService } from "../posts/posts.service";
 import { ObjectId } from "mongodb";
 import { BlogsRepository } from "./blogs.repository";
 
-@Controller()
+@Controller("api")
 export class BlogsController {
 	constructor(
 		protected blogsQueryRepository: BlogsQueryRepository,
@@ -21,7 +21,7 @@ export class BlogsController {
 		protected blogsRepository: BlogsRepository
 	) {}
 
-	@Get()
+	@Get("blogs")
 	async getBlogs(@Query() query: {searchNameTerm: string, sortBy: string, sortDirection: string, pageNumber: string, pageSize: string}) {
 		const getAllBlogs: PaginationType<Blogs> =
       await this.blogsQueryRepository.findAllBlogs(
@@ -34,7 +34,7 @@ export class BlogsController {
     // return res.status(HTTP_STATUS.OK_200).send(getAllBlogs);
 	}
 
-	@Post()
+	@Post("blogs")
 	async createBlog(@Body() inputDateModel: bodyBlogsModel) {
 		const createBlog: Blogs = await this.blogsService.createNewBlog(
 			inputDateModel.name,
@@ -44,7 +44,7 @@ export class BlogsController {
 		//   return res.status(HTTP_STATUS.CREATED_201).send(createBlog);
 	}
 
-	@Get(":id")
+	@Get("blogs/blogId/post")
 	async getPostsByBlogId(@Param('id') blogId: string, @Query() query: {pageNumber: string, pageSize: string, sortBy: string,sortDirection: string,}) {
 
 		const userId = req.user._id.toString() ?? null;
@@ -64,7 +64,7 @@ export class BlogsController {
 		// return res.status(HTTP_STATUS.OK_200).send(getPosts);
 	  }
 
-	  @Post(":id")
+	  @Post("blogs/blogId/post")
 	  async createPostByBlogId(@Param("id") blogId: string, @Body() inputDataModel: bodyPostsModel) {
 	
 		const blog: Blogs = await this.blogsQueryRepository.findBlogById(blogId);
@@ -84,7 +84,7 @@ export class BlogsController {
 		// }
 	  }
 
-	  @Get(":id")
+	  @Get("blogs/:id")
 	  async getBlogsById(@Param("id") _id: string) {
 		const blogById: Blogs | null = await this.blogsQueryRepository.findBlogById(_id);
 		// if (!blogById) {
@@ -94,7 +94,7 @@ export class BlogsController {
 		// }
 	  }
 
-	  @Put(":id")
+	  @Put("blogs/:id")
 	  async updateBlogsById(@Param("id") id: string, @Body() inputDateMode: bodyBlogsModel) {
 		const isUpdateBlog: boolean = await this.blogsService.updateBlog(
 		  id,
@@ -109,7 +109,7 @@ export class BlogsController {
 		// }
 	  }
 
-	  @Delete(":id")
+	  @Delete("blogs/:id")
 	  async deleteBlogsById(@Param("id") id: string) {
 		const isDeleted: boolean = await this.blogsRepository.deletedBlog(id)
 		//   if (!isDeleted) {

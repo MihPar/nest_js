@@ -1,5 +1,5 @@
 import { CommentRepository } from './comment.repository';
-import { Body, Controller, Delete, Param, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common';
 import { likeStatusType } from '../likes/likes.type';
 import { CommentsDB } from './comment.class';
 import { CommentQueryRepository } from './comment.queryRepository';
@@ -7,7 +7,7 @@ import { commentDBToView } from 'src/utils/helpers';
 import { CommentService } from './comment.service';
 import { CommentViewModel, inputModeContentType } from './comment.type';
 
-@Controller()
+@Controller("api")
 export class CommentsController {
   constructor(
     protected commentQueryRepository: CommentQueryRepository,
@@ -15,7 +15,7 @@ export class CommentsController {
     protected commentRepository: CommentRepository,
   ) {}
 
-  @Put(':id')
+  @Put("comments/:commentId/like-status")
   async updateCommentLikeStatusByCommentId(
     @Param('id') commentId: string,
     @Body() inputModelData: likeStatusType,
@@ -41,7 +41,7 @@ export class CommentsController {
     );
   }
 
-  @Put('id')
+  @Put('comments/commentId')
   async updateCommentByCommentId(
     @Param('id') commentId: string,
     @Body() imputDataModel: inputModeContentType,
@@ -66,7 +66,7 @@ export class CommentsController {
       );
   }
 
-  @Delete(':id')
+  @Delete('comments/commentId')
   async deleteCommentByCommentId(@Param('id') commentId: string) {
     const { _id } = req.user;
     const isExistComment = await this.commentQueryRepository.findCommentById(
@@ -88,7 +88,7 @@ export class CommentsController {
     //   }
   }
 
-  @Get(':id')
+  @Get('comments/:id')
   async getCommentById(@Param('id') id: string) {
     const userId = req.user?.id ?? null;
     const getCommentById: CommentViewModel | null =

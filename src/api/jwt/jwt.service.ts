@@ -30,4 +30,13 @@ export class JWTService {
 		const result: any = jwt.decode(token)
 		return new Date(result.iat * 1000).toISOString()
 	}
+
+	async getUserIdByToken(token: string) {
+		try {
+			const result: any = await jwt.verify(token, process.env.JWT_SECRET!)
+			return new ObjectId(result.userId)
+		} catch(err) {
+			return null
+		}
+	}
 }

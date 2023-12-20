@@ -3,7 +3,7 @@ import { PostsDB } from "./posts.class";
 import { ObjectId } from "mongodb";
 import { LikeStatusEnum } from "src/api/likes/likes.emun";
 
-export class PostsRepositories {
+export class PostsRepository {
   async createNewPosts(newPost: PostsDB) {
     const result = await PostsModel.create(newPost);
     return newPost;

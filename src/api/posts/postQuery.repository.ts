@@ -6,7 +6,7 @@ import { Posts, PostsDB } from './posts.class';
 import { PaginationType } from 'src/types/pagination.types';
 
 @Injectable()
-export class PostsQueryRepositories {
+export class PostsQueryRepository {
   async findPostById(postId: string, userId?: string) {
     const post = await PostsModel.findOne(
       { _id: new ObjectId(postId) },

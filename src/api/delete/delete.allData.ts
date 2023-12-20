@@ -6,7 +6,7 @@ import { CommentService } from "../comment/comment.service";
 import { DeviceService } from "../securityDevices/device.service";
 import { IPCollectionService } from "../api.collection.ts/api.collectionService";
 
-@Controller()
+@Controller('api')
 export class DeleteAllDataController {
 	constructor(
 		protected postsService: PostsService,
@@ -16,7 +16,7 @@ export class DeleteAllDataController {
 		protected deviceService: DeviceService,
 		protected IPCollectionService: IPCollectionService
 	) {}
-	@Delete()
+	@Delete('testing/all-data')
 	async deleteAllData() {
     await this.postsService.deleteAllPosts();
     await this.blogsService.deleteAllBlogs();

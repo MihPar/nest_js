@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import {
   BodyPasswordRecoveryCode,
   BodyRegistrationConfirmationModel,
@@ -10,16 +10,19 @@ import { UserService } from '../users/user.service';
 import { Users } from '../users/user.class';
 import { JWTService } from '../jwt/jwt.service';
 import { DeviceService } from '../securityDevices/device.service';
+import { ObjectId } from 'mongodb';
+import { UsersQueryRepository } from '../users/users.queryRepository';
 
-@Controller()
+@Controller("api")
 export class AuthController {
   constructor(
     protected userService: UserService,
     protected jwtService: JWTService,
     protected deviceService: DeviceService,
+	protected usersQueryRepository: UsersQueryRepository
   ) {}
 
-  @Post()
+  @Post("auth/passwrod-recovery")
   async createPasswordRecowery(@Body() inputDataModel: EmailResending) {
     const passwordRecovery = await this.userService.recoveryPassword(
       inputDataModel.email,
@@ -30,7 +33,7 @@ export class AuthController {
     // return res.sendStatus(204);
   }
 
-  @Post()
+  @Post("auth/new-password")
   async createNewPassword(@Body() inputDataModel: BodyPasswordRecoveryCode) {
     const resultUpdatePassword = await this.userService.setNewPassword(
       inputDataModel.newPassword,
@@ -46,7 +49,7 @@ export class AuthController {
     //   return res.sendStatus(HTTP_STATUS.NO_CONTENT_204);
   }
 
-  @Post()
+  @Post("auth/login")
   async createLogin(@Body() inputDataMode: bodyAuthModel) {
     const user: Users | null = await this.userService.checkCridential(
       inputDataMode.loginOrEmail,
@@ -72,7 +75,7 @@ export class AuthController {
     }
   }
 
-  @Post()
+  @Post("auth/refresh-token")
   async createRefreshToken() {
 	const refreshToken: string = req.cookies.refreshToken;
     const userId = req.user._id.toString();
@@ -99,13 +102,13 @@ export class AuthController {
     //   .send({ accessToken: newToken })
   }
 
-  @Post()
+  @Post("auth/registration-confirmation")
   async createRegistrationConfirmation(@Body() inputDataMode: BodyRegistrationConfirmationModel) {
     await this.userService.findUserByConfirmationCode(inputDataMode.code);
     // return res.sendStatus(HTTP_STATUS.NO_CONTENT_204);
   }
 
-  @Post()
+  @Post("auth/registration")
   async createRegistration(@Body() inputDataModel: BodyRegistrationModel) {
 	const user = await this.userService.createNewUser(
 		inputDataModel.login,
@@ -119,7 +122,7 @@ export class AuthController {
 	//   }
   }
 
-  @Post()
+  @Post("auth/registration-eamil-resending")
   async createRegistrationEmailResending(@Body() inputDataModel: EmailResending) {
 	const confirmUser = await this.userService.confirmEmailResendCode(
 		inputDataModel.email
@@ -131,7 +134,7 @@ export class AuthController {
 	//   }
 	}
 
-	@Post()
+	@Post("auth/logout")
 	async createLogout() {
 		const refreshToken: string = req.cookies.refreshToken;
 		const isDeleteDevice = await this.deviceService.logoutDevice(refreshToken);
@@ -141,5 +144,26 @@ export class AuthController {
 		}
 		// res.clearCookie("refreshToken").sendStatus(HTTP_STATUS.NO_CONTENT_204);
 		// return;
+	}
+
+	@Get("auth/me")
+	async findMe() {
+		// if (!req.headers.authorization) {
+		// 	return res.sendStatus(HTTP_STATUS.NOT_AUTHORIZATION_401);
+		//   }
+		  const token: string = req.headers.authorization!.split(" ")[1];
+		  const userId: ObjectId | null = await this.jwtService.getUserIdByToken(
+			token
+		  );
+		//   if (!userId) return res.sendStatus(HTTP_STATUS.NOT_AUTHORIZATION_401);
+		  const currentUser: Users | null = await this.usersQueryRepository.findUserById(
+			userId
+		  );
+		//   if (!currentUser) return res.sendStatus(HTTP_STATUS.NOT_AUTHORIZATION_401);
+		//   return res.status(HTTP_STATUS.OK_200).send({
+		// 	userId: currentUser._id.toString(),
+		// 	email: currentUser.accountData.email,
+		// 	login: currentUser.accountData.userName,
+		//   });
 	}
 }

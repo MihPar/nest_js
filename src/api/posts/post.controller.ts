@@ -1,28 +1,39 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
-import { PostsQueryRepositories } from "./postQuery.repository";
 import { PaginationType } from "src/types/pagination.types";
 import { CommentViewModel, inputModeContentType } from "src/api/comment/comment.type";
-import { CommentQueryRepositories } from "src/api/comment/comment.queryRepository";
 import { Posts } from "./posts.class";
 import { CommentService } from "src/api/comment/comment.service";
 import { inputModelPostType } from "./posts.type";
-import { postsService } from "./posts.service";
 import { likeStatusType } from "src/api/likes/likes.type";
+import { PostService, PostsService } from './posts.service';
+import { CommentQueryRepository } from "../comment/comment.queryRepository";
+import { PostsQueryRepository } from "./postQuery.repository";
 
-@Controller("comments")
+@Controller('api')
 export class PostController {
 	constructor(
-		protected postsQueryRepositories: PostsQueryRepositories,
-		protected commentQueryRepositories: CommentQueryRepositories,
+		protected postsQueryRepository: PostsQueryRepository,
+		protected commentQueryRepository: CommentQueryRepository,
 		protected commentService: CommentService,
-		protected postsService: postsService
+		protected postsService: PostsService,
+		protected postService: PostService
 	) {}
-	@Get(":id")
+
+	@Put('posts/:postId/like-status')
+	async updateLikeStatus(@Param() postId: string, @Body() inputModeLikeStatus: likeStatusType) {
+	   const userId = req.user!._id;
+   const userLogin = req.user.accountData.userName
+   const findPost = await this.postsQueryRepository.findPostById(postId)
+//    const result = await this.postsService.updateLikeStatus(inputModeLikeStatus.likeStatus, postId, userId, userLogin)
+   const result = await this.postService.updateLikeStatus(inputModeLikeStatus.likeStatus, postId, userId, userLogin)
+	}
+
+	@Get('posts/:postId/comments')
 	async getCommentByPostId(@Param("postId") postId: string, @Query() query: {pageNumber: string, pageSize: string, sortBy: string, sortDirection: string}) {
 		const userId = req.user?.id ?? null;
-		const isExistPots = await this.postsQueryRepositories.findPostById(postId);
+		const isExistPots = await this.postsQueryRepository.findPostById(postId);
 		const commentByPostsId: PaginationType<CommentViewModel> | null =
-			await this.commentQueryRepositories.findCommentByPostId(
+			await this.commentQueryRepository.findCommentByPostId(
 				postId,
 				query.pageNumber = "1",
 				query.pageSize = "10",
@@ -31,10 +42,10 @@ export class PostController {
 				userId
 			);
 	}
-	@Post(':id')
+	@Post('posts/:postId/comments')
 	async createCommentByPostid(@Param("postId") postId: string, @Body() inputDataContetn: inputModeContentType) {
 	  const user = req.user;
-	  const post: Posts | null = await this.postsQueryRepositories.findPostById(postId);
+	  const post: Posts | null = await this.postsQueryRepository.findPostById(postId);
 	  const createNewCommentByPostId: CommentViewModel | null =
       await this.commentService.createNewCommentByPostId(
         postId,
@@ -44,12 +55,12 @@ export class PostController {
       );
 	}
 
-	@Get()
+	@Get('posts')
 	async getPosts(@Query() query: {pageNumber: string, pageSize: string, sortBy: string, sortDirection: string, })
 	 {
 		const userId = req.user ? req.user._id.toString() : null
 		const getAllPosts: PaginationType<Posts> =
-      await this.postsQueryRepositories.findAllPosts(
+      await this.postsQueryRepository.findAllPosts(
         query.pageNumber = "1",
         query.pageSize = "10",
         query.sortBy = "createAt",
@@ -58,7 +69,7 @@ export class PostController {
       );
 	 }
 
-	 @Post()
+	 @Post('posts')
 	 async createPost(@Body() inputModelPost: inputModelPostType) {
 		const blog = req.blog
 		const createNewPost: Posts | null = await this.postsService.createPost(
@@ -70,15 +81,15 @@ export class PostController {
 		  )
 	 }
 
-	 @Get(":id")
+	 @Get("posts/:id")
 	 async getPostById(@Param("postId") postId: string) {
 		const userId = req.user ? req.user._id.toString() : null
-		const getPostById: Posts | null = await this.postsQueryRepositories.findPostById(
+		const getPostById: Posts | null = await this.postsQueryRepository.findPostById(
 			req.params.id, userId
 		  );
 	 }
 
-	 @Put(":id")
+	 @Put("posts/:id")
 	 async updatePostById(@Param("postId") postId: string, @Body() inputModelData : inputModelPostType) {
 		const updatePost: boolean = await this.postsService.updateOldPost(
 			postId,
@@ -89,16 +100,10 @@ export class PostController {
 		  )
 	 }
 
-	 @Put(":id")
-	 async updateLikeStatus(@Param() postId: string, @Body() inputModeLikeStatus: likeStatusType) {
-		const userId = req.user!._id;
-	const userLogin = req.user.accountData.userName
-	const findPost = await this.postsQueryRepositories.findPostById(postId)
-	const result = await this.postsService.updateLikeStatus(inputModeLikeStatus.likeStatus, postId, userId, userLogin)
-	 }
-
-	 @Delete(":id")
+	 @Delete("posts/:id")
 	 async deletePostById(@Param("postId") postId: string) {
 		const deletPost: boolean = await this.postsService.deletePostId(postId)
 	 }
 }
+
+
