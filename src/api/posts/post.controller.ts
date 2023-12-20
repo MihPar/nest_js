@@ -5,7 +5,7 @@ import { Posts } from "./posts.class";
 import { CommentService } from "src/api/comment/comment.service";
 import { inputModelPostType } from "./posts.type";
 import { likeStatusType } from "src/api/likes/likes.type";
-import { PostService, PostsService } from './posts.service';
+import { PostsService } from './posts.service';
 import { CommentQueryRepository } from "../comment/comment.queryRepository";
 import { PostsQueryRepository } from "./postQuery.repository";
 
@@ -16,7 +16,6 @@ export class PostController {
 		protected commentQueryRepository: CommentQueryRepository,
 		protected commentService: CommentService,
 		protected postsService: PostsService,
-		protected postService: PostService
 	) {}
 
 	@Put('posts/:postId/like-status')

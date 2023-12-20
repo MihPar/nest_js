@@ -18,12 +18,12 @@
 
   import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { LikeStatusEnum } from './likes.emun';
+import { LikeStatusEnum } from '../api/likes/likes.emun';
 
-export type LikeDocument = HydratedDocument<Like>;
+export type LikeDocument = HydratedDocument<LikeClass>;
 
 @Schema()
-export class Like {
+export class LikeClass {
   @Prop({
 	required: true
   })
@@ -60,4 +60,4 @@ export class Like {
   addedAt: string;
 }
 
-export const LikeSchema = SchemaFactory.createForClass(Like);
+export const LikeSchema = SchemaFactory.createForClass(LikeClass);
