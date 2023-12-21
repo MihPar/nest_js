@@ -1,24 +1,40 @@
-import { ObjectId } from "mongodb";
-import { BlogsDB } from "./blogs.class";
-import { BlogsRepository } from "./blogs.repository";
+import { Blogs, BlogsDB } from './blogs.class';
+import { bodyBlogsModel } from './blogs.type';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { BlogClass, BlogDocument } from 'src/schema/blogs.schema';
+import { BlogsRepository } from './blogs.repository';
 
 export class BlogsService {
-  constructor(protected blogsRepository: BlogsRepository) {}
+  constructor(
+    @InjectModel(BlogClass.name) private blogModel: Model<BlogDocument>,
+    protected blogsRepository: BlogsRepository,
+  ) {}
+  async createNewBlog(inputDateModel: bodyBlogsModel): Promise<Blogs> {
+    const newBlog = {
+      ...inputDateModel,
+      id: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+	  isMembership: true
+    };
+    const createBlog = await this.blogsRepository.createNewBlogs(newBlog);
+    return createBlog;
+  }
+  async updateBlog(
+    id: string,
+    name: string,
+    description: string,
+    websiteUrl: string,
+  ): Promise<boolean> {
+    return await this.blogsRepository.updateBlogById(
+      id,
+      name,
+      description,
+      websiteUrl,
+    );
+  }
 
   async deleteAllBlogs() {
     return await this.blogsRepository.deleteRepoBlogs();
-  }
-
-  async createNewBlog(name: string, description: string, websiteUrl: string) {
-    const newBlog: BlogsDB = new BlogsDB(name, description, websiteUrl, true);
-    const createBlog: BlogsDB = await this.blogsRepository.createNewBlogs(
-      newBlog,
-    );
-    return createBlog.getBlogViewModel();
-  }
-
-  async updateBlog(id: string, name: string, description: string, websiteUrl: string): Promise<boolean> {
-    return await this.blogsRepository.updateBlogById(id, name, description, websiteUrl
-    );
   }
 }

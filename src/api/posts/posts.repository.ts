@@ -1,3 +1,4 @@
+import { BlogDocument } from './../../schema/blogs.schema';
 import { PostsModel } from "src/db/db";
 import { PostsDB } from "./posts.class";
 import { ObjectId } from "mongodb";
@@ -80,12 +81,13 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class PostsRepository {
   constructor(
-	@InjectModel(PostClass.name) private postModel: Model<PostDocument>,
+	@InjectModel(PostClass.name) private postModel: Model<PostDocument>
 	) {}
 
-async createNewPosts(newPost: PostClass): Promise<PostClass> {
+async createNewPosts(newPost: PostsDB): Promise<PostsDB> {
     const result = new this.postModel(newPost);
-    return result.save()
+    const doc = await result.save()
+	return await this.postModel.findById(doc.id);
   }
 
   async updatePost(
@@ -95,7 +97,7 @@ async createNewPosts(newPost: PostClass): Promise<PostClass> {
     content: string,
     blogId: string,
   ) {
-    const result = new this.postModel(id, title, shortDescription, content, blogId)
+    const result = await this.postModel.findByIdAndUpdate(id, {title, shortDescription, content, blogId, ''})
     return result.updateOne();
   }
 

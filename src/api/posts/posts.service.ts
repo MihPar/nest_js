@@ -1,35 +1,24 @@
 import { Injectable } from "@nestjs/common"
 import { PostsDB } from "./posts.class";
-import { LikesModel, PostsModel } from "src/db/db";
 import { PostsRepository } from "./posts.repository";
 import { LikeStatusEnum } from "src/api/likes/likes.emun";
 import { ObjectId } from "mongodb";
 import { likesRepository } from "src/api/likes/likes.repository";
+import { PostClass, PostDocument } from "src/schema/post.schema";
+import { Model } from "mongoose";
+import { InjectModel } from "@nestjs/mongoose";
+import { LikeClass, LikeDocument } from "src/schema/likes.schema";
+import { PostsViewModel, bodyPostsModel } from "./posts.type";
 
 @Injectable()
 export class PostsService {
 	constructor(
+		@InjectModel(PostClass.name) private postModel: Model<PostDocument>,
+		@InjectModel(LikeClass.name) private likeModel: Model<LikeDocument>,
 		protected postsRepository: PostsRepository,
 		protected likesRepository: likesRepository
 	) {}
-	async createPost(
-		blogId: string,
-		title: string,
-		shortDescription: string,
-		content: string,
-		blogName: string) {
-			const newPost: PostsDB = new PostsDB(title, shortDescription, content, blogId, blogName)
-			// console.log(newPost)
-			const createPost: PostsDB = await this.postsRepository.createNewPosts(newPost);
-			const post = await PostsModel.findOne({ blogId: blogId }, {__v: 0 }).lean();
-			const newestLikes = await LikesModel.find({postId: newPost._id}).sort({addedAt: -1}).limit(3).skip(0).lean()
-			let myStatus : LikeStatusEnum = LikeStatusEnum.None;
-			if(blogId){
-				const reaction = await LikesModel.findOne({blogId: blogId})
-				myStatus = reaction ? reaction.myStatus : LikeStatusEnum.None
-			}
-			return createPost.getPostViewModel(myStatus, newestLikes);
-		}
+	
 	async updateOldPost(
 		id: string,
 		title: string,
@@ -81,11 +70,28 @@ export class PostsService {
 			return true
 	}
 
-	async deletePostId(postId: string) {
-		return await this.postsRepository.deletedPostById(postId);
+	async createPost(
+		blogId: string,
+		createData: bodyPostsModel,
+		blogName: string
+	  ): Promise<PostsViewModel | null> {
+		const newPost: PostsDB = new PostsDB(createData.title, createData.shortDescription, createData.content, blogId, blogName)
+		const createPost = await this.postsRepository.createNewPosts(newPost);
+		const post = await this.postModel.findOne({ blogId: blogId }, {__v: 0 }).lean();
+		const newestLikes = await this.likeModel.find({postId: newPost._id}).sort({addedAt: -1}).limit(3).skip(0).lean()
+		let myStatus : LikeStatusEnum = LikeStatusEnum.None;
+		// if(blogId){
+		// 	const reaction = await this.likeModel.findOne({blogId: blogId})
+		// 	myStatus = reaction ? reaction.myStatus : LikeStatusEnum.None
+		// }
+		return createPost.getPostViewModel(myStatus, newestLikes);
 	}
 
-	async deleteAllPosts() {
-		return await this.postsRepository.deleteRepoPosts();
-	}
+	// async deletePostId(postId: string) {
+	// 	return await this.postsRepository.deletedPostById(postId);
+	// }
+
+	// async deleteAllPosts() {
+	// 	return await this.postsRepository.deleteRepoPosts();
+	// }
 }

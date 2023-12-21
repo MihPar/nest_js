@@ -1,13 +1,13 @@
 import { JWTService } from '../jwt/jwt.service';
 import { Controller, Delete, Get, Param } from "@nestjs/common";
-import { deviceQueryRepository } from "./deviceQuery.repository";
+import { DeviceQueryRepository } from "./deviceQuery.repository";
 import { DeviceService } from './device.service';
 import { DeviceRepositories } from './device.repository';
 
 @Controller('api')
 export class SecurityDevice {
 	constructor(
-		protected deviceQueryRepository: deviceQueryRepository,
+		protected deviceQueryRepository: DeviceQueryRepository,
 		protected jwtService: JWTService,
 		protected deviceService: DeviceService,
 		protected deviceRepositories: DeviceRepositories

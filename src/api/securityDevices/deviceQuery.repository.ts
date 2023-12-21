@@ -3,7 +3,7 @@ import { Devices } from "./device.class";
 import { DevicesModel } from "src/db/db";
 
 @Injectable()
-export class deviceQueryRepository {
+export class DeviceQueryRepository {
 	async getAllDevicesUser(userId: string) {
 		const getAllDevices: Devices[] = await DevicesModel
 		  .find({ userId })

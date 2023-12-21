@@ -30,8 +30,7 @@ export class Posts {
 	  blogId: string,
 	  blogName: string,
 	) {
-	  super(title, shortDescription, content, blogId, blogName, 
-		  );
+	  super(title, shortDescription, content, blogId, blogName);
 	  this._id = new ObjectId();
 	}
 	static getPostsViewModel(post: PostsDB, myStatus: LikeStatusEnum,

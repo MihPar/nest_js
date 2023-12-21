@@ -1,18 +1,23 @@
 import { Injectable } from "@nestjs/common";
-import { BlogsModel } from "src/db/db";
-import { BlogsDB } from "./blogs.class";
 import { ObjectId } from "mongodb";
-import { BlogsService } from "./blogs.service";
+import { BlogClass, BlogDocument } from "src/schema/blogs.schema";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { BlogsViewType } from "./blogs.type";
 
 @Injectable()
 export class BlogsRepository {
+	constructor(
+		@InjectModel(BlogClass.name) private blogModel: Model<BlogDocument>
+	) {}
   async deleteRepoBlogs() {
-    const deletedAll = await BlogsModel.deleteMany({});
-    return deletedAll.deletedCount === 1;
+    const deletedAll = this.blogModel.deleteMany({});
+    // return deletedAll.deletedCount === 1;
+    return deletedAll.deleteMany()
   }
 
-  async createNewBlogs(newBlog: BlogsDB): Promise<BlogsDB> {
-    const result = await BlogsModel.create(newBlog);
+  async createNewBlogs(newBlog: BlogsViewType): Promise<BlogsViewType> {
+    const result = await this.blogModel.create(newBlog);
     return newBlog;
   }
 
@@ -21,18 +26,19 @@ export class BlogsRepository {
     name: string,
     description: string,
     websiteUrl: string,
-  ): Promise<boolean> {
-    const result = await BlogsModel.updateOne(
+  ): Promise<BlogClass | any> {
+    const result = this.blogModel.updateOne(
       { _id: new ObjectId(id) },
       {
         $set: { name: name, description: description, websiteUrl: websiteUrl },
       },
     );
-    return result.modifiedCount === 1;
+    return result.updateOne()
   }
 
   async deletedBlog(id: string) {
-    const result = await BlogsModel.deleteOne({ _id: new ObjectId(id) });
-    return result.deletedCount === 1;
+    const result = this.blogModel.deleteOne({ _id: new ObjectId(id) });
+    // return result.deletedCount === 1;
+    return result.deleteOne()
   }
 }

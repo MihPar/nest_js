@@ -1,13 +1,41 @@
 import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
-import { Like } from 'src/api/likes/likes.class';
-import { CommentViewModel } from './comment.type';
 import { CommentsDB } from './comment.class';
-import { CommentsModel, LikesModel } from 'src/db/db';
 import { commentDBToView } from 'src/utils/helpers';
+import { Model } from 'mongoose';
+import { CommentClass, CommentDocument } from 'src/schema/comment.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { LikeClass, LikeDocument } from 'src/schema/likes.schema';
+import { Like } from '../likes/likes.class';
+import { CommentViewModel } from './comment.type';
 
 @Injectable()
 export class CommentQueryRepository {
+	constructor(
+		@InjectModel(CommentClass.name) private commentModel: Model<CommentDocument>,
+		@InjectModel(LikeClass.name) private likeModel: Model<LikeDocument>
+	) {}
+
+	async findCommentById( commentId: string) {
+		try {
+			const commentById: CommentsDB | null = await this.commentModel.findOne({
+			  _id: new ObjectId(commentId),
+			});
+			if (!commentById) {
+			  return null;
+			}
+			const findLike = await this.findLikeCommentByUser(commentId, new ObjectId("commentatorInfo.userId"))
+			return commentDBToView(commentById, findLike?.myStatus ?? null);
+		  } catch (e) {
+			return null;
+		  }
+	  }
+
+	  async findLikeCommentByUser(commentId: string, userId: ObjectId) {
+		const likeModel = await this.likeModel.findOne({$and: [{userId: userId}, {commentId: commentId}]})
+		return likeModel
+	  }
+
   async findCommentByPostId(
     postId: string,
     pageNumber: string,
@@ -17,12 +45,12 @@ export class CommentQueryRepository {
     userId: ObjectId,
   ) {
     const filter = { postId: postId };
-    const commentByPostId: CommentsDB[] = await CommentsModel.find(filter)
+    const commentByPostId: CommentsDB[] = await this.commentModel.find(filter)
       .sort({ [sortBy]: sortDirection === 'asc' ? 1 : -1 })
       .skip((+pageNumber - 1) * +pageSize)
       .limit(+pageSize)
       .lean();
-    const totalCount: number = await CommentsModel.countDocuments(filter);
+    const totalCount: number = await this.commentModel.countDocuments(filter);
     const pagesCount: number = Math.ceil(totalCount / +pageSize);
     let findLike;
     let status: Like | null;
@@ -30,7 +58,7 @@ export class CommentQueryRepository {
       commentByPostId.map(async (item) => {
         findLike = null;
         if (userId) {
-          status = await LikesModel.findOne({
+          status = await this.likeModel.findOne({
             userId,
             commentId: item._id.toString(),
           });
@@ -49,28 +77,8 @@ export class CommentQueryRepository {
     };
   }
 
-  async findCommentByCommentId(commentId: string) {
-	const commentById: CommentsDB | null = await CommentsModel.findOne({_id: new ObjectId(commentId)});
-	  return commentById
-  }
-
-  async findLikeCommentByUser(commentId: string, userId: ObjectId) {
-	const likeModel = LikesModel.findOne({$and: [{userId: userId}, {commentId: commentId}]})
-	return likeModel
-  }
-
-  async findCommentById( commentId: string, userId: string) {
-	try {
-		const commentById: CommentsDB | null = await CommentsModel.findOne({
-		  _id: new ObjectId(commentId),
-		});
-		if (!commentById) {
-		  return null;
-		}
-		const findLike = await this.findLikeCommentByUser(commentId, new ObjectId(userId))
-		return commentDBToView(commentById, findLike?.myStatus ?? null);
-	  } catch (e) {
-		return null;
-	  }
-  }
+//   async findCommentByCommentId(commentId: string) {
+// 	const commentById: CommentsDB | null = await CommentsModel.findOne({_id: new ObjectId(commentId)});
+// 	  return commentById
+//   }
 }

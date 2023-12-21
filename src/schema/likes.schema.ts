@@ -16,23 +16,30 @@
 //   addedAt: { type: String, require: true },
 // });
 
-  import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { LikeStatusEnum } from '../api/likes/likes.emun';
+import { PostsDB } from 'src/api/posts/posts.class';
+import { newestLikesType } from 'src/api/likes/likes.type';
+import { PostsViewModel } from 'src/api/posts/posts.type';
+import { ObjectId } from 'mongodb';
 
 export type LikeDocument = HydratedDocument<LikeClass>;
 
 @Schema()
 export class LikeClass {
-  @Prop({
-	required: true
-  })
-  userId: string;
+
+	_id: Types.ObjectId
 
   @Prop({
 	required: true
   })
-  login: number;
+  userId: ObjectId;
+
+  @Prop({
+	required: true
+  })
+  login: string;
 
   @Prop({
 	required: true

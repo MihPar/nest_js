@@ -1,11 +1,16 @@
+import { LikesModel } from 'src/db/db';
 import { Injectable } from "@nestjs/common";
 import { ObjectId } from "mongodb";
-import { LikesModel } from "src/db/db";
+import { LikeClass, LikeDocument } from 'src/schema/likes.schema';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class likesRepository {
+	constructor(@InjectModel(LikeClass.name) private likeModel: LikeDocument) {}
+
 	async findLikePostByUser(postId: string, userId: ObjectId) {
-		return LikesModel.findOne({userId, postId: postId}, {__v: 0}).lean()
+		const result = new this.likeModel({userId, postId: postId}, {__v: 0})
+		return result.find()
 	}
 
 	async saveLikeForPost(postId: string, userId: ObjectId, likeStatus: string, userLogin: string) {
