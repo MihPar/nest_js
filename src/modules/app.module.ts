@@ -5,6 +5,7 @@ import { BlogsModule } from './blogs.module';
 import { CommentModule } from './comments.module';
 import { PostsModule } from './posts.module';
 import { UsersModule } from './users.module';
+import { LikesModule } from './likes.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { UsersModule } from './users.module';
 	BlogsModule,
 	CommentModule,
 	PostsModule,
-	UsersModule
+	UsersModule,
+	LikesModule
   ],
   controllers: [],
   providers: [],
