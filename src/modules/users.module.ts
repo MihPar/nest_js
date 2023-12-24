@@ -7,13 +7,9 @@ import { UserService } from 'src/api/users/user.service';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.MONGO_URL, {
-      dbName: process.env.MONGOOSE_DB_NAME,
-      // loggerLevel: 'debug'
-    }),
     MongooseModule.forFeature([{ name: UserClass.name, schema: UserSchema }]),
   ],
   controllers: [UsersController],
   providers: [UsersQueryRepository, UserService],
 })
-export class AppModule {}
+export class UsersModule {}

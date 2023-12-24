@@ -17,3 +17,18 @@ export type CommentatorInfo = {
 export type inputModeContentType = {
 	content: string
 }
+
+export type CommentViewType = {
+	id: string
+	content: string
+	commentatorInfo: {
+	  userId: string
+	  userLogin: string
+	},
+	createdAt: string
+	likesInfo: {
+	  likesCount: number
+	  dislikesCount: number
+	  myStatus: string
+	}
+  }

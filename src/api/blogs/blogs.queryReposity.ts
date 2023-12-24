@@ -13,11 +13,11 @@ export class BlogsQueryRepository {
 			@InjectModel(BlogClass.name) private blogModel: Model<BlogDocument>
 		) {}
 
-	async findAllBlogs(searchNameTerm: string | null, sortBy: string, sortDirection: string, pageNumber: string, pageSize: string) {
+	async findAllBlogs(searchNameTerm: string | null, sortBy: string, sortDirection: string, pageNumber: string, pageSize: string):Promise<PaginationType<Blogs>> {
 		const filtered = searchNameTerm
 		  ? { name: { $regex: searchNameTerm ?? '', $options: 'i' } }
 		  : {}
-		const blogs: BlogsViewType[] = await this.blogModel.find()
+		const blogs: BlogsDB[] = await this.blogModel
 		  .find(filtered, { __v: 0 } )
 		  .sort({ [sortBy]: sortDirection === "asc" ? 1 : -1 })
 		  .skip((+pageNumber - 1) * +pageSize)
@@ -27,18 +27,17 @@ export class BlogsQueryRepository {
 		const totalCount: number = await this.blogModel.countDocuments(filtered);
 		const pagesCount: number = Math.ceil(totalCount / +pageSize);
 		
-		const result: PaginationType<BlogsViewType> = {
+		const result: PaginationType<Blogs> = {
 			pagesCount: pagesCount,
 			page: +pageNumber,
 			pageSize: +pageSize,
 			totalCount: totalCount,
-			items: blogs,
+			items: blogs.map((item) => BlogsDB.getBlogsViewModel(item)),
 		}
 		return result
-	
 	}
-	async findBlogById(id: string, userId?: string): Promise<BlogsViewType | null> {
-		return await this.blogModel.findOne({ _id: new ObjectId(id) }, {__v: 0})
-		// return blog ? BlogsDB.getBlogsViewModel(blog) : null;
+	async findBlogById(blogId: string, userId?: string): Promise<BlogsViewType | null> {
+		const blog: BlogsDB =  await this.blogModel.findOne({ _id: new ObjectId(blogId) }, {__v: 0}).lean();
+		return blog ? BlogsDB.getBlogsViewModel(blog) : null;
 	  }
 }

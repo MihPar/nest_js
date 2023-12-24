@@ -4,32 +4,16 @@ import { HydratedDocument, Types } from "mongoose";
 export type BlogDocument = HydratedDocument<BlogClass>
 @Schema()
 export class BlogClass {
-
 	_id: Types.ObjectId
-	
-	@Prop({
-		required: true
-	})
+	@Prop({required: true})
 	name: string
-	
-	@Prop({
-		required: true
-	})
+	@Prop({required: true})
 	description: string
-
-	@Prop({
-		required: true
-	})
+	@Prop({required: true})
 	websiteUrl: string
-
-	@Prop({
-		required: true
-	})
+	@Prop({required: true})
 	createdAt: string
-
-	@Prop({
-		required: true
-	})
+	@Prop({required: true})
 	isMembership: boolean
 }
 

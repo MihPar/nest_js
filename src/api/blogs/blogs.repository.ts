@@ -4,6 +4,7 @@ import { BlogClass, BlogDocument } from "src/schema/blogs.schema";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { BlogsViewType } from "./blogs.type";
+import { BlogsDB } from "./blogs.class";
 
 @Injectable()
 export class BlogsRepository {
@@ -11,12 +12,11 @@ export class BlogsRepository {
 		@InjectModel(BlogClass.name) private blogModel: Model<BlogDocument>
 	) {}
   async deleteRepoBlogs() {
-    const deletedAll = this.blogModel.deleteMany({});
-    // return deletedAll.deletedCount === 1;
-    return deletedAll.deleteMany()
+    const deletedAll = await this.blogModel.deleteMany({});
+    return deletedAll.deletedCount === 1;
   }
 
-  async createNewBlogs(newBlog: BlogsViewType): Promise<BlogsViewType> {
+  async createNewBlogs(newBlog: BlogsDB): Promise<BlogsDB> {
     const result = await this.blogModel.create(newBlog);
     return newBlog;
   }
@@ -37,8 +37,7 @@ export class BlogsRepository {
   }
 
   async deletedBlog(id: string) {
-    const result = this.blogModel.deleteOne({ _id: new ObjectId(id) });
-    // return result.deletedCount === 1;
-    return result.deleteOne()
+    const result = await this.blogModel.deleteOne({ _id: new ObjectId(id) });
+    return result.deletedCount === 1;
   }
 }

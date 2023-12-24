@@ -9,13 +9,9 @@ import { PostsService } from 'src/api/posts/posts.service';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.MONGO_URL, {
-      dbName: process.env.MONGOOSE_DB_NAME,
-      // loggerLevel: 'debug'
-    }),
     MongooseModule.forFeature([{ name: PostClass.name, schema: PostSchema }]),
   ],
   controllers: [PostController],
   providers: [PostsQueryRepository, CommentQueryRepository, CommentService, PostsService],
 })
-export class AppModule {}
+export class PostsModule {}

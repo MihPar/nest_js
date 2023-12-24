@@ -12,7 +12,7 @@ export class Blogs {
 		}
   };
 
-export class BlogsDB extends Blogs {
+  export class BlogsDB extends Blogs {
 	public _id: ObjectId
 	constructor(
 		 name: string,
@@ -45,5 +45,4 @@ export class BlogsDB extends Blogs {
 				isMembership: this.isMembership
 			}
 		}
-		 
   };

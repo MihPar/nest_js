@@ -2,6 +2,21 @@ import { ObjectId } from "mongodb";
 import { CommentViewModel, CommentatorInfo } from "./comment.type";
 import { LikeStatusEnum } from "src/api/likes/likes.emun";
 
+export class Comment {
+	public createdAt: string;
+  public likesCount: number
+  public dislikesCount: number
+constructor(
+  public content: string,
+  public postId: string,
+  public commentatorInfo: CommentatorInfo,
+) {
+  this.createdAt = new Date().toISOString();
+  this.likesCount = 0
+  this.dislikesCount = 0
+}
+}
+
 export class CommentsDB extends Comment {
 	public _id: ObjectId;
 	constructor(
