@@ -18,7 +18,7 @@ import { PostsService } from './posts.service';
 import { CommentQueryRepository } from '../comment/comment.queryRepository';
 import { PostsQueryRepository } from './postQuery.repository';
 import { Users } from '../users/user.class';
-import { UserDecorator, UserIdDecorator } from 'src/decorator/decorator.user';
+import { UserDecorator, UserIdDecorator } from 'src/infrastructure/decorator/decorator.user';
 import { Blogs } from '../blogs/blogs.class';
 import { BlogsQueryRepository } from '../blogs/blogs.queryReposity';
 

@@ -6,12 +6,21 @@ import { PostsQueryRepository } from 'src/api/posts/postQuery.repository';
 import { CommentQueryRepository } from 'src/api/comment/comment.queryRepository';
 import { CommentService } from 'src/api/comment/comment.service';
 import { PostsService } from 'src/api/posts/posts.service';
+import { LikeClass } from 'src/schema/likes.schema';
+import { CommentClass } from 'src/schema/comment.schema';
+import { CommentRepository } from 'src/api/comment/comment.repository';
+import { likesRepository } from 'src/api/likes/likes.repository';
+import { PostsRepository } from 'src/api/posts/posts.repository';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: PostClass.name, schema: PostSchema }]),
+    MongooseModule.forFeature([
+		{ name: PostClass.name, schema: PostSchema },
+		{ name: LikeClass.name, schema: LikeClass },
+		{ name: CommentClass.name, schema: CommentClass }
+	]),
   ],
   controllers: [PostController],
-  providers: [PostsQueryRepository, CommentQueryRepository, CommentService, PostsService],
+  providers: [PostsQueryRepository, CommentQueryRepository, CommentService, PostsService, CommentRepository, likesRepository, PostsRepository],
 })
 export class PostsModule {}

@@ -10,7 +10,7 @@ import { PostsService } from "../posts/posts.service";
 import { BlogsRepository } from "./blogs.repository";
 import { PostsQueryRepository } from "../posts/postQuery.repository";
 import { Users } from "../users/user.class";
-import { UserDecorator, UserIdDecorator } from "src/decorator/decorator.user";
+import { UserDecorator, UserIdDecorator } from "src/infrastructure/decorator/decorator.user";
 
 @Controller('blogs')
 export class BlogsController {
