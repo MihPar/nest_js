@@ -42,7 +42,6 @@ export class CommentQueryRepository {
     pageSize: string,
     sortBy: string,
     sortDirection: string,
-    userId: ObjectId,
   ) {
     const filter = { postId: postId };
     const commentByPostId: CommentsDB[] = await this.commentModel.find(filter)
@@ -57,13 +56,13 @@ export class CommentQueryRepository {
     const items: CommentViewModel[] = await Promise.all(
       commentByPostId.map(async (item) => {
         findLike = null;
-        if (userId) {
-          status = await this.likeModel.findOne({
-            userId,
-            commentId: item._id.toString(),
-          });
-          findLike = status ? status.myStatus : null;
-        }
+        // if (userId) {
+        //   status = await this.likeModel.findOne({
+        //     userId,
+        //     commentId: item._id.toString(),
+        //   });
+        //   findLike = status ? status.myStatus : null;
+        // }
         const commnent = commentDBToView(item, findLike);
         return commnent;
       }),

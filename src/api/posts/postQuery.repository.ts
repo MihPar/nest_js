@@ -16,22 +16,16 @@ export class PostsQueryRepository {
 		@InjectModel(LikeClass.name) private likeModel: Model<LikeDocument>
 	) {}
 
-	async findPostById(postId: string) {
-		const post: PostsDB = await new this.postModel( { _id: new ObjectId(postId) },
-		{ __v: 0 },)
-
-		const newestLikes = new this.likeModel(postId, myStatus: LikeStatusEnum.Like,)
-		.sort({ addedAt: -1 })
-		.limit(3) 
-		.skip(0)
-		.lean();
-	  let myStatus: LikeStatusEnum = LikeStatusEnum.None;
-	//   if (userId) {
-	// 	const reaction = new this.likeModel.find({ postId, userId: new ObjectId(userId)});
-	// 	myStatus = reaction ? reaction.myStatus : LikeStatusEnum.None;
-	//   }
-	  return PostsDB.getPostsViewModel(post, myStatus, newestLikes);
-	}
+	async findPostById(id: string): Promise<Posts | null> {
+		const post = await this.likeModel.findOne({ _id: new ObjectId(id) }, {__v: 0 }).lean();
+		const newestLikes = await this.likeModel.find({postId: id, myStatus: LikeStatusEnum.Like}).sort({addedAt: -1}).limit(3).skip(0).lean()
+		let myStatus : LikeStatusEnum = LikeStatusEnum.None;
+		// if(userId){
+		// 	const reaction = await this.likeModel.findOne({postId: id, userId: new ObjectId(userId)})
+		// 	myStatus = reaction ? reaction.myStatus : LikeStatusEnum.None
+		// }
+		return post ? PostsDB.getPostsViewModel(post, myStatus, newestLikes) : null
+	  }
 //   async findPostById(postId: string, userId?: string) {
 //     const post = await PostsModel.findOne(
 //       { _id: new ObjectId(postId) },
@@ -56,19 +50,19 @@ export class PostsQueryRepository {
 //     return post ? PostsDB.getPostsViewModel(post, myStatus, newestLikes) : null;
 //   }
 
-async fincdAllPost( pageNumber: string,
+async findAllPosts( pageNumber: string,
     pageSize: string,
     sortBy: string,
     sortDirection: string,
-    userId: ObjectId,) {
+	) {
 		const filtered = {};
-		const allPosts: PostClass[] = await new this.postModel.find(filtered, { __v: 0 })
+		const allPosts: PostsDB[] = await this.postModel.find(filtered, { __v: 0 })
 		  .sort({ [sortBy]: sortDirection === 'asc' ? 1 : -1 })
 		  .skip((+pageNumber - 1) * +pageSize)
 		  .limit(+pageSize)
 		  .lean();
 	
-		const totalCount: number = await PostsModel.countDocuments(filtered);
+		const totalCount: number = await this.postModel.countDocuments(filtered);
 		const pagesCount: number = Math.ceil(totalCount / +pageSize);
 	
 		let result: PaginationType<Posts> = {
@@ -78,7 +72,7 @@ async fincdAllPost( pageNumber: string,
 		  totalCount: totalCount,
 		  items: await Promise.all(
 			allPosts.map(async (post) => {
-			  const newestLikes = await LikesModel.find({
+			  const newestLikes = await this.likeModel.find({
 				postId: new ObjectId(post._id),
 				myStatus: LikeStatusEnum.Like,
 			  })
@@ -87,14 +81,14 @@ async fincdAllPost( pageNumber: string,
 				.skip(0)
 				.lean();
 			  let myStatus: LikeStatusEnum = LikeStatusEnum.None;
-			  if (userId) {
-				const reaction = await LikesModel.findOne(
-				  { postId: new ObjectId(post._id), userId: new ObjectId(userId) },
-				  { __v: 0 },
-				).lean();
-				myStatus = reaction ? reaction.myStatus : LikeStatusEnum.None;
-			  }
-			  return this.postModel.getPostsViewModel(post, myStatus, newestLikes);
+			//   if (userId) {
+			// 	const reaction = await this.likeModel.findOne(
+			// 	  { postId: new ObjectId(post._id), userId: new ObjectId(userId) },
+			// 	  { __v: 0 },
+			// 	).lean();
+			// 	myStatus = reaction ? reaction.myStatus : LikeStatusEnum.None;
+			//   }
+			  return PostsDB.getPostsViewModel(post, myStatus, newestLikes);
 			}),
 		  ),
 		};
@@ -169,7 +163,7 @@ async findPostsByBlogsId(
 		pageSize: +pageSize,
 		totalCount: totalCount,
 		items: await Promise.all(posts.map(async(post)=> {
-			const newestLikes = await LikesModel
+			const newestLikes = await this.likeModel
 			.find({postId: post._id.toString(), myStatus: LikeStatusEnum.Like})
 			.sort({addedAt: -1})
 			.limit(3)

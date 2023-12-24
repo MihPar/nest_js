@@ -77,6 +77,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import {  PostClass, PostDocument } from '../../schema/post.schema';
 import { Injectable } from "@nestjs/common";
+import { inputModelPostType } from './posts.type';
 
 @Injectable()
 export class PostsRepository {
@@ -92,12 +93,9 @@ async createNewPosts(newPost: PostsDB): Promise<PostsDB> {
 
   async updatePost(
     id: string,
-    title: string,
-    shortDescription: string,
-    content: string,
-    blogId: string,
+    inputModelPostType: inputModelPostType
   ) {
-    const result = await this.postModel.findByIdAndUpdate(id, {title, shortDescription, content, blogId, ''})
+    const result = await this.postModel.findByIdAndUpdate(id, inputModelPostType)
     return result.updateOne();
   }
 
@@ -118,12 +116,12 @@ async createNewPosts(newPost: PostsDB): Promise<PostsDB> {
   }
 
   async deletedPostById(id: string) {
-    const result = new this.postModel({ _id: new ObjectId(id) });
+    const result = this.postModel.deleteOne({ _id: new ObjectId(id) });
     return result.deleteOne()
   }
 
   async deleteRepoPosts() {
-	const deletedAll = new this.postModel();
+	const deletedAll = this.postModel.deleteOne();
     return deletedAll.deleteOne()
   }
  

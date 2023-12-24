@@ -15,7 +15,7 @@ export class BlogsQueryRepository {
 	async findAllBlogs(searchNameTerm: string | null, sortBy: string, sortDirection: string, pageNumber: string, pageSize: string) {
 		const filtered = searchNameTerm
 		  ? { name: { $regex: searchNameTerm ?? '', $options: 'i' } }
-		  : {}; // todo finished filter
+		  : {}
 		const blogs: BlogClass[] = await this.blogModel.find()
 		  .find(filtered, { __v: 0 } )
 		  .sort({ [sortBy]: sortDirection === "asc" ? 1 : -1 })

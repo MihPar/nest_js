@@ -1,23 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { UsersModel } from 'src/db/db';
 import { ObjectId } from 'mongodb';
 import { Users } from './user.class';
 import { add } from 'date-fns';
+import { UserClass, UserDocument } from 'src/schema/user.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { UserViewType } from './user.type';
 
 @Injectable()
 export class UsersRepository {
+	constructor(
+		@InjectModel(UserClass.name) private userModel: Model<UserDocument>
+	) {}
   async createUser(newUser: Users) {
-    const updateUser = await UsersModel.insertMany([newUser]);
+    const updateUser = await this.userModel.insertMany([newUser]);
     return newUser;
   }
 
   async deleteById(userId: string) {
-	const deleted = await UsersModel.deleteOne({ _id: new ObjectId(userId) });
+	const deleted = await this.userModel.deleteOne({ _id: new ObjectId(userId) });
     return deleted.deletedCount === 1;
   }
 
   async deleteAll() {
-	const deleteAllUsers = await UsersModel.deleteMany({});
+	const deleteAllUsers = await this.userModel.deleteMany({});
     return deleteAllUsers.deletedCount === 1;
   }
 
@@ -26,7 +32,7 @@ export class UsersRepository {
       ["emailConfirmation.confirmationCode"]: recoveryCode,
       ["emailConfirmation.expirationDate"]: add(new Date(), { minutes: 5 }),
     };
-    const updateRes = await UsersModel.updateOne(
+    const updateRes = await this.userModel.updateOne(
       { _id: new ObjectId(id) },
       { $set: recoveryInfo }
     );
@@ -34,7 +40,7 @@ export class UsersRepository {
   }
 
   async updatePassword(id: ObjectId, newPasswordHash: string) {
-    const updatePassword = await UsersModel.updateOne(
+    const updatePassword = await this.userModel.updateOne(
       { _id: id },
       {
         $unset: {
@@ -48,7 +54,7 @@ export class UsersRepository {
   }
 
   async updateConfirmation(_id: ObjectId) {
-    const result = await UsersModel.updateOne(
+    const result = await this.userModel.updateOne(
       { _id },
       { $set: { "emailConfirmation.isConfirmed": true } }
     );
@@ -60,7 +66,7 @@ export class UsersRepository {
     confirmationCode: string,
     newExpirationDate: Date
   ): Promise<boolean> {
-    const result = await UsersModel.updateOne(
+    const result = await this.userModel.updateOne(
       { _id },
       {
         $set: {

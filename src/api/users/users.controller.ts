@@ -1,14 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Query } from '@nestjs/common';
 import { UsersQueryRepository } from './users.queryRepository';
 import { UserService } from './user.service';
 
-@Controller('api')
+@Controller('users')
 export class UsersController {
   constructor(
 	protected usersQueryRepository: UsersQueryRepository,
 	protected userService: UserService
 	) {}
-  @Get('users')
+  @Get()
   async getAllUsers(
     @Query()
     query: {
@@ -31,14 +31,16 @@ export class UsersController {
 	return users
   }
 
-  @Post('users')
+  @Post()
   async createUser(@Body() login: string, password: string, email: string) {
 	const createUser = await this.userService.createNewUser(login, password, email)
 	return createUser
   }
 
-  @Delete('user/:id')
+  @Delete(':id')
   async deleteUserById(@Param('id') userId: string) {
 	const deleteUserById = await this.userService.deleteUserById(userId)
+	if (!deleteUserById) throw new NotFoundException("Blogs by id not found")
+		return true
   }
 }

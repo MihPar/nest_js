@@ -4,6 +4,7 @@
 // import { Users } from "./user.class"
 
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { ObjectId } from "mongodb";
 import { HydratedDocument } from "mongoose";
 
 // export const DBUserSchema = new mongoose.Schema<WithId<Users>>({
@@ -30,24 +31,28 @@ export type UserDocument = HydratedDocument<UserClass>
 
 @Schema()
 export class UserClass {
-	@Prop({
-		required: true
-	})
-	accountData: {
-		userName: string,
-		email: string,
-		passwordHash: string,
-		createdAt: string
-	}
+	@Prop({required: true})
+	id: ObjectId
+	@Prop({required: true})
+	login: string
+	@Prop({required: true})
+	email: string
+	@Prop({required: true})
+	createAt: string
 
-	@Prop({
-		require: true
-	})
-	emailConfirmation: {
-				confirmationCode: string
-				expirationDate: Date,
-				isConfirmed: boolean
-			}
+	// @Prop({required: true})
+	// accountData: {
+	// 	userName: string,
+	// 	email: string,
+	// 	passwordHash: string,
+	// 	createdAt: string
+	// }
+	// @Prop({require: true})
+	// emailConfirmation: {
+	// 			confirmationCode: string
+	// 			expirationDate: Date,
+	// 			isConfirmed: boolean
+	// 		}
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserClass);

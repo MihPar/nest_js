@@ -8,7 +8,6 @@ export class DbId {
 	}
 }
 
-
 export class Users extends DbId {
 	constructor(
 	  public accountData: AccountDataType,

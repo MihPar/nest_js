@@ -41,7 +41,7 @@ export class BlogsController {
 	}
 
 	@Get(":blogId/post")
-	async getPostsByBlogId(@Param('id') blogId: string, @Query() query: {pageNumber: string, pageSize: string, sortBy: string,sortDirection: string,}) {
+	async getPostsByBlogId(@Param('blogId') blogId: string, @Query() query: {pageNumber: string, pageSize: string, sortBy: string,sortDirection: string,}) {
 		const blog = await this.blogsQueryRepository.findBlogById(blogId);
 		if (!blog) throw new NotFoundException("Blogs by id not found")
 		const getPosts: PaginationType<Posts> =
@@ -57,7 +57,7 @@ export class BlogsController {
 	  }
 
 	  @Post(":blogId/post")
-	  async createPostByBlogId(@Param("id") blogId: string, @Body() inputDataModel: bodyPostsModel) {
+	  async createPostByBlogId(@Param("blogId") blogId: string, @Body() inputDataModel: bodyPostsModel) {
 		const findBlog: Blogs = await this.blogsQueryRepository.findBlogById(blogId);
 		if (!findBlog) throw new NotFoundException("Blogs by id not found")
 		const isCreatePost = await this.postsService.createPost(
@@ -68,14 +68,14 @@ export class BlogsController {
 	  }
 
 	  @Get(":id")
-	  async getBlogsById(@Param("id") _id: string) {
+	  async getBlogsById(@Param("blogId") _id: string) {
 		const blogById: Blogs | null = await this.blogsQueryRepository.findBlogById(_id);
 		if (!blogById) throw new NotFoundException("Blogs by id not found")
 		return blogById
 	  }
 
 	  @Put(":id")
-	  async updateBlogsById(@Param("id") id: string, @Body() inputDateMode: bodyBlogsModel) {
+	  async updateBlogsById(@Param("blogId") id: string, @Body() inputDateMode: bodyBlogsModel) {
 		const isUpdateBlog: boolean = await this.blogsService.updateBlog(
 		  id,
 		  inputDateMode.name,
@@ -86,9 +86,10 @@ export class BlogsController {
 	  }
 
 	  @Delete("/:id")
-	  async deleteBlogsById(@Param("id") id: string) {
+	  async deleteBlogsById(@Param("blogId") id: string) {
 		const isDeleted: boolean = await this.blogsRepository.deletedBlog(id)
 		  if (!isDeleted) throw new NotFoundException("Blogs by id not found")
+		  return true
 	  }
 
 }

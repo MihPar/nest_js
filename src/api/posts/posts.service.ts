@@ -8,7 +8,7 @@ import { PostClass, PostDocument } from "src/schema/post.schema";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { LikeClass, LikeDocument } from "src/schema/likes.schema";
-import { PostsViewModel, bodyPostsModel } from "./posts.type";
+import { PostsViewModel, bodyPostsModel, inputModelPostType } from "./posts.type";
 
 @Injectable()
 export class PostsService {
@@ -21,17 +21,8 @@ export class PostsService {
 	
 	async updateOldPost(
 		id: string,
-		title: string,
-		shortDescription: string,
-		content: string,
-		blogId: string) {
-			const updatPostById: boolean = await this.postsRepository.updatePost(
-				id,
-				title,
-				shortDescription,
-				content,
-				blogId
-			  );
+		inputModelData: inputModelPostType) {
+			const updatPostById: boolean = await this.postsRepository.updatePost(id, inputModelData)
 			  return updatPostById;
 	}
 
@@ -70,14 +61,11 @@ export class PostsService {
 			return true
 	}
 
-	async createPost(
-		blogId: string,
-		createData: bodyPostsModel,
-		blogName: string
+	async createPost(blogId: string, inputModelPost: bodyPostsModel, userName: string
 	  ): Promise<PostsViewModel | null> {
-		const newPost: PostsDB = new PostsDB(createData.title, createData.shortDescription, createData.content, blogId, blogName)
+		const newPost: PostsDB = new PostsDB(inputModelPost.title, inputModelPost.shortDescription, inputModelPost.content, blogId, userName)
 		const createPost = await this.postsRepository.createNewPosts(newPost);
-		const post = await this.postModel.findOne({ blogId: blogId }, {__v: 0 }).lean();
+		const post = await this.postModel.findOne({ blogId }, {__v: 0 }).lean();
 		const newestLikes = await this.likeModel.find({postId: newPost._id}).sort({addedAt: -1}).limit(3).skip(0).lean()
 		let myStatus : LikeStatusEnum = LikeStatusEnum.None;
 		// if(blogId){
@@ -87,11 +75,11 @@ export class PostsService {
 		return createPost.getPostViewModel(myStatus, newestLikes);
 	}
 
-	// async deletePostId(postId: string) {
-	// 	return await this.postsRepository.deletedPostById(postId);
-	// }
+	async deletePostId(postId: string): Promise<boolean> {
+		return await this.postsRepository.deletedPostById(postId);
+	}
 
-	// async deleteAllPosts() {
-	// 	return await this.postsRepository.deleteRepoPosts();
-	// }
+	async deleteAllPosts() {
+		return await this.postsRepository.deleteRepoPosts();
+	}
 }
