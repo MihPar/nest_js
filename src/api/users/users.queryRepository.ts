@@ -27,12 +27,11 @@ export class UsersQueryRepository {
 			],
 		};
 	
-		const getAllUsers = await this.userModel.find(filter, {__v: 0})
+		const getAllUsers: Users[] = await this.userModel.find(filter, {__v: 0})
 		  .sort({ [sortBy]: sortDirection === "asc" ? 1 : -1 })
 		  .skip((+pageNumber - 1) * +pageSize)
 		  .limit(+pageSize)
 		  .lean()
-		  
 	
 		const totalCount: number = await this.userModel.countDocuments(filter);
 		const pagesCount: number = await Math.ceil(totalCount / +pageSize);

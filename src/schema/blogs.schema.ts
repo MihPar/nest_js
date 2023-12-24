@@ -4,17 +4,17 @@ import { HydratedDocument, Types } from "mongoose";
 export type BlogDocument = HydratedDocument<BlogClass>
 @Schema()
 export class BlogClass {
-	_id: Types.ObjectId
+		_id: Types.ObjectId
 	@Prop({required: true})
-	name: string
+		name: string
 	@Prop({required: true})
-	description: string
+		description: string
 	@Prop({required: true})
-	websiteUrl: string
+		websiteUrl: string
 	@Prop({required: true})
-	createdAt: string
+		reatedAt: string
 	@Prop({required: true})
-	isMembership: boolean
+		isMembership: boolean
 }
 
 export const BlogSchema = SchemaFactory.createForClass(BlogClass)

@@ -30,17 +30,17 @@ export type LikeDocument = HydratedDocument<LikeClass>;
 export class LikeClass {
 	_id: Types.ObjectId
   @Prop({required: true})
-  userId: ObjectId;
+  	userId: ObjectId;
   @Prop({required: true})
-  login: string;
+  	login: string;
   @Prop({required: true})
-  commentId: string;
+  	commentId: string;
   @Prop({required: true})
-  postId: string;
+  	postId: string;
+  @Prop({required: true, type: String, default: LikeStatusEnum.None, enum: ["None", "Like", "Dislike"]})
+  	myStatus: LikeStatusEnum
   @Prop({required: true})
-  myStatus: {type: String, default: LikeStatusEnum.None, enum: ["None", "Like", "Dislike"]}
-  @Prop({required: true})
-  addedAt: string;
+  	addedAt: string;
 }
 
 export const LikeSchema = SchemaFactory.createForClass(LikeClass);

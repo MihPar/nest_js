@@ -30,21 +30,35 @@ import { HydratedDocument } from "mongoose";
 export type UserDocument = HydratedDocument<UserClass>
 
 @Schema()
+export class AccountDataClass {
+	@Prop({required: true})
+		userName: string
+	@Prop({required: true})
+		email: string
+	@Prop({required: true})
+		passwordHash: string
+	@Prop({required: true})
+		createdAt: string
+}
+export const AccountDataSchena = SchemaFactory.createForClass(AccountDataClass);
+
+@Schema()
+export class EmailConfirmationClass {
+	@Prop({required: true})
+		confirmationCode: string
+	@Prop({required: true})
+	expirationDate: Date
+	@Prop({required: true})
+		isConfirmed: boolean
+}
+export const EmailConfirmationSchena = SchemaFactory.createForClass(EmailConfirmationClass)
+
+@Schema()
 export class UserClass {
 	@Prop({required: true})
-	accountData: {
-		userName: string,
-		email: string,
-		passwordHash: string,
-		createdAt: string
-	}
+		accountData: AccountDataClass
 	@Prop({require: true})
-	emailConfirmation: {
-				confirmationCode: string
-				expirationDate: Date,
-				isConfirmed: boolean
-			}
+		emailConfirmation: EmailConfirmationClass
 }
-
 export const UserSchema = SchemaFactory.createForClass(UserClass);
 

@@ -4,23 +4,30 @@ import { HydratedDocument, Types } from "mongoose";
 export type CommentDocument = HydratedDocument<CommentClass>
 
 @Schema()
+export class ComentatorInfoClass {
+	@Prop({required: true})
+		userId: string
+	@Prop({reuqired: true})
+		userLogin: string
+}
+
+export const ComentatorInfoSchema = SchemaFactory.createForClass(ComentatorInfoClass)
+
+@Schema()
 export class CommentClass {
-	_id:  Types.ObjectId
+		_id:  Types.ObjectId
 	@Prop({requierd: true})
-	content: string
+		content: string
 	@Prop({required: true})
-	commentatorInfo: {
-				userId: string,
-				userLogin: string,
-			}
+		commentatorInfo: ComentatorInfoClass
 	@Prop({require: true})
-	postId: string
+		postId: string
 	@Prop({required: true})
-	createdAt: string
+		createdAt: string
 	@Prop({required: true})
-	likesCount: number
+		likesCount: number
 	@Prop({required: true})
-	dislikesCount: number
+		dislikesCount: number
 }
 
 export const CommentSchema = SchemaFactory.createForClass(CommentClass)
