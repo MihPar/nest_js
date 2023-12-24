@@ -32,27 +32,18 @@ export type UserDocument = HydratedDocument<UserClass>
 @Schema()
 export class UserClass {
 	@Prop({required: true})
-	id: ObjectId
-	@Prop({required: true})
-	login: string
-	@Prop({required: true})
-	email: string
-	@Prop({required: true})
-	createAt: string
-
-	// @Prop({required: true})
-	// accountData: {
-	// 	userName: string,
-	// 	email: string,
-	// 	passwordHash: string,
-	// 	createdAt: string
-	// }
-	// @Prop({require: true})
-	// emailConfirmation: {
-	// 			confirmationCode: string
-	// 			expirationDate: Date,
-	// 			isConfirmed: boolean
-	// 		}
+	accountData: {
+		userName: string,
+		email: string,
+		passwordHash: string,
+		createdAt: string
+	}
+	@Prop({require: true})
+	emailConfirmation: {
+				confirmationCode: string
+				expirationDate: Date,
+				isConfirmed: boolean
+			}
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserClass);

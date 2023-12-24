@@ -1,4 +1,4 @@
-import { ObjectId, WithId } from "mongodb";
+import { ObjectId } from "mongodb";
 import { UserViewType} from "./user.type";
 import bcrypt from "bcrypt";
 import {v4 as uuidv4} from "uuid"
@@ -16,7 +16,11 @@ export class UserService {
     protected emailManager: EmailManager,
 	protected usersQueryRepository: UsersQueryRepository
   ) {}
-  async createNewUser(login: string, password: string, email: string) {
+  async createNewUser(
+    login: string,
+    password: string,
+    email: string
+  ): Promise<UserViewType | null> {
     const passwordHash = await this._generateHash(password);
     const newUser: Users = {
       _id: new ObjectId(),
@@ -47,7 +51,7 @@ export class UserService {
     try {
       await this.emailManager.sendEamilConfirmationMessage(
         user.accountData.email,
-        user.emailConfirmation.confirmationCode,
+        user.emailConfirmation.confirmationCode
       );
     } catch (error) {
       console.log(error);
