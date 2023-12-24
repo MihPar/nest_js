@@ -39,6 +39,7 @@ export class PostController {
     },
   ) {
     const isExistPots = await this.postsQueryRepository.findPostById(postId);
+	if(!isExistPots) throw new NotFoundException('Blogs by id not found');
     const commentByPostsId: PaginationType<CommentViewModel> | null =
       await this.commentQueryRepository.findCommentByPostId(
         postId,
@@ -61,7 +62,6 @@ export class PostController {
       sortDirection: string;
     },
   ) {
-    // const userId = req.user ? req.user._id.toString() : null;
     const getAllPosts: PaginationType<Posts> =
       await this.postsQueryRepository.findAllPosts(
         (query.pageNumber = '1'),
@@ -80,7 +80,6 @@ export class PostController {
 
   @Get(':id')
   async getPostById(@Param('postId') postId: string) {
-    // const userId = req.user ? req.user._id.toString() : null;
     const getPostById: Posts | null =
       await this.postsQueryRepository.findPostById(postId);
     if (!getPostById) {

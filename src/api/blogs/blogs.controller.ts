@@ -2,15 +2,13 @@ import { BadRequestException, Body, Controller, Delete, Get, HttpCode, NotFoundE
 import { BlogsQueryRepository } from "./blogs.queryReposity";
 import { PaginationType } from "src/types/pagination.types";
 import { Blogs } from "./blogs.class";
-import { bodyBlogsModel } from "./blogs.type";
+import { BlogsViewType, bodyBlogsModel } from "./blogs.type";
 import { BlogsService } from "./blogs.service";
 import { Posts } from "../posts/posts.class";
 import { bodyPostsModel } from "../posts/posts.type";
 import { PostsService } from "../posts/posts.service";
 import { BlogsRepository } from "./blogs.repository";
 import { PostsQueryRepository } from "../posts/postQuery.repository";
-import { BlogClass } from "src/schema/blogs.schema";
-import { PostClass } from "src/schema/post.schema";
 
 @Controller("blogs")
 export class BlogsController {
@@ -24,7 +22,7 @@ export class BlogsController {
 
 	@Get()
 	async getBlogsWithPagin(@Query() query: {searchNameTerm: string, sortBy: string, sortDirection: string, pageNumber: string, pageSize: string}) {
-		const getAllBlogs: PaginationType<BlogClass> =
+		const getAllBlogs: PaginationType<BlogsViewType> =
       await this.blogsQueryRepository.findAllBlogs(
         query.searchNameTerm,
         query.pageNumber = "1",
@@ -52,7 +50,7 @@ export class BlogsController {
 			query.sortDirection = "desc",
 			blogId,
 		  );
-		  if(!blog) throw new NotFoundException("Blogs by id not found")
+		  if(!getPosts) throw new NotFoundException("Blogs by id not found")
 		  return getPosts
 	  }
 
@@ -68,8 +66,8 @@ export class BlogsController {
 	  }
 
 	  @Get(":id")
-	  async getBlogsById(@Param("blogId") _id: string) {
-		const blogById: Blogs | null = await this.blogsQueryRepository.findBlogById(_id);
+	  async getBlogsById(@Param("blogId") _id: string): Promise<BlogsViewType | null> {
+		const blogById: BlogsViewType | null = await this.blogsQueryRepository.findBlogById(_id);
 		if (!blogById) throw new NotFoundException("Blogs by id not found")
 		return blogById
 	  }

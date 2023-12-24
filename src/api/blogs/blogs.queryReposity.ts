@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb";
 import { BlogClass, BlogDocument } from "src/schema/blogs.schema";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
+import { BlogsViewType } from "./blogs.type";
 
 @Injectable()
 export class BlogsQueryRepository {
@@ -16,17 +17,17 @@ export class BlogsQueryRepository {
 		const filtered = searchNameTerm
 		  ? { name: { $regex: searchNameTerm ?? '', $options: 'i' } }
 		  : {}
-		const blogs: BlogClass[] = await this.blogModel.find()
+		const blogs: BlogsViewType[] = await this.blogModel.find()
 		  .find(filtered, { __v: 0 } )
 		  .sort({ [sortBy]: sortDirection === "asc" ? 1 : -1 })
-		  .skip((+pageNumber - 1) * +pageSize) //todo find how we can skip
+		  .skip((+pageNumber - 1) * +pageSize)
 		  .limit(+pageSize)
 		  .lean();
 	
 		const totalCount: number = await this.blogModel.countDocuments(filtered);
 		const pagesCount: number = Math.ceil(totalCount / +pageSize);
 		
-		const result: PaginationType<BlogClass> = {
+		const result: PaginationType<BlogsViewType> = {
 			pagesCount: pagesCount,
 			page: +pageNumber,
 			pageSize: +pageSize,
@@ -36,7 +37,8 @@ export class BlogsQueryRepository {
 		return result
 	
 	}
-	async findBlogById(id: string, userId?: string): Promise<BlogsDB | null> {
+	async findBlogById(id: string, userId?: string): Promise<BlogsViewType | null> {
 		return await this.blogModel.findOne({ _id: new ObjectId(id) }, {__v: 0})
+		// return blog ? BlogsDB.getBlogsViewModel(blog) : null;
 	  }
 }

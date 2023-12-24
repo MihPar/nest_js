@@ -1,3 +1,4 @@
+import { findCommentDBToView } from './../../utils/helpers';
 import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
 import { CommentsDB } from './comment.class';
@@ -6,8 +7,9 @@ import { Model } from 'mongoose';
 import { CommentClass, CommentDocument } from 'src/schema/comment.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { LikeClass, LikeDocument } from 'src/schema/likes.schema';
-import { Like } from '../likes/likes.class';
 import { CommentViewModel } from './comment.type';
+import { LikeStatusEnum } from '../likes/likes.emun';
+import { Like } from '../likes/likes.class';
 
 @Injectable()
 export class CommentQueryRepository {
@@ -18,23 +20,24 @@ export class CommentQueryRepository {
 
 	async findCommentById( commentId: string) {
 		try {
-			const commentById: CommentsDB | null = await this.commentModel.findOne({
+			const commentById: CommentClass | null = await this.commentModel.findOne({
 			  _id: new ObjectId(commentId),
 			});
 			if (!commentById) {
 			  return null;
 			}
-			const findLike = await this.findLikeCommentByUser(commentId, new ObjectId("commentatorInfo.userId"))
-			return commentDBToView(commentById, findLike?.myStatus ?? null);
+			// const findLike = await this.findLikeCommentByUser(commentId, new ObjectId("commentatorInfo.userId"))
+			const likeStatus = LikeStatusEnum.None
+			return commentDBToView(commentById, likeStatus);
 		  } catch (e) {
 			return null;
 		  }
 	  }
 
-	  async findLikeCommentByUser(commentId: string, userId: ObjectId) {
-		const likeModel = await this.likeModel.findOne({$and: [{userId: userId}, {commentId: commentId}]})
-		return likeModel
-	  }
+	//   async findLikeCommentByUser(commentId: string, userId: ObjectId) {
+	// 	const likeModel = await this.likeModel.findOne({$and: [{userId: userId}, {commentId: commentId}]})
+	// 	return likeModel
+	//   }
 
   async findCommentByPostId(
     postId: string,
@@ -56,14 +59,14 @@ export class CommentQueryRepository {
     const items: CommentViewModel[] = await Promise.all(
       commentByPostId.map(async (item) => {
         findLike = null;
-        // if (userId) {
-        //   status = await this.likeModel.findOne({
-        //     userId,
-        //     commentId: item._id.toString(),
-        //   });
-        //   findLike = status ? status.myStatus : null;
-        // }
-        const commnent = commentDBToView(item, findLike);
+        if (userId) {
+          status = await this.likeModel.findOne({
+            userId,
+            commentId: item._id.toString(),
+          });
+          findLike = status ? status.myStatus : null;
+        }
+        const commnent = findCommentDBToView(item, findLike);
         return commnent;
       }),
     );
