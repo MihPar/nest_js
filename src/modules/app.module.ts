@@ -10,7 +10,7 @@ import { LikesModule } from './likes.module';
 @Module({
   imports: [
 	ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.MONGO_URL),
+    MongooseModule.forRoot(process.env.MONGO_URL ==='true' ?  process.env.LOCAL_MONGO_URL! : process.env.MONGO_URL!),
 	BlogsModule,
 	CommentModule,
 	PostsModule,
