@@ -1,4 +1,4 @@
-import { PostController } from 'src/api/posts/post.controller.ts';
+import { PostController } from 'src/api/posts/post.controller';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PostClass, PostSchema } from 'src/schema/post.schema';
