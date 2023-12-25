@@ -24,6 +24,7 @@ import { UsersQueryRepository } from 'src/api/users/users.queryRepository';
 import { UserService } from 'src/api/users/user.service';
 import { UsersRepository } from 'src/api/users/user.repository';
 import { EmailManager } from 'src/api/manager/email.manager';
+import { DeleteAllDataController } from 'src/api/delete/delete.allData';
 
 const blogsProviders = [
   BlogsQueryRepository,
@@ -80,6 +81,7 @@ const userProviders = [
     PostController,
     CommentsController,
     BlogsController,
+	DeleteAllDataController
   ],
   providers: [
     ...blogsProviders,
