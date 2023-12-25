@@ -69,7 +69,7 @@ const userProviders = [
       //   loggerLevel: 'debug'
     }),
     MongooseModule.forFeature([
-      { name: PostClass.name, schema: PostSchema },
+    //   { name: PostClass.name, schema: PostSchema },
       { name: LikeClass.name, schema: LikeSchema },
       { name: UserClass.name, schema: UserSchema },
       { name: CommentClass.name, schema: CommentSchema },
