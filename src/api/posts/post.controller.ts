@@ -101,7 +101,7 @@ export class PostController {
 
   @Get(':id')
   async getPostById(
-    @Param('postId') postId: string,
+    @Param('id') postId: string,
     @UserDecorator() user: Users,
     @UserIdDecorator() userId: string | null,
   ) {
@@ -115,7 +115,7 @@ export class PostController {
 
   @Put(':id')
   async updatePostById(
-    @Param('postId') postId: string,
+    @Param('id') postId: string,
     @Body() inputModelData: inputModelPostType,
   ) {
     const updatePost: boolean = await this.postsService.updateOldPost(
@@ -130,7 +130,7 @@ export class PostController {
   }
 
   @Delete(':id')
-  async deletePostById(@Param('postId') postId: string): Promise<boolean> {
+  async deletePostById(@Param('id') postId: string): Promise<boolean> {
     const deletPost: boolean = await this.postsService.deletePostId(postId);
     if (!deletPost) throw new NotFoundException('Blogs by id not found');
     return true;

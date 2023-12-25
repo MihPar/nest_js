@@ -102,7 +102,7 @@ export class BlogsController {
 
   @Get(':id')
   async getBlogsById(
-    @Param('blogId') id: string,
+    @Param('id') id: string,
   ): Promise<BlogsViewType | null> {
     const blogById: BlogsViewType | null =
       await this.blogsQueryRepository.findBlogById(id);
@@ -112,7 +112,7 @@ export class BlogsController {
 
   @Put(':id')
   async updateBlogsById(
-    @Param('blogId') id: string,
+    @Param('id') id: string,
     @Body() inputDateMode: bodyBlogsModel,
   ) {
     const isUpdateBlog: boolean = await this.blogsService.updateBlog(
@@ -125,7 +125,7 @@ export class BlogsController {
   }
 
   @Delete('/:id')
-  async deleteBlogsById(@Param('blogId') id: string) {
+  async deleteBlogsById(@Param('id') id: string) {
     const isDeleted: boolean = await this.blogsRepository.deletedBlog(id);
     if (!isDeleted) throw new NotFoundException('Blogs by id not found');
     return true;
