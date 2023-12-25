@@ -4,7 +4,7 @@ import { CommentViewModel } from './comment.type';
 import { Users } from '../users/user.class';
 import { UserDecorator, UserIdDecorator } from 'src/infrastructure/decorator/decorator.user';
 
-@Controller('comment')
+@Controller('comments')
 export class CommentsController {
   constructor(protected commentQueryRepository: CommentQueryRepository) {}
 

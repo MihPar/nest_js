@@ -23,7 +23,7 @@ import { UserDecorator, UserIdDecorator } from 'src/infrastructure/decorator/dec
 import { Blogs } from '../blogs/blogs.class';
 import { BlogsQueryRepository } from '../blogs/blogs.queryReposity';
 
-@Controller('post')
+@Controller('posts')
 export class PostController {
   constructor(
     protected postsQueryRepository: PostsQueryRepository,

@@ -78,7 +78,7 @@ const userProviders = [
   ],
   controllers: [
     UsersController,
-    PostController,
+    // PostController,
     CommentsController,
     BlogsController,
 	DeleteAllDataController
