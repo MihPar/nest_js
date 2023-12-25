@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   NotFoundException,
   Param,
   Post,
@@ -33,6 +34,7 @@ export class PostController {
   ) {}
 
   @Get(':postId/comments')
+  @HttpCode(200)
   async getCommentByPostId(
     @Param('postId') postId: string,
     @UserDecorator() user: Users,
@@ -61,6 +63,7 @@ export class PostController {
   }
 
   @Get()
+  @HttpCode(200)
   async getPosts(
     @UserDecorator() user: Users,
     @UserIdDecorator() userId: string | null,
@@ -100,6 +103,7 @@ export class PostController {
   }
 
   @Get(':id')
+  @HttpCode(200)
   async getPostById(
     @Param('id') postId: string,
     @UserDecorator() user: Users,
@@ -114,6 +118,7 @@ export class PostController {
   }
 
   @Put(':id')
+  @HttpCode(204)
   async updatePostById(
     @Param('id') postId: string,
     @Body() inputModelData: inputModelPostType,
@@ -130,6 +135,7 @@ export class PostController {
   }
 
   @Delete(':id')
+  @HttpCode(204)
   async deletePostById(@Param('id') postId: string): Promise<boolean> {
     const deletPost: boolean = await this.postsService.deletePostId(postId);
     if (!deletPost) throw new NotFoundException('Blogs by id not found');

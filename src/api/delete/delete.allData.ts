@@ -1,4 +1,4 @@
-import { Controller, Delete } from "@nestjs/common";
+import { Controller, Delete, HttpCode } from "@nestjs/common";
 import { PostsService } from "src/api/posts/posts.service";
 import { BlogsService } from "../blogs/blogs.service";
 import { UserService } from "../users/user.service";
@@ -12,6 +12,7 @@ export class DeleteAllDataController {
 		protected commentService: CommentService,
 	) {}
 	@Delete()
+	@HttpCode(204)
 	async deleteAllData() {
     await this.postsService.deleteAllPosts();
     await this.blogsService.deleteAllBlogs();

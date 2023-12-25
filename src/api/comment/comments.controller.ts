@@ -1,4 +1,4 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import { Controller, Get, HttpCode, NotFoundException, Param } from '@nestjs/common';
 import { CommentQueryRepository } from './comment.queryRepository';
 import { CommentViewModel } from './comment.type';
 import { Users } from '../users/user.class';
@@ -9,6 +9,7 @@ export class CommentsController {
   constructor(protected commentQueryRepository: CommentQueryRepository) {}
 
   @Get(':id')
+  @HttpCode(200)
   async getCommentById(
     @Param('id') id: string,
     @UserDecorator() user: Users,

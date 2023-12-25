@@ -23,6 +23,7 @@ export class BlogsController {
   ) {}
 
   @Get()
+  @HttpCode(200)
   async getBlogsWithPagin(
     @Query()
     query: {
@@ -53,6 +54,7 @@ export class BlogsController {
   }
 
   @Get(':blogId/post')
+  @HttpCode(200)
   async getPostsByBlogId(
     @Param('blogId') blogId: string,
 	@UserDecorator() user: Users,
@@ -101,6 +103,7 @@ export class BlogsController {
   }
 
   @Get(':id')
+  @HttpCode(200)
   async getBlogsById(
     @Param('id') id: string,
   ): Promise<BlogsViewType | null> {
@@ -111,6 +114,7 @@ export class BlogsController {
   }
 
   @Put(':id')
+  @HttpCode(204)
   async updateBlogsById(
     @Param('id') id: string,
     @Body() inputDateMode: bodyBlogsModel,
@@ -125,6 +129,7 @@ export class BlogsController {
   }
 
   @Delete('/:id')
+  @HttpCode(204)
   async deleteBlogsById(@Param('id') id: string) {
     const isDeleted: boolean = await this.blogsRepository.deletedBlog(id);
     if (!isDeleted) throw new NotFoundException('Blogs by id not found');
