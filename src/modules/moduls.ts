@@ -25,22 +25,47 @@ import { UserService } from 'src/api/users/user.service';
 import { UsersRepository } from 'src/api/users/user.repository';
 import { EmailManager } from 'src/api/manager/email.manager';
 
+const blogsProviders = [
+  BlogsQueryRepository,
+  BlogsService,
+  PostsQueryRepository,
+  PostsService,
+  BlogsRepository,
+  PostsRepository,
+  likesRepository,
+];
 
-const blogsProviders = [BlogsQueryRepository, BlogsService, PostsQueryRepository, PostsService, BlogsRepository, PostsRepository, likesRepository]
-
-const commentProviders = [CommentQueryRepository, CommentService, CommentRepository, likesRepository]
-const postProviders = [PostsQueryRepository, CommentQueryRepository, CommentService, PostsService, CommentRepository, likesRepository, PostsRepository]
-const userProviders = [UsersQueryRepository, UserService, UsersRepository, EmailManager]
+const commentProviders = [
+  CommentQueryRepository,
+  CommentService,
+  CommentRepository,
+  likesRepository,
+];
+const postProviders = [
+  PostsQueryRepository,
+  CommentQueryRepository,
+  CommentService,
+  PostsService,
+  CommentRepository,
+  likesRepository,
+  PostsRepository,
+];
+const userProviders = [
+  UsersQueryRepository,
+  UserService,
+  UsersRepository,
+  EmailManager,
+];
 
 @Module({
   imports: [
-	ConfigModule.forRoot({
-		isGlobal: true,
-		envFilePath: '.env'
-	}),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     MongooseModule.forRoot(process.env.MONGO_URL, {
       dbName: process.env.MONGOOSE_DB_NAME,
-    //   loggerLevel: 'debug'
+      //   loggerLevel: 'debug'
     }),
     MongooseModule.forFeature([
       { name: PostClass.name, schema: PostSchema },
@@ -56,6 +81,12 @@ const userProviders = [UsersQueryRepository, UserService, UsersRepository, Email
     CommentsController,
     BlogsController,
   ],
-  providers: [...blogsProviders, ...commentProviders, likesRepository, ...postProviders, ...userProviders],
+  providers: [
+    ...blogsProviders,
+    ...commentProviders,
+    likesRepository,
+    ...postProviders,
+    ...userProviders,
+  ],
 })
 export class AppModule {}
