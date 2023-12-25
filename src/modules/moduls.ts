@@ -60,10 +60,12 @@ const userProviders = [
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
+    ConfigModule.forRoot(
+	// 	{
+    //   isGlobal: true,
+    //   envFilePath: '.env',
+    // }
+	),
     MongooseModule.forRoot(process.env.MONGO_URL, {
       dbName: process.env.MONGOOSE_DB_NAME,
       //   loggerLevel: 'debug'
