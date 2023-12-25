@@ -17,4 +17,5 @@ export class BlogClass {
 		isMembership: boolean
 }
 
+// module.exports = mongoose.model("UserSchema", UserSchema);
 export const BlogSchema = SchemaFactory.createForClass(BlogClass)
