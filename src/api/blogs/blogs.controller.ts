@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, Query } from "@nestjs/common";
 import { BlogsQueryRepository } from "./blogs.queryReposity";
 import { PaginationType } from "src/types/pagination.types";
 import { Blogs } from "./blogs.class";
