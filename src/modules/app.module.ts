@@ -28,26 +28,20 @@ import { DeleteAllDataController } from 'src/api/delete/delete.allData';
 
 const blogsProviders = [
   BlogsQueryRepository,
-  BlogsService,
-  PostsQueryRepository,
-  PostsService,
-  BlogsRepository,
-  PostsRepository,
-  likesRepository,
+  BlogsService,  
+  BlogsRepository, 
+  
 ];
 
 const commentProviders = [
   CommentQueryRepository,
   CommentService,
   CommentRepository,
-  likesRepository,
+ 
 ];
 const postProviders = [
-  PostsQueryRepository,
-  CommentQueryRepository,
-  CommentService,
-  PostsService,
-  CommentRepository,
+  PostsQueryRepository,  
+  PostsService,  
   likesRepository,
   PostsRepository,
 ];
