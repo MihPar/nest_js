@@ -40,7 +40,7 @@ export class BlogsController {
         query.searchNameTerm,
         (query.pageNumber = '1'),
         (query.pageSize = '10'),
-        (query.sortBy = 'createAt'),
+        (query.sortBy = 'createdAt'),
         (query.sortDirection = 'desc'),
       );
     return getAllBlogs;
@@ -74,7 +74,7 @@ export class BlogsController {
       await this.postsQueryRepository.findPostsByBlogsId(
         (query.pageNumber = '1'),
         (query.pageSize = '10'),
-        (query.sortBy = 'createAt'),
+        (query.sortBy = 'createdAt'),
         (query.sortDirection = 'desc'),
         blogId,
 		userId

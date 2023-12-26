@@ -55,7 +55,7 @@ export class PostController {
         postId,
         (query.pageNumber = '1'),
         (query.pageSize = '10'),
-        (query.sortBy = 'createAt'),
+        (query.sortBy = 'createdAt'),
         (query.sortDirection = 'desc'),
         userId,
       );
@@ -80,7 +80,7 @@ export class PostController {
       await this.postsQueryRepository.findAllPosts(
         (query.pageNumber = '1'),
         (query.pageSize = '10'),
-        (query.sortBy = 'createAt'),
+        (query.sortBy = 'createdAt'),
         (query.sortDirection = 'desc'),
         userId,
       );
