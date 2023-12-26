@@ -1,6 +1,6 @@
 {
 	"version": 2,
-	"name": "nest",
+	"name": "nest_js",
 	"builds": [
 	   { 
 		"src": "src/main.ts", 
