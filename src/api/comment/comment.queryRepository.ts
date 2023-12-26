@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
 import { CommentsDB } from './comment.class';
-import { commentDBToView } from 'src/utils/helpers';
+import { commentDBToView } from '../../utils/helpers';
 import { Model } from 'mongoose';
-import { CommentClass, CommentDocument } from 'src/schema/comment.schema';
+import { CommentClass, CommentDocument } from '../../schema/comment.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { LikeClass, LikeDocument } from 'src/schema/likes.schema';
+import { LikeClass, LikeDocument } from '../../schema/likes.schema';
 import { CommentViewModel } from './comment.type';
 import { Like } from '../likes/likes.class';
-import { PaginationType } from 'src/types/pagination.types';
+import { PaginationType } from '../../types/pagination.types';
 
 @Injectable()
 export class CommentQueryRepository {

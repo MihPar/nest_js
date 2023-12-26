@@ -2,7 +2,7 @@ import { Blogs, BlogsDB } from './blogs.class';
 import { BlogsViewType, bodyBlogsModel } from './blogs.type';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { BlogClass, BlogDocument } from 'src/schema/blogs.schema';
+import { BlogClass, BlogDocument } from '../../schema/blogs.schema';
 import { BlogsRepository } from './blogs.repository';
 
 export class BlogsService {

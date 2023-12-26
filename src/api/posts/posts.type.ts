@@ -1,4 +1,4 @@
-import { LikesInfoViewModel } from "src/api/likes/likes.type";
+import { LikesInfoViewModel } from "../likes/likes.type";
 
 export type PostsViewModel = {
 	id: string;

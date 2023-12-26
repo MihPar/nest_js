@@ -2,7 +2,7 @@ import { Controller, Get, HttpCode, NotFoundException, Param } from '@nestjs/com
 import { CommentQueryRepository } from './comment.queryRepository';
 import { CommentViewModel } from './comment.type';
 import { Users } from '../users/user.class';
-import { UserDecorator, UserIdDecorator } from 'src/infrastructure/decorator/decorator.user';
+import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
 
 @Controller('comments')
 export class CommentsController {

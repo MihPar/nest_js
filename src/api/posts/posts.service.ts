@@ -1,14 +1,16 @@
 import { Injectable } from "@nestjs/common"
 import { PostsDB } from "./posts.class";
 import { PostsRepository } from "./posts.repository";
-import { LikeStatusEnum } from "src/api/likes/likes.emun";
-import { ObjectId } from "mongodb";
-import { likesRepository } from "src/api/likes/likes.repository";
-import { PostClass, PostDocument } from "src/schema/post.schema";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
-import { LikeClass, LikeDocument } from "src/schema/likes.schema";
-import { PostsViewModel, bodyPostsModel, inputModelPostType } from "./posts.type";
+import { PostsViewModel } from "./posts.type";
+import { LikeClass, LikeDocument } from "../../schema/likes.schema";
+import { PostClass, PostDocument } from "../../schema/post.schema";
+import { likesRepository } from "../likes/likes.repository";
+import { LikeStatusEnum } from "../likes/likes.emun";
+
+
+
 
 @Injectable()
 export class PostsService {

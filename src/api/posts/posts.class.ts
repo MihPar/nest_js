@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
-import { LikeStatusEnum } from "src/api/likes/likes.emun";
-import { LikesInfoModel, newestLikesType } from "src/api/likes/likes.type";
+import { LikeStatusEnum } from "../likes/likes.emun";
+import { LikesInfoModel, newestLikesType } from "../likes/likes.type";
 import { PostsViewModel } from "./posts.type";
 
 export class Posts {

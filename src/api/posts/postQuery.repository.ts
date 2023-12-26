@@ -1,13 +1,13 @@
-import { PostsDB } from 'src/api/posts/posts.class';
 import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
-import { LikeStatusEnum } from 'src/api/likes/likes.emun';
-import { Posts } from './posts.class';
-import { PaginationType } from 'src/types/pagination.types';
+import { Posts, PostsDB } from './posts.class';
 import { InjectModel } from '@nestjs/mongoose';
-import { PostClass, PostDocument } from 'src/schema/post.schema';
 import { Model } from 'mongoose';
-import { LikeClass, LikeDocument } from 'src/schema/likes.schema';
+import { LikeStatusEnum } from '../likes/likes.emun';
+import { PostClass, PostDocument } from '../../schema/post.schema';
+import { PaginationType } from '../../types/pagination.types';
+import { LikeClass, LikeDocument } from '../../schema/likes.schema';
+
 
 @Injectable()
 export class PostsQueryRepository {

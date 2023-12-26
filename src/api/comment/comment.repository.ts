@@ -1,6 +1,4 @@
-import { CommentsDB } from "./comment.class";
-import { ObjectId } from "mongodb";
-import { CommentClass, CommentDocument } from "src/schema/comment.schema";
+import { CommentClass, CommentDocument } from "../../schema/comment.schema";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 

@@ -9,7 +9,11 @@
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": ".",
+	"paths": {
+		"*":["src/*"]
+		},
+	"moduleResolution": "node",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
@@ -18,7 +22,11 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": false,
 	"esModuleInterop": true,
+	// "rootDir": "./src",
 	// "allowImportingTsExtensions": true,
 	// "noEmit": true
-  }
+  },
+  "include":["src/**/*"],
+  "exclude": ["node_modules"],
+  
 }

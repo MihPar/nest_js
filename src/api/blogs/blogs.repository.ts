@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { ObjectId } from "mongodb";
-import { BlogClass, BlogDocument } from "src/schema/blogs.schema";
+import { BlogClass, BlogDocument } from "../../schema/blogs.schema";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { BlogsViewType } from "./blogs.type";
 import { BlogsDB } from "./blogs.class";
 
 @Injectable()

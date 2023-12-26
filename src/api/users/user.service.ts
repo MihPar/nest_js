@@ -5,7 +5,7 @@ import {v4 as uuidv4} from "uuid"
 import { UsersRepository } from "./user.repository";
 import { Injectable } from "@nestjs/common";
 import { add } from "date-fns";
-import { EmailManager } from "src/api/manager/email.manager";
+import { EmailManager } from "../manager/email.manager";
 import { Users } from "./user.class";
 import { UsersQueryRepository } from "./users.queryRepository";
 

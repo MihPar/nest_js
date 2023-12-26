@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { Blogs, BlogsDB } from "./blogs.class";
-import { PaginationType } from "src/types/pagination.types";
+import { PaginationType } from "../../types/pagination.types";
 import { ObjectId } from "mongodb";
-import { BlogClass, BlogDocument } from "src/schema/blogs.schema";
+import { BlogClass, BlogDocument } from "../../schema/blogs.schema";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { BlogsViewType } from "./blogs.type";

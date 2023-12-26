@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, Query } from "@nestjs/common";
 import { BlogsQueryRepository } from "./blogs.queryReposity";
-import { PaginationType } from "src/types/pagination.types";
+
 import { Blogs } from "./blogs.class";
 import { BlogsViewType, bodyBlogsModel } from "./blogs.type";
 import { BlogsService } from "./blogs.service";
@@ -10,7 +10,8 @@ import { PostsService } from "../posts/posts.service";
 import { BlogsRepository } from "./blogs.repository";
 import { PostsQueryRepository } from "../posts/postQuery.repository";
 import { Users } from "../users/user.class";
-import { UserDecorator, UserIdDecorator } from "src/infrastructure/decorator/decorator.user";
+import { UserDecorator, UserIdDecorator } from "../../infrastructure/decorator/decorator.user";
+import { PaginationType } from "../../types/pagination.types";
 
 @Controller('blogs')
 export class BlogsController {

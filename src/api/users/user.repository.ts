@@ -2,10 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
 import { Users } from './user.class';
 import { add } from 'date-fns';
-import { UserClass, UserDocument } from 'src/schema/user.schema';
+import { UserClass, UserDocument } from '../../schema/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserViewType } from './user.type';
 
 @Injectable()
 export class UsersRepository {

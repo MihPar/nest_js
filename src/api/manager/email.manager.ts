@@ -1,4 +1,4 @@
-import { EmailAdapter } from 'src/api/adapter/email.adapter';
+import { EmailAdapter } from '../adapter/email.adapter';
 
 export class EmailManager {
 	constructor(

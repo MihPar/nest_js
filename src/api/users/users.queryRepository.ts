@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { UserViewType} from './user.type';
 import { Users } from './user.class';
-import { ObjectId, WithId } from 'mongodb';
 import { InjectModel } from '@nestjs/mongoose';
-import { UserClass, UserDocument } from 'src/schema/user.schema';
+import { UserClass, UserDocument } from '../../schema/user.schema';
 import { Model } from 'mongoose';
-import { PaginationType } from 'src/types/pagination.types';
+import { PaginationType } from '../../types/pagination.types';
 
 @Injectable()
 export class UsersQueryRepository {
