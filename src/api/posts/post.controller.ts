@@ -10,18 +10,19 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { PaginationType } from 'src/types/pagination.types';
-import { CommentViewType } from 'src/api/comment/comment.type';
+import { PaginationType } from '../../types/pagination.types';
+import { CommentViewType } from '../comment/comment.type';
 import { Posts } from './posts.class';
-import { CommentService } from 'src/api/comment/comment.service';
+import { CommentService } from '../comment/comment.service';
 import { inputModelPostType } from './posts.type';
 import { PostsService } from './posts.service';
 import { CommentQueryRepository } from '../comment/comment.queryRepository';
 import { PostsQueryRepository } from './postQuery.repository';
 import { Users } from '../users/user.class';
-import { UserDecorator, UserIdDecorator } from 'src/infrastructure/decorator/decorator.user';
+
 import { Blogs } from '../blogs/blogs.class';
 import { BlogsQueryRepository } from '../blogs/blogs.queryReposity';
+import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
 
 @Controller('posts')
 export class PostController {
