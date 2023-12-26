@@ -1,5 +1,6 @@
-import { PostController } from 'src/api/posts/post.controller';
+
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PostClass, PostSchema } from 'src/schema/post.schema';
 import { LikeClass, LikeSchema } from 'src/schema/likes.schema';
@@ -9,7 +10,6 @@ import { BlogClass, BlogSchema } from 'src/schema/blogs.schema';
 import { UsersController } from 'src/api/users/users.controller';
 import { CommentsController } from 'src/api/comment/comments.controller';
 import { BlogsController } from 'src/api/blogs/blogs.controller';
-import { ConfigModule } from '@nestjs/config';
 import { BlogsQueryRepository } from 'src/api/blogs/blogs.queryReposity';
 import { BlogsService } from 'src/api/blogs/blogs.service';
 import { PostsQueryRepository } from 'src/api/posts/postQuery.repository';
@@ -25,6 +25,7 @@ import { UserService } from 'src/api/users/user.service';
 import { UsersRepository } from 'src/api/users/user.repository';
 import { EmailManager } from 'src/api/manager/email.manager';
 import { DeleteAllDataController } from 'src/api/delete/delete.allData';
+import { PostController } from 'src/api/posts/post.controller';
 
 const blogsProviders = [
   BlogsQueryRepository,
