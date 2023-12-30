@@ -70,7 +70,7 @@ export class BlogsController {
     },
   ) {
     const blog = await this.blogsQueryRepository.findBlogById(blogId);
-	console.log("find blog by id, str 72: ", blog)
+	// console.log("find blog by id, str 72: ", blog)
     if (!blog) throw new NotFoundException('Blogs by id not found');
     const getPosts: PaginationType<Posts> =
       await this.postsQueryRepository.findPostsByBlogsId(
@@ -91,7 +91,7 @@ export class BlogsController {
     @Body() inputDataModel: bodyPostsModel,
   ) {
     const findBlog: Blogs = await this.blogsQueryRepository.findBlogById(blogId);
-	console.log("find blog by blogId, str 94: ", findBlog)
+	// console.log("find blog by blogId, str 94: ", findBlog)
     if (!findBlog) throw new NotFoundException('Blogs by id not found');
     const isCreatePost = await this.postsService.createPost(
       blogId,

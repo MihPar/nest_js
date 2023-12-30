@@ -36,23 +36,21 @@ export class PostsService {
       blogId,
       blogName,
     );
-	console.log(newPost)
-    const createPost: PostsDB = await this.postsRepository.createNewPosts(
-      newPost,
-    );
-	console.log(createPost)
+	// console.log(newPost)
+    const createPost: PostsDB = await this.postsRepository.createNewPosts(newPost);
+	// console.log(createPost)
     const post = await this.postModel
       .findOne({ blogId: new ObjectId(blogId) }, { __v: 0 }) //
       .lean();
     const newestLikes = await this.likeModel
-      .find({ postId: createPost._id }) //
+      .find({ postId: new ObjectId(createPost._id) }) //
       .sort({ addedAt: -1 })
       .limit(3)
       .skip(0)
       .lean();
     let myStatus: LikeStatusEnum = LikeStatusEnum.None;
     if (blogId) {
-      const reaction = await this.likeModel.findOne({ blogId: blogId });
+      const reaction = await this.likeModel.findOne({ blogId: new ObjectId(blogId) }); //
       myStatus = reaction
         ? (reaction.myStatus as unknown as LikeStatusEnum)
         : LikeStatusEnum.None;
