@@ -27,7 +27,7 @@ export class BlogsRepository {
     websiteUrl: string,
   ): Promise<BlogClass | any> {
     const result = this.blogModel.updateOne(
-      { id: new ObjectId(id) },
+      { _id: new ObjectId(id) },
       {
         $set: { name: name, description: description, websiteUrl: websiteUrl },
       },
