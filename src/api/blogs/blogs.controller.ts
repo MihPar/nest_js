@@ -38,10 +38,10 @@ export class BlogsController {
     const getAllBlogs: PaginationType<Blogs> =
       await this.blogsQueryRepository.findAllBlogs(
         query.searchNameTerm,
+		(query.sortBy || 'createdAt'),
+		(query.sortDirection || 'desc'),
         (query.pageNumber || '1'),
         (query.pageSize || '10'),
-        (query.sortBy || 'createdAt'),
-        (query.sortDirection || 'desc'),
       );
     return getAllBlogs;
   }
