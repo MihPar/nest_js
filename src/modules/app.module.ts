@@ -10,7 +10,7 @@ import { PostsQueryRepository } from '../api/posts/postQuery.repository';
 import { PostsService } from '../api/posts/posts.service';
 import { BlogsRepository } from '../api/blogs/blogs.repository';
 import { PostsRepository } from '../api/posts/posts.repository';
-import { LikesRepository } from '../api/likes/likes.repository';
+import { LikesRepository } from '/api/likes/likes.repository';
 import { CommentQueryRepository } from '../api/comment/comment.queryRepository';
 import { CommentService } from '../api/comment/comment.service';
 import { CommentRepository } from '../api/comment/comment.repository';
@@ -31,14 +31,12 @@ const blogsProviders = [
   BlogsQueryRepository,
   BlogsService,  
   BlogsRepository, 
-  
 ];
 
 const commentProviders = [
   CommentQueryRepository,
   CommentService,
   CommentRepository,
- 
 ];
 const postProviders = [
   PostsQueryRepository,  
