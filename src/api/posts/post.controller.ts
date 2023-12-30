@@ -125,7 +125,7 @@ export class PostController {
   @Put(':id')
   @HttpCode(204)
   async updatePostById(
-    @Param('id') postId: ObjectId,
+    @Param('id') postId: string,
     @Body() inputModelData: inputModelPostType,
   ) {
     const updatePost: boolean = await this.postsService.updateOldPost(

@@ -12,7 +12,7 @@ export type EmailConfirmationType = {
 }	
 
 export type UserViewType = {
-   id: any;
+   id: string;
    login: string;
    email: string;
   createdAt: string;
