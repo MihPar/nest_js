@@ -20,7 +20,7 @@ export class DeleteAllDataController {
     await this.blogsService.deleteAllBlogs();
     await this.userService.deleteAllUsers();
     await this.commentService.deleteAllComments();
-	await this.likesService.deleteAllLikes()
+	// await this.likesService.deleteAllLikes()
   }
 	
 }
