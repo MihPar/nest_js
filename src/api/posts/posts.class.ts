@@ -60,7 +60,12 @@ export class Posts {
 		blogId: this.blogId,
 		blogName: this.blogName,
 		createdAt: this.createdAt,
-		extendedLikesInfo: {...this.extendedLikesInfo, myStatus, newestLikes},
+		extendedLikesInfo: {
+			dislikesCount: this.extendedLikesInfo.dislikesCount, 
+			likesCount: this.extendedLikesInfo.likesCount, 
+			myStatus, 
+			newestLikes
+		},
 	  };
 	}
   }
