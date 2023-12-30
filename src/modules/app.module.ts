@@ -86,3 +86,6 @@ const userProviders = [
   ],
 })
 export class AppModule {}
+
+
+// mongodb+srv://MihPar:MihPar1981@cluster0.e2lfxsd.mongodb.net/?retryWrites=true&w=majo
