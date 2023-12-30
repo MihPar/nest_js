@@ -20,11 +20,11 @@ import { UsersRepository } from '../api/users/user.repository';
 import { EmailManager } from '../api/manager/email.manager';
 import { DeleteAllDataController } from '../api/delete/delete.allData';
 import { PostController } from '../api/posts/post.controller';
-import { PostClass, PostSchema } from '../schema/post.schema';
 import { LikeClass, LikeSchema } from '../schema/likes.schema';
 import { UserClass, UserSchema } from '../schema/user.schema';
 import { CommentClass, CommentSchema } from '../schema/comment.schema';
 import { BlogClass, BlogSchema } from '../schema/blogs.schema';
+import { PostModel } from 'schema/post.schema';
 
 const blogsProviders = [
   BlogsQueryRepository,
@@ -62,8 +62,8 @@ const userProviders = [
 	),
     MongooseModule.forRoot(process.env.MONGO_URL),
     MongooseModule.forFeature([
-    //   PostModel,
-	  { name: PostClass.name, schema: PostSchema },
+      PostModel,
+	//   { name: PostClass.name, schema: PostSchema },
       { name: LikeClass.name, schema: LikeSchema },
       { name: UserClass.name, schema: UserSchema },
       { name: CommentClass.name, schema: CommentSchema },
