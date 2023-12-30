@@ -7,7 +7,7 @@ export type LikeDocument = HydratedDocument<LikeClass>;
 
 @Schema()
 export class LikeClass {
-	_id: Types.ObjectId
+	id: Types.ObjectId
   @Prop({required: true})
   	userId: ObjectId;
   @Prop({required: true})
