@@ -43,7 +43,7 @@ export class PostsService {
       .findOne({ blogId: new ObjectId(blogId) }, { __v: 0 }) //
       .lean();
     const newestLikes = await this.likeModel
-      .find({ postId: new ObjectId(newPost._id) }) //
+      .find({ postId: newPost._id })
       .sort({ addedAt: -1 })
       .limit(3)
       .skip(0)
@@ -59,7 +59,7 @@ export class PostsService {
   }
 
   async updateOldPost(
-	id: ObjectId,
+	id: string,
 	title: string,
 	shortDescription: string,
 	content: string,

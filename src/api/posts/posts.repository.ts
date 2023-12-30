@@ -17,7 +17,7 @@ export class PostsRepository {
   }
 
   async updatePost(
-    id: ObjectId,
+    id: string,
     title: string,
     shortDescription: string,
     content: string,
