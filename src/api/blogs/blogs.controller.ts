@@ -128,6 +128,7 @@ export class BlogsController {
       inputDateMode.websiteUrl,
     );
     if (!isUpdateBlog) throw new NotFoundException('Blogs by id not found');
+	return isUpdateBlog
   }
 
   @Delete('/:id')
@@ -135,6 +136,6 @@ export class BlogsController {
   async deleteBlogsById(@Param('id') id: string) {
     const isDeleted: boolean = await this.blogsRepository.deletedBlog(id);
     if (!isDeleted) throw new NotFoundException('Blogs by id not found');
-    return true;
+    return isDeleted;
   }
 }

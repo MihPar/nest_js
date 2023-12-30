@@ -50,7 +50,7 @@ export class PostsService {
       .lean();
     let myStatus: LikeStatusEnum = LikeStatusEnum.None;
     if (blogId) {
-      const reaction = await this.likeModel.findOne({ blogId: new ObjectId(blogId) },  { __v: 0 }); //
+      const reaction = await this.likeModel.findOne({ blogId: new ObjectId(blogId) }, { __v: 0 }); //
       myStatus = reaction
         ? (reaction.myStatus as unknown as LikeStatusEnum)
         : LikeStatusEnum.None;
