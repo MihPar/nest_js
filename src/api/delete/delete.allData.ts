@@ -11,7 +11,7 @@ export class DeleteAllDataController {
 		protected blogsService: BlogsService,
 		protected userService: UserService,
 		protected commentService: CommentService,
-		protected likesService: LikesService
+		// protected likesService: LikesService
 	) {}
 	@Delete()
 	@HttpCode(204)
