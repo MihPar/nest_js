@@ -49,8 +49,9 @@ export class PostController {
       sortDirection: string;
     },
   ) {
+	// console.log("get comment by postId str 52: ", postId)
     const isExistPots = await this.postsQueryRepository.findPostById(postId);
-	console.log(isExistPots)
+	// console.log("postController 54 str, isExistPots: ", isExistPots)
     if (!isExistPots) throw new NotFoundException('Blogs by id not found');
     const commentByPostsId: PaginationType<CommentViewType> | null =
       await this.commentQueryRepository.findCommentByPostId(
@@ -86,7 +87,7 @@ export class PostController {
         (query.sortDirection = 'desc'),
         userId,
       );
-	  console.log(getAllPosts)
+	//   console.log(getAllPosts)
     return getAllPosts;
   }
 

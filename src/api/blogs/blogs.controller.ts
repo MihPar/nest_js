@@ -54,7 +54,7 @@ export class BlogsController {
     return createBlog;
   }
 
-  @Get(':blogId/post')
+  @Get(':blogId/posts')
   @HttpCode(200)
   async getPostsByBlogId(
     @Param('blogId') blogId: string,
@@ -69,6 +69,7 @@ export class BlogsController {
     },
   ) {
     const blog = await this.blogsQueryRepository.findBlogById(blogId);
+	console.log("find blog by id, str 72: ", blog)
     if (!blog) throw new NotFoundException('Blogs by id not found');
     const getPosts: PaginationType<Posts> =
       await this.postsQueryRepository.findPostsByBlogsId(
@@ -83,7 +84,7 @@ export class BlogsController {
     return getPosts;
   }
 
-  @Post(':blogId/post')
+  @Post(':blogId/posts')
   async createPostByBlogId(
     @Param('blogId') blogId: string,
     @Body() inputDataModel: bodyPostsModel,
@@ -91,7 +92,7 @@ export class BlogsController {
     const findBlog: Blogs = await this.blogsQueryRepository.findBlogById(
       blogId,
     );
-	console.log(findBlog)
+	console.log("find blog by blogId, str 94: ", findBlog)
     if (!findBlog) throw new NotFoundException('Blogs by id not found');
     const isCreatePost = await this.postsService.createPost(
       blogId,
