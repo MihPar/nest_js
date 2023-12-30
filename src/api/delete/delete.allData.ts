@@ -11,7 +11,7 @@ export class DeleteAllDataController {
 		protected blogsService: BlogsService,
 		protected userService: UserService,
 		protected commentService: CommentService,
-		// protected likesService: LikesService
+		protected likesService: LikesService
 	) {}
 	@Delete()
 	@HttpCode(204)
@@ -20,7 +20,7 @@ export class DeleteAllDataController {
     await this.blogsService.deleteAllBlogs();
     await this.userService.deleteAllUsers();
     await this.commentService.deleteAllComments();
-	// await this.likesService.deleteAllLikes()
+	await this.likesService.deleteAllLikes()
   }
 	
 }
