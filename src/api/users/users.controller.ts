@@ -33,8 +33,8 @@ export class UsersController {
   }
 
   @Post()
-  async createUser(@Body() login: string, password: string, email: string) {
-	const createUser = await this.userService.createNewUser(login, password, email)
+  async createUser(@Body() body: {login: string, password: string, email: string}) {
+	const createUser = await this.userService.createNewUser(body.login, body.password, body.email)
 	return createUser
   }
 
