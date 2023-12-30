@@ -74,10 +74,10 @@ export class BlogsController {
     if (!blog) throw new NotFoundException('Blogs by id not found');
     const getPosts: PaginationType<Posts> =
       await this.postsQueryRepository.findPostsByBlogsId(
-        (query.pageNumber = '1'),
-        (query.pageSize = '10'),
-        (query.sortBy = 'createdAt'),
-        (query.sortDirection = 'desc'),
+        query.pageNumber = '1',
+        query.pageSize = '10',
+        query.sortBy = 'createdAt',
+        query.sortDirection = 'desc',
         blogId,
 		userId
       );

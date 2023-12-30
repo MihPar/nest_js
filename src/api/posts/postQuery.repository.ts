@@ -103,7 +103,7 @@ export class PostsQueryRepository {
     blogId: string,
     userId: string,
   ): Promise<PaginationType<Posts>> {
-    const filter = { blogId: blogId };
+    const filter = { blogId: new ObjectId(blogId) };
     const posts: PostsDB[] = await this.postModel
       .find(filter, { __v: 0 })
       .sort({ [sortBy]: sortDirection === 'asc' ? 1 : -1 })
@@ -137,7 +137,7 @@ export class PostsQueryRepository {
                 userId: new ObjectId(userId),
               })
               .lean();
-            console.log('reaction: ', reaction);
+            // console.log('reaction: ', reaction);
             myStatus = reaction
               ? (reaction.myStatus as unknown as LikeStatusEnum)
               : LikeStatusEnum.None;
