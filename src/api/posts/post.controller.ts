@@ -56,10 +56,10 @@ export class PostController {
     const commentByPostsId: PaginationType<CommentViewType> | null =
       await this.commentQueryRepository.findCommentByPostId(
         postId,
-        (query.pageNumber = '1'),
-        (query.pageSize = '10'),
-        (query.sortBy = 'createdAt'),
-        (query.sortDirection = 'desc'),
+        (query.pageNumber || '1'),
+        (query.pageSize || '10'),
+        (query.sortBy || 'createdAt'),
+        (query.sortDirection || 'desc'),
         userId,
       );
     if (!commentByPostsId) throw new NotFoundException('Blogs by id not found');
@@ -81,10 +81,10 @@ export class PostController {
   ) {
     const getAllPosts: PaginationType<Posts> =
       await this.postsQueryRepository.findAllPosts(
-        (query.pageNumber = '1'),
-        (query.pageSize = '10'),
-        (query.sortBy = 'createdAt'),
-        (query.sortDirection = 'desc'),
+        (query.pageNumber || '1'),
+        (query.pageSize || '10'),
+        (query.sortBy || 'createdAt'),
+        (query.sortDirection || 'desc'),
         userId,
       );
 	//   console.log(getAllPosts)
