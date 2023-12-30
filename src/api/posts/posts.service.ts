@@ -6,9 +6,9 @@ import { InjectModel } from "@nestjs/mongoose";
 import { PostsViewModel } from "./posts.type";
 import { LikeClass, LikeDocument } from "../../schema/likes.schema";
 import { PostClass, PostDocument } from "../../schema/post.schema";
-import { likesRepository } from "../likes/likes.repository";
 import { LikeStatusEnum } from "../likes/likes.emun";
 import { ObjectId } from "mongodb";
+import { LikesRepository } from "api/likes/likes.repository";
 
 
 
@@ -19,7 +19,7 @@ export class PostsService {
     @InjectModel(PostClass.name) private postModel: Model<PostDocument>,
     @InjectModel(LikeClass.name) private likeModel: Model<LikeDocument>,
     protected postsRepository: PostsRepository,
-    protected likesRepository: likesRepository,
+    protected likesRepository: LikesRepository,
   ) {}
 
   async createPost(

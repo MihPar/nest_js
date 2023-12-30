@@ -1,3 +1,4 @@
+import { LikesService } from './../likes/likes.service';
 import { Controller, Delete, HttpCode } from "@nestjs/common";
 import { PostsService } from "../posts/posts.service";
 import { BlogsService } from "../blogs/blogs.service";
@@ -10,6 +11,7 @@ export class DeleteAllDataController {
 		protected blogsService: BlogsService,
 		protected userService: UserService,
 		protected commentService: CommentService,
+		protected likesService: LikesService
 	) {}
 	@Delete()
 	@HttpCode(204)
@@ -18,6 +20,7 @@ export class DeleteAllDataController {
     await this.blogsService.deleteAllBlogs();
     await this.userService.deleteAllUsers();
     await this.commentService.deleteAllComments();
+	await this.likesService.deleteAllLikes()
   }
 	
 }

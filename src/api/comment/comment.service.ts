@@ -1,4 +1,4 @@
-import { likesRepository } from './../likes/likes.repository';
+import { LikesRepository } from './../likes/likes.repository';
 import { CommentsDB } from "./comment.class";
 import { CommentRepository } from "./comment.repository";
 import { Injectable } from "@nestjs/common";
@@ -8,7 +8,7 @@ import { ObjectId } from "mongodb";
 export class CommentService {
   constructor(
 	protected commentRepositories: CommentRepository,
-	protected likesRepositories: likesRepository
+	protected likesRepositories: LikesRepository
 	) {}
   async deleteAllComments() {
 	return await this.commentRepositories.deleteAllComments();

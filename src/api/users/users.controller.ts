@@ -22,12 +22,12 @@ export class UsersController {
     },
   ) {
     const users = await this.usersQueryRepository.getAllUsers(
-      query.sortBy = 'createAt',
-      query.sortDirection = "desc",
-	  query.pageNumber = '1',
-      query.pageSize = '10',
-      query.searchLoginTerm = '',
-      query.searchEmailTerm = '',
+      query.sortBy || 'createAt',
+      query.sortDirection || "desc",
+	  query.pageNumber || '1',
+      query.pageSize || '10',
+      query.searchLoginTerm || '',
+      query.searchEmailTerm || '',
     );
 	return users
   }
@@ -43,6 +43,5 @@ export class UsersController {
   async deleteUserById(@Param('id') userId: string) {
 	const deleteUserById = await this.userService.deleteUserById(userId)
 	if (!deleteUserById) throw new NotFoundException("Blogs by id not found")
-		return true
   }
 }

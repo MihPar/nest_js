@@ -1,10 +1,16 @@
 import { Injectable } from "@nestjs/common";
 import { LikeClass, LikeDocument } from '../../schema/likes.schema';
 import { InjectModel } from '@nestjs/mongoose';
+import { Model } from "mongoose";
 
 @Injectable()
-export class likesRepository {
-	constructor(@InjectModel(LikeClass.name) private likeModel: LikeDocument) {}
+export class LikesRepository {
+	constructor(@InjectModel(LikeClass.name) private likeModel: Model<LikeDocument>) {}
+
+	async deleteLikes() {
+		const deleteAllLikes = await this.likeModel.deleteMany({});
+    return deleteAllLikes.deletedCount === 1;
+	}
 
 	// async findLikePostByUser(postId: string, userId: ObjectId) {
 	// 	const result = new this.likeModel({userId, postId: postId}, {__v: 0})

@@ -32,7 +32,8 @@ export class BlogsRepository {
         $set: { name: name, description: description, websiteUrl: websiteUrl },
       },
     );
-    return result.updateOne()
+	console.log(result)
+    // return result
   }
 
   async deletedBlog(id: string) {

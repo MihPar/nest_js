@@ -32,6 +32,6 @@ export class PostClass {
   	extendedLikesInfo: LikeInfoClass
 }
 
- const PostSchema = SchemaFactory.createForClass(PostClass);
-export const PostModel = {name: PostClass.name, schema: PostSchema}
+ export const PostSchema = SchemaFactory.createForClass(PostClass);
+// export const PostModel = {name: PostClass.name, schema: PostSchema}
 
