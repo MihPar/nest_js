@@ -48,14 +48,14 @@ export class UserService {
       },
     };
     const user: Users = await this.usersRepository.createUser(newUser);
-    try {
-      await this.emailManager.sendEamilConfirmationMessage(
-        user.accountData.email,
-        user.emailConfirmation.confirmationCode
-      );
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   await this.emailManager.sendEamilConfirmationMessage(
+    //     user.accountData.email,
+    //     user.emailConfirmation.confirmationCode
+    //   );
+    // } catch (error) {
+    //   console.log(error);
+    // }
     return {
       id: user._id.toString(),
       login: user.accountData.userName,
