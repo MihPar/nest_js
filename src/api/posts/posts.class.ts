@@ -43,12 +43,16 @@ export class Posts {
 		blogId: post.blogId,
 		blogName: post.blogName,
 		createdAt: post.createdAt,
-		extendedLikesInfo: {...post.extendedLikesInfo, myStatus, newestLikes: newestLikes.map(l => ({
-		  addedAt: l.addedAt,
-		  login: l.login,
-		  userId: l.userId
-		}))},
-	  };
+		extendedLikesInfo: {
+			dislikesCount: post.extendedLikesInfo.dislikesCount, 
+			likesCount: post.extendedLikesInfo.likesCount, 
+			myStatus, 
+			newestLikes: newestLikes.map(l => ({
+				addedAt: l.addedAt,
+				login: l.login,
+				userId: l.userId
+			}))},
+		};
 	}
 	getPostViewModel(myStatus: LikeStatusEnum,
 	  newestLikes: newestLikesType[]): PostsViewModel {
