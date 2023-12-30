@@ -12,7 +12,7 @@ export class BlogClass {
 	@Prop({required: true})
 		websiteUrl: string
 	@Prop({required: true})
-		reatedAt: string
+		createdAt: string
 	@Prop({required: true})
 		isMembership: boolean
 }
