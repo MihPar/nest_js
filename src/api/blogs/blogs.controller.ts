@@ -121,6 +121,7 @@ export class BlogsController {
     @Param('id') id: string,
     @Body() inputDateMode: bodyBlogsModel,
   ) {
+	if(!id) throw new NotFoundException('Blogs by id not found');
     const isUpdateBlog: boolean = await this.blogsService.updateBlog(
       id,
       inputDateMode.name,
