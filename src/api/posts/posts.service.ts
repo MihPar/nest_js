@@ -8,6 +8,7 @@ import { LikeClass, LikeDocument } from "../../schema/likes.schema";
 import { PostClass, PostDocument } from "../../schema/post.schema";
 import { likesRepository } from "../likes/likes.repository";
 import { LikeStatusEnum } from "../likes/likes.emun";
+import { ObjectId } from "mongodb";
 
 
 
@@ -58,7 +59,7 @@ export class PostsService {
   }
 
   async updateOldPost(
-	id: string,
+	id: ObjectId,
 	title: string,
 	shortDescription: string,
 	content: string,

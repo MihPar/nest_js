@@ -23,6 +23,7 @@ import { Users } from '../users/user.class';
 import { Blogs } from '../blogs/blogs.class';
 import { BlogsQueryRepository } from '../blogs/blogs.queryReposity';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
+import { ObjectId } from 'mongodb';
 
 @Controller('posts')
 export class PostController {
@@ -121,7 +122,7 @@ export class PostController {
   @Put(':id')
   @HttpCode(204)
   async updatePostById(
-    @Param('id') postId: string,
+    @Param('id') postId: ObjectId,
     @Body() inputModelData: inputModelPostType,
   ) {
     const updatePost: boolean = await this.postsService.updateOldPost(
