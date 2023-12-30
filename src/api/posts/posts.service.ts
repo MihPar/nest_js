@@ -42,10 +42,10 @@ export class PostsService {
     );
 	console.log(createPost)
     const post = await this.postModel
-      .findOne({ blogId: blogId }, { __v: 0 })
+      .findOne({ blogId: new ObjectId(blogId) }, { __v: 0 }) //
       .lean();
     const newestLikes = await this.likeModel
-      .find({ postId: newPost._id })
+      .find({ postId: createPost._id }) //
       .sort({ addedAt: -1 })
       .limit(3)
       .skip(0)
