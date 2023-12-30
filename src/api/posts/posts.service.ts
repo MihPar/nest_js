@@ -36,9 +36,11 @@ export class PostsService {
       blogId,
       blogName,
     );
+	console.log(newPost)
     const createPost: PostsDB = await this.postsRepository.createNewPosts(
       newPost,
     );
+	console.log(createPost)
     const post = await this.postModel
       .findOne({ blogId: blogId }, { __v: 0 })
       .lean();

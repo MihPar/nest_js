@@ -22,6 +22,7 @@ export class CommentQueryRepository {
     commentId: string,
     userId: string,
   ): Promise<CommentViewModel | null> {
+	console.log(userId)
     try {
       const commentById: CommentsDB | null = await this.commentModel.findOne({
         _id: new ObjectId(commentId),

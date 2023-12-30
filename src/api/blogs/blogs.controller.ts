@@ -91,6 +91,7 @@ export class BlogsController {
     const findBlog: Blogs = await this.blogsQueryRepository.findBlogById(
       blogId,
     );
+	console.log(findBlog)
     if (!findBlog) throw new NotFoundException('Blogs by id not found');
     const isCreatePost = await this.postsService.createPost(
       blogId,
