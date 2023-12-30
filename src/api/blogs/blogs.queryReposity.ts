@@ -37,7 +37,7 @@ export class BlogsQueryRepository {
 		return result
 	}
 	async findBlogById(blogId: string, userId?: string): Promise<BlogsViewType | null> {
-		const blog: BlogsDB =  await this.blogModel.findOne({ _id: new ObjectId(blogId) }, {__v: 0}).lean();
+		const blog: BlogsDB =  await this.blogModel.findOne({ id: new ObjectId(blogId) }, {__v: 0}).lean();
 		return blog ? BlogsDB.getBlogsViewModel(blog) : null;
 	  }
 }
