@@ -9,7 +9,7 @@ export class LikesRepository {
 
 	async deleteLikes() {
 		const deleteAllLikes = await this.likeModel.deleteMany({});
-    return deleteAllLikes.deletedCount === 1;
+    	return deleteAllLikes.deletedCount === 1;
 	}
 
 	// async findLikePostByUser(postId: string, userId: ObjectId) {
