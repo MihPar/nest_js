@@ -47,6 +47,7 @@ export class BlogsController {
   }
 
   @Post()
+  @HttpCode(201)
   async createBlog(@Body() inputDateModel: bodyBlogsModel) {
     const createBlog: Blogs = await this.blogsService.createNewBlog(
       inputDateModel,

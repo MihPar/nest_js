@@ -42,7 +42,7 @@ export class Blogs {
 				description: this.description,
 				websiteUrl: this.websiteUrl,
 				createdAt: this.createdAt,
-				isMembership: this.isMembership
+				isMembership: false
 			}
 		}
   };
