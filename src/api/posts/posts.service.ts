@@ -8,7 +8,7 @@ import { LikeClass, LikeDocument } from "../../schema/likes.schema";
 import { PostClass, PostDocument } from "../../schema/post.schema";
 import { LikeStatusEnum } from "../likes/likes.emun";
 import { ObjectId } from "mongodb";
-import { LikesRepository } from "api/likes/likes.repository";
+import { LikesRepository } from "../likes/likes.repository";
 
 
 
