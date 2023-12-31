@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, Query } from "@nestjs/common";
 import { BlogsQueryRepository } from "./blogs.queryReposity";
-
 import { Blogs } from "./blogs.class";
 import { BlogsViewType, bodyBlogsModel } from "./blogs.type";
 import { BlogsService } from "./blogs.service";
