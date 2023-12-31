@@ -22,7 +22,7 @@ export class UsersController {
     },
   ) {
     const users = await this.usersQueryRepository.getAllUsers(
-      query.sortBy || 'createAt',
+      query.sortBy || 'createdAt',
       query.sortDirection || "desc",
 	  query.pageNumber || '1',
       query.pageSize || '10',
