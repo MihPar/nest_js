@@ -137,7 +137,6 @@ export class PostsQueryRepository {
                 userId: new ObjectId(userId),
               })
               .lean();
-            // console.log('reaction: ', reaction);
             myStatus = reaction
               ? (reaction.myStatus as unknown as LikeStatusEnum)
               : LikeStatusEnum.None;
