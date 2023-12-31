@@ -1,4 +1,4 @@
-import { Controller, Injectable } from "@nestjs/common";
+import { Controller } from "@nestjs/common";
 
 @Controller("likes")
 export class LikesController {

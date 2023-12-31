@@ -24,8 +24,8 @@ import { LikeClass, LikeSchema } from '../schema/likes.schema';
 import { UserClass, UserSchema } from '../schema/user.schema';
 import { CommentClass, CommentSchema } from '../schema/comment.schema';
 import { BlogClass, BlogSchema } from '../schema/blogs.schema';
-import { PostClass, PostSchema } from 'schema/post.schema';
-import { LikesService } from 'api/likes/likes.service';
+import { PostClass, PostSchema } from '../schema/post.schema';
+import { LikesService } from '../api/likes/likes.service';
 
 const blogsProviders = [
   BlogsQueryRepository,

@@ -23,7 +23,6 @@ import { Users } from '../users/user.class';
 import { Blogs } from '../blogs/blogs.class';
 import { BlogsQueryRepository } from '../blogs/blogs.queryReposity';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
-import { ObjectId } from 'mongodb';
 
 @Controller('posts')
 export class PostController {
