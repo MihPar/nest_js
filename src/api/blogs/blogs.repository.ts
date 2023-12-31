@@ -26,14 +26,14 @@ export class BlogsRepository {
     description: string,
     websiteUrl: string,
   ): Promise<BlogClass | any> {
-    const result = this.blogModel.updateOne(
-      { _id: new ObjectId(id) },
+    const result = await this.blogModel.updateOne(
+      { _id: id },
       {
         $set: { name: name, description: description, websiteUrl: websiteUrl },
       },
     );
-	console.log(result)
-    // return result
+	// console.log("update blog by id str 35: ", result)
+    return result.matchedCount === 1
   }
 
   async deletedBlog(id: string) {

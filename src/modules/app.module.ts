@@ -41,7 +41,6 @@ const commentProviders = [
 const postProviders = [
   PostsQueryRepository,  
   PostsService,  
-  LikesRepository,
   PostsRepository,
 ];
 const userProviders = [
