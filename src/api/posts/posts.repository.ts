@@ -43,7 +43,7 @@ export class PostsRepository {
   }
 
   async deleteRepoPosts() {
-    const deletedAll = await this.postModel.deleteOne();
+    const deletedAll = await this.postModel.deleteMany({});
     return deletedAll.deletedCount === 1;
   }
 }
