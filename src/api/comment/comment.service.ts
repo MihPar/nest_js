@@ -8,7 +8,6 @@ import { ObjectId } from "mongodb";
 export class CommentService {
   constructor(
 	protected commentRepositories: CommentRepository,
-	protected likesRepositories: LikesRepository
 	) {}
   async deleteAllComments() {
 	return await this.commentRepositories.deleteAllComments();
