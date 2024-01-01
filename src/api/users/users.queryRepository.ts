@@ -12,7 +12,7 @@ export class UsersQueryRepository {
 		@InjectModel(UserClass.name) private userModel: Model<UserDocument>
 	) {}
 	async getAllUsers(
-		sortBy: string = "createdAt",
+		sortBy: string,
 		sortDirection: string,
 		pageNumber: string,
 		pageSize: string,
@@ -22,7 +22,7 @@ export class UsersQueryRepository {
 		const filter = {
 			$or: [
 				{"accountData.userName": {$regex: searchLoginTerm || "",$options: "i"}},
-				{"accountData.email": { $regex: searchEmailTerm ?? "", $options: "i" }}
+				{"accountData.email": {$regex: searchEmailTerm ?? "", $options: "i"}}
 			],
 		};
 	
