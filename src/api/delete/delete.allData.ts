@@ -4,6 +4,7 @@ import { PostsService } from "../posts/posts.service";
 import { BlogsService } from "../blogs/blogs.service";
 import { UserService } from "../users/user.service";
 import { CommentService } from "../comment/comment.service";
+
 @Controller('testing/all-data')
 export class DeleteAllDataController {
 	constructor(
@@ -22,5 +23,4 @@ export class DeleteAllDataController {
     await this.commentService.deleteAllComments();
 	await this.likesService.deleteAllLikes()
   }
-	
 }
