@@ -22,7 +22,7 @@ export class EmailConfirmationClass {
 	@Prop({required: true})
 		confirmationCode: string
 	@Prop({required: true})
-	expirationDate: Date
+		expirationDate: Date
 	@Prop({required: true})
 		isConfirmed: boolean
 }

@@ -15,7 +15,6 @@ import { CommentQueryRepository } from '../api/comment/comment.queryRepository';
 import { CommentService } from '../api/comment/comment.service';
 import { CommentRepository } from '../api/comment/comment.repository';
 import { UsersQueryRepository } from '../api/users/users.queryRepository';
-import { UserService } from '../api/users/user.service';
 import { UsersRepository } from '../api/users/user.repository';
 import { EmailManager } from '../api/manager/email.manager';
 import { DeleteAllDataController } from '../api/delete/delete.allData';
@@ -26,6 +25,7 @@ import { CommentClass, CommentSchema } from '../schema/comment.schema';
 import { BlogClass, BlogSchema } from '../schema/blogs.schema';
 import { PostClass, PostSchema } from '../schema/post.schema';
 import { LikesService } from '../api/likes/likes.service';
+import { UsersService } from 'api/users/user.service';
 
 const blogsProviders = [
   BlogsQueryRepository,
@@ -45,7 +45,7 @@ const postProviders = [
 ];
 const userProviders = [
   UsersQueryRepository,
-  UserService,
+  UsersService,
   UsersRepository,
   EmailManager,
 ];

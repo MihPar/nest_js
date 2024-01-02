@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query } from '@nestjs/common';
 import { UsersQueryRepository } from './users.queryRepository';
-import { UserService } from './user.service';
+import { UsersService } from './user.service';
 
 @Controller('users')
 export class UsersController {
   constructor(
 	protected usersQueryRepository: UsersQueryRepository,
-	protected userService: UserService
+	protected usersService: UsersService
 	) {}
   @Get()
   @HttpCode(200)
@@ -41,14 +41,14 @@ export class UsersController {
 
   @Post()
   async createUser(@Body() body: {login: string, password: string, email: string}) {
-	const createUser = await this.userService.createNewUser(body.login, body.password, body.email)
+	const createUser = await this.usersService.createNewUser(body.login, body.password, body.email)
 	return createUser
   }
 
   @Delete(':id')
   @HttpCode(204)
   async deleteUserById(@Param('id') userId: string) {
-	const deleteUserById = await this.userService.deleteUserById(userId)
+	const deleteUserById = await this.usersService.deleteUserById(userId)
 	if (!deleteUserById) throw new NotFoundException("Blogs by id not found")
   }
 }

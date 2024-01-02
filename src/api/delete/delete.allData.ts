@@ -2,15 +2,15 @@ import { LikesService } from './../likes/likes.service';
 import { Controller, Delete, HttpCode } from "@nestjs/common";
 import { PostsService } from "../posts/posts.service";
 import { BlogsService } from "../blogs/blogs.service";
-import { UserService } from "../users/user.service";
 import { CommentService } from "../comment/comment.service";
+import { UsersService } from 'api/users/user.service';
 
 @Controller('testing/all-data')
 export class DeleteAllDataController {
 	constructor(
 		protected postsService: PostsService,
 		protected blogsService: BlogsService,
-		protected userService: UserService,
+		protected userService: UsersService,
 		protected commentService: CommentService,
 		protected likesService: LikesService
 	) {}

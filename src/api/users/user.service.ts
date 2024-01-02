@@ -10,7 +10,7 @@ import { Users } from "./user.class";
 import { UsersQueryRepository } from "./users.queryRepository";
 
 @Injectable()
-export class UserService {
+export class UsersService {
   constructor(
     protected usersRepository: UsersRepository,
     protected emailManager: EmailManager,
