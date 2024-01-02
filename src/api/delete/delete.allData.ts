@@ -3,7 +3,7 @@ import { Controller, Delete, HttpCode } from "@nestjs/common";
 import { PostsService } from "../posts/posts.service";
 import { BlogsService } from "../blogs/blogs.service";
 import { CommentService } from "../comment/comment.service";
-import { UsersService } from 'api/users/user.service';
+import { UsersService } from '../users/user.service';
 
 @Controller('testing/all-data')
 export class DeleteAllDataController {
