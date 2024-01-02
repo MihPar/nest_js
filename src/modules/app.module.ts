@@ -25,7 +25,7 @@ import { CommentClass, CommentSchema } from '../schema/comment.schema';
 import { BlogClass, BlogSchema } from '../schema/blogs.schema';
 import { PostClass, PostSchema } from '../schema/post.schema';
 import { LikesService } from '../api/likes/likes.service';
-import { UsersService } from 'api/users/user.service';
+import { UsersService } from '../api/users/user.service';
 
 const blogsProviders = [
   BlogsQueryRepository,
