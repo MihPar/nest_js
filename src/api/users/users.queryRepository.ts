@@ -25,7 +25,9 @@ export class UsersQueryRepository {
 				{"accountData.email": {$regex: searchEmailTerm ?? "", $options: "i"}}
 			],
 		};
-	
+		if(sortBy === "login") {
+			sortBy = "userName"
+		}
 		const getAllUsers: Users[] = await this.userModel.find(filter, {__v: 0})
 		  .sort({ [`accountData.${sortBy}`]: sortDirection === "asc" ? 1 : -1 })
 		  .skip((+pageNumber - 1) * +pageSize)
