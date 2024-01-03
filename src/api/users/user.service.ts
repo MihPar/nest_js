@@ -8,12 +8,14 @@ import { add } from "date-fns";
 import { EmailManager } from "../manager/email.manager";
 import { Users } from "./user.class";
 import { UsersQueryRepository } from "./users.queryRepository";
+import { EmailAdapter } from "api/adapter/email.adapter";
 
 @Injectable()
 export class UsersService {
   constructor(
     protected usersRepository: UsersRepository,
     protected emailManager: EmailManager,
+	protected emailAdapter: EmailAdapter,
 	protected usersQueryRepository: UsersQueryRepository
   ) {}
   async createNewUser(
@@ -48,14 +50,14 @@ export class UsersService {
       },
     };
     const user: Users = await this.usersRepository.createUser(newUser);
-    // try {
-    //   await this.emailManager.sendEamilConfirmationMessage(
-    //     user.accountData.email,
-    //     user.emailConfirmation.confirmationCode
-    //   );
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      await this.emailManager.sendEamilConfirmationMessage(
+        user.accountData.email,
+        user.emailConfirmation.confirmationCode
+      );
+    } catch (error) {
+      console.log(error);
+    }
     return {
       id: user._id.toString(),
       login: user.accountData.userName,

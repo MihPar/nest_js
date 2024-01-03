@@ -42,6 +42,7 @@ export class PostsService {
     const post = await this.postModel
       .findOne({ blogId: new ObjectId(blogId) }, { __v: 0 }) //
       .lean();
+	if(!post) return null
     const newestLikes = await this.likeModel
       .find({ postId: post._id }) //
       .sort({ addedAt: -1 })

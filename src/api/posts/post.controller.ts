@@ -48,6 +48,7 @@ export class PostController {
       sortDirection: string;
     },
   ) {
+	if(!userId) return null
 	// console.log("get comment by postId str 52: ", postId)
     const isExistPots = await this.postsQueryRepository.findPostById(postId);
 	// console.log("postController 54 str, isExistPots: ", isExistPots)
@@ -78,6 +79,7 @@ export class PostController {
       sortDirection: string;
     },
   ) {
+	if(!userId) return null
     const getAllPosts: PaginationType<Posts> =
       await this.postsQueryRepository.findAllPosts(
         (query.pageNumber || '1'),
@@ -112,6 +114,7 @@ export class PostController {
     @UserDecorator() user: Users,
     @UserIdDecorator() userId: string | null,
   ) {
+	if(!userId) return null
     const getPostById: Posts | null =
       await this.postsQueryRepository.findPostById(postId, userId);
     if (!getPostById) {

@@ -68,6 +68,7 @@ export class BlogsController {
       sortDirection: string;
     },
   ) {
+	if(!userId) return null
     const blog = await this.blogsQueryRepository.findBlogById(blogId);
 	// console.log("find blog by id, str 72: ", blog)
     if (!blog) throw new NotFoundException('Blogs by id not found');
