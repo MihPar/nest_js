@@ -17,7 +17,7 @@ export class PostsQueryRepository {
   ) {}
 
   async findPostById(id: string, userId?: string): Promise<Posts | null> {
-    const post: PostsDB = await this.postModel
+    const post: PostsDB | null = await this.postModel
       .findOne({ _id: new ObjectId(id) }, { __v: 0 })
       .lean();
     const newestLikes = await this.likeModel

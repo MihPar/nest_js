@@ -93,7 +93,7 @@ export class PostController {
 
   @Post()
   async createPost(@Body() inputModelPost: inputModelPostType) {
-    const findBlog: Blogs = await this.blogsQueryRepository.findBlogById(
+    const findBlog: Blogs | null = await this.blogsQueryRepository.findBlogById(
       inputModelPost.blogId,
     );
     if (!findBlog) throw new NotFoundException('Blogs by id not found');

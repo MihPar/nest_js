@@ -1,3 +1,6 @@
+// import { appSettings } from './../src/setting';
+// import { AppModule } from './../src/modules/app.module';
+// import { Test, TestingModule } from '@nestjs/testing';
 // import { UsersService } from './../src/api/users/user.service';
 // import { UsersQueryRepository } from './../src/api/users/users.queryRepository';
 // import { EmailManager } from './../src/api/manager/email.manager';
@@ -9,106 +12,75 @@
 // import { ObjectId } from 'mongodb';
 // import {v4 as uuidv4} from "uuid"
 // import { add } from 'date-fns';
+// import { HttpStatus, INestApplication } from '@nestjs/common';
+// import { request } from 'http';
 
 
 // jest.setTimeout(100000000)
 
-// describe('integration test for usersService', async () => {
-//   let mongoServer: MongoMemoryServer;
+// describe('Blogs e2e', async () => {
+// //   let mongoServer: MongoMemoryServer;
+//   let app: INestApplication
+//   let httpServer
 
 //   beforeAll(async () => {
-//     mongoServer = await MongoMemoryServer.create();
-//     const mongoUri = mongoServer.getUri();
-//     await mongoose.connect(mongoUri);
+//     // mongoServer = await MongoMemoryServer.create();
+//     // const mongoUri = mongoServer.getUri();
+//     // await mongoose.connect(mongoUri);
+
+// 	const moduleFixture: TestingModule = await Test.createTestingModule({
+// 		imports: [AppModule] 
+// 	}).compile()
+// 	app = moduleFixture.createNestApplication()
+// 	appSettings(app)
+// 	await app.init()
+// 	httpServer = app.getHttpServer()
 //   });
 
 //   afterAll(async () => {
-//     await mongoose.disconnect();
-//     await mongoServer.stop();
+//     // await mongoose.disconnect();
+//     // await mongoServer.stop();
+// 	await app.close()
 //   });
 
-//   const usersRepository = new UsersRepository(userModel);
-//   const emailAdapterMock: jest.Mocked<EmailAdapter> = {
-//     sendEmail: jest.fn(),
-//   };
-//   const emailAdapter = new EmailAdapter()
-//   const emailManager = new EmailManager(emailAdapter);
-//   const usersQueryRepository = new UsersQueryRepository(userModel);
-//   const usersService = new UsersService(
-//     usersRepository,
-//     emailManager,
-//     emailAdapterMock,
-//     usersQueryRepository,
-//   );
+// //   const usersRepository = new UsersRepository(userModel);
+// //   const emailAdapterMock: jest.Mocked<EmailAdapter> = {
+// //     sendEmail: jest.fn(),
+// //   };
+// //   const emailAdapter = new EmailAdapter()
+// //   const emailManager = new EmailManager(emailAdapter);
+// //   const usersQueryRepository = new UsersQueryRepository(userModel);
+// //   const usersService = new UsersService(
+// //     usersRepository,
+// //     emailManager,
+// //     emailAdapterMock,
+// //     usersQueryRepository,
+// //   );
 
-//   describe('create users', () => {
-//     it('this.emailAdapter.sendEmail should be called', async () => {
-//       let email = '1234mpara7274@gmail.com';
-//       let password = '123';
-//       let login = 'Mickhail';
-//       const result: UserViewType = await usersService.createNewUser(
-//         login,
-//         password,
-//         email,
-//       );
+// beforeAll(async(): Promise<void> => {
+// 	const moduleFixture: TestingModule = await Test.createTestingModule({
+// 		imports: [AppModule]
+// 	}).TestingModuleBuilder
+// 	.overrideProvider(EmailService)
+// 	.useClass(EmailServiceMock)
+// 	.compile()
 
-//       expect(emailAdapterMock.sendEmail).toBeCalled();
-//     });
+// 	app = moduleFixture.createNestApplication()
+// 	appSettings(app)
+// 	await app.init()
+// 	httpServer = app.getHttpServer()
+// })
+
+//   describe('create blog', (): void => {
+//     it('blog should created', async (): Promise<void> => {
+//       request(httpServer).post('/blogs').expect(HttpStatus.CREATED)
 //   });
-
-//   it('should currect created user', async () => {
-//     let email = 'mpara7274@gmail.com';
-//     let password = '123';
-//     let login = 'Mickhail';
-//     const result: UserViewType = await usersService.createNewUser(
-//       login,
-//       password,
-//       email,
-//     );
-
-//     expect(result.accountData.userName).toBe(login);
-//     expect(result.accountData.email).toBe(email);
-//     expect(result.emailConfirmation.isConfirmed).toBe(false);
-//   });
+// })
 
 //   describe("confirmEmail", () => {
 
 // 	it("should return false for expired confirmation code", async () => {
-// 		await userModel.insertMany([{
-// 			_id: new ObjectId(),
-// 			accountData: {
-// 			  userName: "",
-// 			  email: "mpara7274@gmail.com",
-// 			  passwordHash: "",
-// 			  createdAt: new Date().toISOString(),
-// 			},
-// 			emailConfirmation: {
-// 			  confirmationCode: uuidv4(),
-// 			  expirationDate: add(new Date(), {
-// 				hours: 1,
-// 				minutes: 10,
-// 			  }),
-// 			  isConfirmed: false,
-// 			},
-// 			getViewUser(): UserViewType {
-// 			  return {
-// 				id: this._id.toString(),
-// 				login: this.accountData.userName,
-// 				email: this.accountData.email,
-// 				createdAt: this.accountData.createdAt,
-// 			  };
-// 			},
-// 		}]);
-// 		let email = 'mpara7274@gmail.com';
-// 		let password = '123';
-// 		let login = 'Mickhail';
-// 		const result: UserViewType = await authService.confirmation(
-// 		  login,
-// 		  password,
-// 		  email,
-// 		);
-	
-// 		expect(result).toBeFalsy();
+		
 // 	})
 //   })
 // });

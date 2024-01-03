@@ -26,6 +26,7 @@ import { BlogClass, BlogSchema } from '../schema/blogs.schema';
 import { PostClass, PostSchema } from '../schema/post.schema';
 import { LikesService } from '../api/likes/likes.service';
 import { UsersService } from '../api/users/user.service';
+import { EmailAdapter } from 'api/adapter/email.adapter';
 
 const blogsProviders = [
   BlogsQueryRepository,
@@ -48,6 +49,7 @@ const userProviders = [
   UsersService,
   UsersRepository,
   EmailManager,
+  EmailAdapter
 ];
 
 @Module({
@@ -58,7 +60,7 @@ const userProviders = [
       envFilePath: '.env',
     }
 	),
-    MongooseModule.forRoot(process.env.MONGO_URL),
+    MongooseModule.forRoot(process.env.MONGO_URL || "mongodb://0.0.0.0:27017"),
     MongooseModule.forFeature([
     //   PostModel,
 	  { name: PostClass.name, schema: PostSchema },

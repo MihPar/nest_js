@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { AccountDataType, EmailConfirmationType, UserViewType } from "./user.type";
+import { IsEmail, IsNotEmpty, Length, isEmail } from "class-validator";
 
 export class DbId {
 	_id: ObjectId
@@ -24,3 +25,15 @@ export class Users extends DbId {
 	  };
 	}
 }
+
+export class InputModelClassCreateBody {
+	@Length(3, 10)
+	login: string
+	@Length(6, 20)
+	@IsNotEmpty()
+	password: string
+	@IsEmail({}, {
+		message: "incorrect email"
+	})
+	email: string
+ }

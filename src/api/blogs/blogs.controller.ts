@@ -90,8 +90,7 @@ export class BlogsController {
     @Param('blogId') blogId: string,
     @Body() inputDataModel: bodyPostsModel,
   ) {
-    const findBlog: Blogs = await this.blogsQueryRepository.findBlogById(blogId);
-	// console.log("find blog by blogId, str 94: ", findBlog)
+    const findBlog: Blogs | null = await this.blogsQueryRepository.findBlogById(blogId);
     if (!findBlog) throw new NotFoundException('Blogs by id not found');
     const isCreatePost = await this.postsService.createPost(
       blogId,

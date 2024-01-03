@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query } from '@nestjs/common';
 import { UsersQueryRepository } from './users.queryRepository';
 import { UsersService } from './user.service';
+import { InputModelClassCreateBody } from './user.class';
 
 @Controller('users')
 export class UsersController {
@@ -40,7 +41,7 @@ export class UsersController {
   }
 
   @Post()
-  async createUser(@Body() body: {login: string, password: string, email: string}) {
+  async createUser(@Body() body: InputModelClassCreateBody) {
 	const createUser = await this.usersService.createNewUser(body.login, body.password, body.email)
 	return createUser
   }

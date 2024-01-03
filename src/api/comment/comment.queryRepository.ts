@@ -30,7 +30,7 @@ export class CommentQueryRepository {
       if (!commentById) {
         return null;
       }
-      const findLike: Like = await this.findLikeCommentByUser(
+      const findLike: Like | null = await this.findLikeCommentByUser(
         commentId,
         new ObjectId(userId),
       );
@@ -41,7 +41,7 @@ export class CommentQueryRepository {
   }
 
   async findLikeCommentByUser(commentId: string, userId: ObjectId) {
-    const likeModel: Like = await this.likeModel.findOne({
+    const likeModel: Like | null = await this.likeModel.findOne({
       $and: [{ userId: userId }, { commentId: commentId }],
     });
     return likeModel;
