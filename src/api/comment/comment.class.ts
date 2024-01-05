@@ -1,6 +1,10 @@
 import { ObjectId } from "mongodb";
 import { CommentViewModel, CommentatorInfo } from "./comment.type";
 import { LikeStatusEnum } from "../../api/likes/likes.emun";
+import { Transform, TransformFnParams } from "class-transformer";
+import { IsNotEmpty, IsString } from "class-validator";
+import { applyDecorators } from "@nestjs/common";
+import { isMatch } from "date-fns";
 
 export class Comment {
 	public createdAt: string;
@@ -54,4 +58,18 @@ export class CommentsDB extends Comment {
 		}
 	  };
 	}
+  }
+
+  const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
+
+function IsOptional() {
+	return applyDecorators(Trim(), IsString(), IsNotEmpty())
+}
+
+const allowedValues = ['Like', 'Dislike', 'None']
+
+  export class InputModelStatusClass {
+	@IsOptional()
+	@isMatch(new RegExp(`^(${allowedValues.join('|')})$`)).withMessage("Pattern is incorrect")
+	likeStatus: "None"
   }

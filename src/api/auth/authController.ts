@@ -1,5 +1,5 @@
 import { DeviceService } from './../securityDevices/device.service';
-import { BadRequestException, Body, Controller, Headers, HttpCode, Ip, Post, Req, Res, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Headers, HttpCode, Ip, Post, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { InputDataModelClassAuth, InputDataReqClass, InputDateReqConfirmClass, InputModelNewPasswordClass, emailInputDataClass } from "./auth.class";
 import { Users } from "api/users/user.class";
 import { UsersService } from "api/users/user.service";
@@ -7,6 +7,9 @@ import { JwtService } from "@nestjs/jwt";
 import { Response } from 'express';
 import { UserDecorator, UserIdDecorator } from 'infrastructure/decorator/decorator.user';
 import { UsersQueryRepository } from 'api/users/users.queryRepository';
+import { Ratelimits } from '../../infrastructure/guards/auth/rateLimets';
+import { AuthGuard } from '@nestjs/passport';
+import { CheckRefreshToken } from 'infrastructure/guards/auth/checkRefreshToken';
 
 @Controller('auth')
 export class AuthController {
@@ -35,6 +38,7 @@ export class AuthController {
 
 	@HttpCode(200)
 	@Post()
+	@UseGuards(Ratelimits)
 	async createLogin(@Body() inutDataModel: InputDataModelClassAuth, @Ip() IP: string, @Headers() Headers: any,
 	@Res({passthrough: true}) res: Response) {
 		const user: Users | null = await this.usersService.checkCridential(
@@ -59,6 +63,7 @@ export class AuthController {
 	}
 	@HttpCode(200)
 	@Post()
+	@UseGuards(CheckRefreshToken)
 	async cretaeRefreshToken(
 		@Req() req: Request,
 		@Res({passthrough: true}) res: Response,

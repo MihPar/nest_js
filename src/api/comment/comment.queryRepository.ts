@@ -90,4 +90,15 @@ export class CommentQueryRepository {
       items,
     };
   }
+
+  async findCommentByCommentId(commentId: string, userId?: ObjectId | null) {
+    const commentById: CommentsDB | null = await this.commentModel.findOne({
+      _id: new ObjectId(commentId),
+    });
+    if (!commentById) {
+      return null;
+    }
+	return commentById
+	
+  }
 }

@@ -5,7 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { UserClass, UserDocument } from '../../schema/user.schema';
 import { Model } from 'mongoose';
 import { PaginationType } from '../../types/pagination.types';
-import { WithId } from 'mongodb';
+import { ObjectId, WithId } from 'mongodb';
 
 @Injectable()
 export class UsersQueryRepository {
@@ -29,7 +29,7 @@ export class UsersQueryRepository {
 		if(sortBy === "login") {
 			sortBy = "userName"
 		}
-		const getAllUsers: Users[] = await this.userModel.find(filter, {__v: 0})
+		const getAllUsers: Users[] = await this.userModel.find(filter)
 		  .sort({ [`accountData.${sortBy}`]: sortDirection === "asc" ? 1 : -1 })
 		  .skip((+pageNumber - 1) * +pageSize)
 		  .limit(+pageSize)
@@ -57,24 +57,29 @@ export class UsersQueryRepository {
 			{ "accountData.email": loginOrEmail },
 			{ "accountData.userName": loginOrEmail },
 		  ],
-		}, {__v: 0}).lean(); 
+		}).lean(); 
 		return user;
 	  }
 
 	  async findUserByEmail(email: string) {
-		return this.userModel.findOne({ "accountData.email": email }, {__v: 0}).lean();
+		return this.userModel.findOne({ "accountData.email": email }).lean();
 	  }
 
 	  async findUserByCode(recoveryCode: string): Promise<WithId<Users> | null> {
 		return this.userModel.findOne({
 		  "emailConfirmation.confirmationCode": recoveryCode,
-		}, {__v: 0}).lean();
+		}).lean();
 	  }
 
 	  async findUserByConfirmation(code: string): Promise<Users | null> {
 		const user: Users | null = await this.userModel.findOne({
 		  "emailConfirmation.confirmationCode": code,
-		}, {__v: 0}).lean();
+		}).lean();
+		return user;
+	  }
+
+	  async findUserById(userId: ObjectId): Promise<Users | null> {
+		let user = await this.userModel.findOne({ _id: new ObjectId(userId) }).lean();
 		return user;
 	  }
 }

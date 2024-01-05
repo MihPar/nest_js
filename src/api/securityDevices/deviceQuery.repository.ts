@@ -22,4 +22,8 @@ export class DeviceQueryRepository {
 		  };
 		});
 	}
+
+	async findDeviceByDeviceId(deviceId: string) {
+		return await this.deviceModel.findOne({ deviceId: deviceId }, {__v: 0}).lean();
+	  }
 }
