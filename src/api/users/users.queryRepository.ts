@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { UserClass, UserDocument } from '../../schema/user.schema';
 import { Model } from 'mongoose';
 import { PaginationType } from '../../types/pagination.types';
+import { WithId } from 'mongodb';
 
 @Injectable()
 export class UsersQueryRepository {
@@ -48,5 +49,32 @@ export class UsersQueryRepository {
 				createdAt: user.accountData.createdAt,
 			})),
 		};
+	  }
+
+	  async findByLoginOrEmail(loginOrEmail: string): Promise<Users | null> {
+		const user: Users | null = await this.userModel.findOne({
+		  $or: [
+			{ "accountData.email": loginOrEmail },
+			{ "accountData.userName": loginOrEmail },
+		  ],
+		}, {__v: 0}).lean(); 
+		return user;
+	  }
+
+	  async findUserByEmail(email: string) {
+		return this.userModel.findOne({ "accountData.email": email }, {__v: 0}).lean();
+	  }
+
+	  async findUserByCode(recoveryCode: string): Promise<WithId<Users> | null> {
+		return this.userModel.findOne({
+		  "emailConfirmation.confirmationCode": recoveryCode,
+		}, {__v: 0}).lean();
+	  }
+
+	  async findUserByConfirmation(code: string): Promise<Users | null> {
+		const user: Users | null = await this.userModel.findOne({
+		  "emailConfirmation.confirmationCode": code,
+		}, {__v: 0}).lean();
+		return user;
 	  }
 }

@@ -3,7 +3,7 @@ import { BlogsQueryRepository } from "./blogs.queryReposity";
 import { Blogs, bodyBlogsModel } from "./blogs.class";
 import { BlogsViewType } from "./blogs.type";
 import { BlogsService } from "./blogs.service";
-import { Posts, bodyPostsModel } from "../posts/posts.class";
+import { Posts, bodyPostsModelClass } from "../posts/posts.class";
 import { PostsService } from "../posts/posts.service";
 import { BlogsRepository } from "./blogs.repository";
 import { PostsQueryRepository } from "../posts/postQuery.repository";
@@ -87,7 +87,7 @@ export class BlogsController {
   @Post(':blogId/posts')
   async createPostByBlogId(
     @Param('blogId') blogId: string,
-    @Body() inputDataModel: bodyPostsModel,
+    @Body() inputDataModel: bodyPostsModelClass,
   ) {
     const findBlog: Blogs | null = await this.blogsQueryRepository.findBlogById(blogId);
     if (!findBlog) throw new NotFoundException('Blogs by id not found');

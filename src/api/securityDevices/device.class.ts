@@ -19,3 +19,5 @@ export class Devices {
 	  public lastActiveDate: string
 	) {}
   }
+
+  

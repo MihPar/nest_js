@@ -13,7 +13,7 @@ export class LikeInfoClass {
 
 export const LikeInfoSchema = SchemaFactory.createForClass(LikeInfoClass);
 
-@Schema()
+@Schema({ _id: false, versionKey: false })
 export class PostClass {
   	_id: Types.ObjectId;
   @Prop({required: true, type: String})

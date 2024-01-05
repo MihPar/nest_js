@@ -27,6 +27,8 @@ import { PostClass, PostSchema } from '../schema/post.schema';
 import { LikesService } from '../api/likes/likes.service';
 import { UsersService } from '../api/users/user.service';
 import { EmailAdapter } from 'api/adapter/email.adapter';
+import { JwtModule } from '@nestjs/jwt';
+import { DeviceClass, DeviceSchema } from 'schema/device.schema';
 
 const blogsProviders = [
   BlogsQueryRepository,
@@ -60,6 +62,10 @@ const userProviders = [
       envFilePath: '.env',
     }
 	),
+	JwtModule.register({
+		secret: process.env.JWT_SECRET, 
+		signOptions: { expiresIn: '600s' }, 
+	}),
     MongooseModule.forRoot(process.env.MONGO_URL || "mongodb://0.0.0.0:27017"),
     MongooseModule.forFeature([
 	  { name: PostClass.name, schema: PostSchema },
@@ -67,6 +73,7 @@ const userProviders = [
       { name: UserClass.name, schema: UserSchema },
       { name: CommentClass.name, schema: CommentSchema },
       { name: BlogClass.name, schema: BlogSchema },
+	  { name: DeviceClass.name, schema: DeviceSchema}
     ]),
   ],
   controllers: [

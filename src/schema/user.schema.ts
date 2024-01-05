@@ -28,7 +28,7 @@ export class EmailConfirmationClass {
 }
 export const EmailConfirmationSchena = SchemaFactory.createForClass(EmailConfirmationClass)
 
-@Schema()
+@Schema({ _id: false, versionKey: false })
 export class UserClass {
 	@Prop({required: true})
 		accountData: AccountDataClass

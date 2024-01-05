@@ -13,7 +13,7 @@ export class ComentatorInfoClass {
 
 export const ComentatorInfoSchema = SchemaFactory.createForClass(ComentatorInfoClass)
 
-@Schema()
+@Schema({ _id: false, versionKey: false })
 export class CommentClass {
 		_id:  Types.ObjectId
 	@Prop({requierd: true})

@@ -83,7 +83,7 @@ function IsOptional() {
 	return applyDecorators(Trim(), IsString(), IsNotEmpty())
 }
 
-  export class bodyPostsModel {
+  export class bodyPostsModelClass {
 	@IsOptional()
 	@Length(0, 30, {message: "length is incorrect"})
 	title: string
@@ -94,3 +94,17 @@ function IsOptional() {
 	@Length(0, 1000, {message: "length is incorrect"})
 	content: string
 }
+
+export class inputModelPostClass {
+	@IsOptional()
+	@Length(0, 30, {message: "length is incorrect"})
+	title: string
+	@IsOptional()
+	@Length(0, 100, {message: "length is incorrect"})
+	shortDescription: string
+	@IsOptional()
+	@Length(0, 1000, {message: "length is incorrect"})
+	content: string
+	@IsOptional()
+	blogId: string
+  }

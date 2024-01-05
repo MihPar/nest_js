@@ -5,7 +5,7 @@ import { ObjectId } from 'mongodb';
 
 export type LikeDocument = HydratedDocument<LikeClass>;
 
-@Schema()
+@Schema({ _id: false, versionKey: false })
 export class LikeClass {
 	_id: Types.ObjectId
   @Prop({required: true})

@@ -10,10 +10,3 @@ export type PostsViewModel = {
 	createdAt: string;
 	extendedLikesInfo: LikesInfoViewModel,
   };
-
-  export type inputModelPostType = {
-	title: string
-	shortDescription: string
-	content: string
-	blogId: string
-  }

@@ -12,9 +12,8 @@ import {
 } from '@nestjs/common';
 import { PaginationType } from '../../types/pagination.types';
 import { CommentViewType } from '../comment/comment.type';
-import { Posts } from './posts.class';
+import { Posts, inputModelPostClass } from './posts.class';
 import { CommentService } from '../comment/comment.service';
-import { inputModelPostType } from './posts.type';
 import { PostsService } from './posts.service';
 import { CommentQueryRepository } from '../comment/comment.queryRepository';
 import { PostsQueryRepository } from './postQuery.repository';
@@ -92,7 +91,7 @@ export class PostController {
   }
 
   @Post()
-  async createPost(@Body() inputModelPost: inputModelPostType) {
+  async createPost(@Body() inputModelPost: inputModelPostClass) {
     const findBlog: Blogs | null = await this.blogsQueryRepository.findBlogById(
       inputModelPost.blogId,
     );
@@ -127,7 +126,7 @@ export class PostController {
   @HttpCode(204)
   async updatePostById(
     @Param('id') postId: string,
-    @Body() inputModelData: inputModelPostType,
+    @Body() inputModelData: inputModelPostClass,
   ) {
     const updatePost: boolean = await this.postsService.updateOldPost(
       postId,

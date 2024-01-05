@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+import { ObjectId, WithId } from "mongodb";
 import { UserViewType} from "./user.type";
 import bcrypt from "bcrypt";
 import {v4 as uuidv4} from "uuid"
@@ -16,8 +16,24 @@ export class UsersService {
     protected usersRepository: UsersRepository,
     protected emailManager: EmailManager,
 	protected emailAdapter: EmailAdapter,
-	protected usersQueryRepository: UsersQueryRepository
+	protected usersQueryRepository: UsersQueryRepository,
   ) {}
+
+  async checkCridential(
+    loginOrEmail: string,
+    password: string
+  ): Promise<Users | null> {
+    const user: Users | null =
+      await this.usersQueryRepository.findByLoginOrEmail(loginOrEmail);
+    if (!user) return null;
+    const resultBcryptCompare: boolean = await bcrypt.compare(
+      password,
+      user.accountData.passwordHash
+    );
+    if (resultBcryptCompare !== true) return null;
+    return user;
+  }
+
   async createNewUser(
     login: string,
     password: string,
@@ -78,5 +94,82 @@ export class UsersService {
 
   async deleteAllUsers() {
 	return await this.usersRepository.deleteAll();
+  }
+
+
+  async recoveryPassword(email: string): Promise<any> {
+    const recoveryCode = uuidv4();
+    const findUser: WithId<Users | null> | null =
+      await this.usersQueryRepository.findUserByEmail(email);
+    if (!findUser) {
+      return false;
+    }
+    try {
+      await this.emailManager.sendEamilRecoveryCode(email, recoveryCode);
+      await this.usersRepository.passwordRecovery(findUser._id, recoveryCode);
+	  return true
+    //   return recoveryCode;
+    } catch (e) {
+      console.log("email: ", e);
+      return false;
+    }
+  }
+
+  async setNewPassword(
+    newPassword: string,
+    recoveryCode: string
+  ): Promise<boolean> {
+    const findUserByCode = await this.usersQueryRepository.findUserByCode(
+      recoveryCode
+    );
+    if (!findUserByCode) {
+      return false;
+    }
+    if (findUserByCode.emailConfirmation.expirationDate < new Date()) {
+      return false;
+    }
+    const newPasswordHash = await this._generateHash(newPassword);
+    const resultUpdatePassword = await this.usersRepository.updatePassword(
+      findUserByCode._id,
+      newPasswordHash
+    );
+    if (!resultUpdatePassword) {
+      return false;
+    }
+    return true;
+  }
+
+  async findUserByConfirmationCode(code: string): Promise<boolean> {
+    const user = await this.usersQueryRepository.findUserByConfirmation(code);
+    const result = await this.usersRepository.updateConfirmation(user!._id);
+    return result;
+  }
+
+  async confirmEmailResendCode(email: string): Promise<boolean | null> {
+    const user: Users | null =
+      await this.usersQueryRepository.findByLoginOrEmail(email);
+    if (!user) return null;
+    if (user.emailConfirmation.isConfirmed) {
+      return null;
+    }
+    const newConfirmationCode = uuidv4();
+    const newExpirationDate = add(new Date(), {
+      hours: 1,
+      minutes: 10,
+    });
+    await this.usersRepository.updateUserConfirmation(
+      user!._id,
+      newConfirmationCode,
+      newExpirationDate
+    );
+    try {
+      await this.emailManager.sendEamilConfirmationMessage(
+        user.accountData.email,
+        newConfirmationCode
+      );
+    } catch (error) {
+      return null;
+    }
+    return true;
   }
 }
