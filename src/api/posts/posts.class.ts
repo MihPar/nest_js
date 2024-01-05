@@ -2,6 +2,9 @@ import { ObjectId } from "mongodb";
 import { LikeStatusEnum } from "../likes/likes.emun";
 import { LikesInfoModel, newestLikesType } from "../likes/likes.type";
 import { PostsViewModel } from "./posts.type";
+import { Transform, TransformFnParams } from "class-transformer";
+import { applyDecorators } from "@nestjs/common";
+import { IsNotEmpty, IsString, Length } from "class-validator";
 
 export class Posts {
 	public createdAt: string;
@@ -73,3 +76,21 @@ export class Posts {
 	  };
 	}
   }
+
+const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
+
+function IsOptional() {
+	return applyDecorators(Trim(), IsString(), IsNotEmpty())
+}
+
+  export class bodyPostsModel {
+	@IsOptional()
+	@Length(0, 30, {message: "length is incorrect"})
+	title: string
+	@IsOptional()
+	@Length(0, 100, {message: "length is incorrect"})
+	shortDescription: string
+	@IsOptional()
+	@Length(0, 1000, {message: "length is incorrect"})
+	content: string
+}

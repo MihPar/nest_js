@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { UsersQueryRepository } from './users.queryRepository';
 import { UsersService } from './user.service';
 import { InputModelClassCreateBody } from './user.class';
+import { AuthGuard } from '../auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(

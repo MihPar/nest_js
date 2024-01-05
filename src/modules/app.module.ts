@@ -62,7 +62,6 @@ const userProviders = [
 	),
     MongooseModule.forRoot(process.env.MONGO_URL || "mongodb://0.0.0.0:27017"),
     MongooseModule.forFeature([
-    //   PostModel,
 	  { name: PostClass.name, schema: PostSchema },
       { name: LikeClass.name, schema: LikeSchema },
       { name: UserClass.name, schema: UserSchema },

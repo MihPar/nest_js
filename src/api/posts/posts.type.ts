@@ -17,9 +17,3 @@ export type PostsViewModel = {
 	content: string
 	blogId: string
   }
-
-  export type bodyPostsModel = {
-	title: string
-	shortDescription: string
-	content: string
-}

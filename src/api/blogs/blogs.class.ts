@@ -1,5 +1,8 @@
 import { ObjectId } from "mongodb"
 import { BlogsViewType } from "./blogs.type"
+import { IsNotEmpty, IsString, IsUrl, Length } from "class-validator";
+import { Transform, TransformFnParams } from "class-transformer";
+import { applyDecorators } from "@nestjs/common";
 
 export class Blogs {
 	public createdAt: string
@@ -46,3 +49,22 @@ export class Blogs {
 			}
 		}
   };
+
+const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
+
+function IsOptional() {
+	return applyDecorators(Trim(), IsString(), IsNotEmpty())
+}
+
+  export class bodyBlogsModel {
+	@IsOptional()
+	@Length(0, 15)
+	name: string
+	@Length(0, 500)
+	@IsOptional()
+    description: string
+	@Length(0, 100)
+	@IsOptional()
+	@IsUrl()
+    websiteUrl: string
+}
