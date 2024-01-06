@@ -5,6 +5,7 @@ import { DeviceRepository } from './device.repository';
 import { JwtService } from "@nestjs/jwt";
 import { UserDecorator, UserIdDecorator } from "infrastructure/decorator/decorator.user";
 import { Users } from "api/users/user.class";
+import { Request } from "express";
 
 @Controller('api')
 export class SecurityDevice {

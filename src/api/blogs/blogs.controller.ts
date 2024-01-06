@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, Query, UseFilters, UseGuards } from "@nestjs/common";
 import { BlogsQueryRepository } from "./blogs.queryReposity";
 import { Blogs, bodyBlogsModel } from "./blogs.class";
 import { BlogsViewType } from "./blogs.type";
@@ -10,6 +10,8 @@ import { PostsQueryRepository } from "../posts/postQuery.repository";
 import { Users } from "../users/user.class";
 import { UserDecorator, UserIdDecorator } from "../../infrastructure/decorator/decorator.user";
 import { PaginationType } from "../../types/pagination.types";
+import { AuthBasic } from "guards/auth/basic.auth";
+import { HttpExceptionFilter } from "exceptionFilters.ts/exceptionFilter";
 
 @Controller('blogs')
 export class BlogsController {
@@ -46,15 +48,17 @@ export class BlogsController {
 
   @Post()
   @HttpCode(201)
+  @UseGuards(AuthBasic)
+  @UseFilters(new HttpExceptionFilter())
   async createBlog(@Body() inputDateModel: bodyBlogsModel) {
     const createBlog: Blogs = await this.blogsService.createNewBlog(
       inputDateModel,
     );
     return createBlog;
   }
-
-  @Get(':blogId/posts')
+  
   @HttpCode(200)
+  @Get(':blogId/posts')
   async getPostsByBlogId(
     @Param('blogId') blogId: string,
 	@UserDecorator() user: Users,
@@ -84,13 +88,16 @@ export class BlogsController {
     return getPosts;
   }
 
+  @HttpCode(201)
   @Post(':blogId/posts')
+  @UseGuards(AuthBasic)
+  @UseFilters(new HttpExceptionFilter())
   async createPostByBlogId(
     @Param('blogId') blogId: string,
     @Body() inputDataModel: bodyPostsModelClass,
   ) {
     const findBlog: Blogs | null = await this.blogsQueryRepository.findBlogById(blogId);
-    if (!findBlog) throw new NotFoundException('Blogs by id not found');
+    if (!findBlog) throw new NotFoundException('Blogs by id not found 404');
     const isCreatePost = await this.postsService.createPost(
       blogId,
       inputDataModel.title,
@@ -98,7 +105,7 @@ export class BlogsController {
       inputDataModel.content,
       findBlog.name,
     );
-    if (!isCreatePost) throw new NotFoundException('Blogs by id not found');
+    if (!isCreatePost) throw new NotFoundException('Blogs by id not found 404');
     return isCreatePost;
   }
 
@@ -109,12 +116,14 @@ export class BlogsController {
   ): Promise<BlogsViewType | null> {
     const blogById: BlogsViewType | null =
       await this.blogsQueryRepository.findBlogById(id);
-    if (!blogById) throw new NotFoundException('Blogs by id not found');
+    if (!blogById) throw new NotFoundException('Blogs by id not found 404');
     return blogById;
   }
 
   @Put(':id')
   @HttpCode(204)
+  @UseGuards(AuthBasic)
+  @UseFilters(new HttpExceptionFilter())
   async updateBlogsById(
     @Param('id') id: string,
     @Body() inputDateMode: bodyBlogsModel,
@@ -125,15 +134,16 @@ export class BlogsController {
       inputDateMode.description,
       inputDateMode.websiteUrl,
     );
-    if (!isUpdateBlog) throw new NotFoundException('Blogs by id not found');
+    if (!isUpdateBlog) throw new NotFoundException('Blogs by id not found 404');
 	return isUpdateBlog
   }
 
   @Delete('/:id')
   @HttpCode(204)
+  @UseGuards(AuthBasic)
   async deleteBlogsById(@Param('id') id: string) {
     const isDeleted: boolean = await this.blogsRepository.deletedBlog(id);
-    if (!isDeleted) throw new NotFoundException('Blogs by id not found');
+    if (!isDeleted) throw new NotFoundException('Blogs by id not found 404');
     return isDeleted;
   }
 }

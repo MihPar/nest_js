@@ -41,8 +41,6 @@ export class CommentsController {
       commentId,
       userId
     );
-    // console.log(updateLikeStatus)
-    return res.sendStatus(HTTP_STATUS.NO_CONTENT_204);
   } 
 
 

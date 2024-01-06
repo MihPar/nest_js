@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post
 import { UsersQueryRepository } from './users.queryRepository';
 import { UsersService } from './user.service';
 import { InputModelClassCreateBody } from './user.class';
-import { AuthGuard } from '../../infrastructure/guards/auth/rateLimets';
+import { AuthGuard } from '@nestjs/passport';
 
 @UseGuards(AuthGuard)
 @Controller('users')

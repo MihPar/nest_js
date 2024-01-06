@@ -41,4 +41,15 @@ export class DeviceRepository {
 	const decayResult = await this.deviceModel.deleteOne({deviceId})
 	return decayResult.deletedCount === 1
   }
+
+  async createCollectionIP(reqData: any) {
+	await this.deviceModel.insertMany(reqData);
+	return reqData;
+  }
+
+
+  async countDocs(filter: any) {
+	const result = await this.deviceModel.countDocuments(filter);
+	return result
+  }
 }

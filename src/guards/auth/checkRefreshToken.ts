@@ -1,7 +1,7 @@
 import { JwtService } from '@nestjs/jwt';
 import { Injectable, CanActivate, ExecutionContext, Ip, PayloadTooLargeException, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
-import { UsersService } from '../../../api/users/user.service';
+import { UsersService } from '../../api/users/user.service';
 import { ObjectId } from 'mongodb';
 import { Model } from 'mongoose';
 import { IPCollectionClass, IPCollectionDocument } from 'schema/IP.Schema';
@@ -26,7 +26,7 @@ export class CheckRefreshToken implements CanActivate {
 	if (!refreshToken) throw new UnauthorizedException("401")
 	let result: any;
 	try {
-		result = await this.jwtService.verify(refreshToken, process.env.REFRESH_JWT_SECRET!);
+		result = await this.jwtService.verify(refreshToken, {secret: process.env.REFRESH_JWT_SECRET!});
 	} catch (err) { 
 		throw new UnauthorizedException("401")
 	}
@@ -46,7 +46,7 @@ export class CheckRefreshToken implements CanActivate {
 	  if (!user) {
 		throw new UnauthorizedException("401")
 	  }
-	  req.user = user;
+	  req['user'] = user;
 	  return true
 	}
 	throw new UnauthorizedException("401")

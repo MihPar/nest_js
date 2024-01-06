@@ -75,4 +75,10 @@ export class UsersRepository {
     );
     return result.matchedCount === 1;
   }
+
+
+  async findUserById(userId: ObjectId): Promise<Users | null> {
+    let user = await this.userModel.findOne({ _id: new ObjectId(userId) }).lean();
+    return user;
+  }
 }

@@ -58,12 +58,12 @@ function IsOptional() {
 
   export class bodyBlogsModel {
 	@IsOptional()
-	@Length(0, 15)
+	@Length(1, 15)
 	name: string
-	@Length(0, 500)
+	@Length(1, 500)
 	@IsOptional()
     description: string
-	@Length(0, 100)
+	@Length(1, 100)
 	@IsOptional()
 	@IsUrl()
     websiteUrl: string

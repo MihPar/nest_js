@@ -1,15 +1,18 @@
-import { DeviceService } from './../securityDevices/device.service';
-import { BadRequestException, Body, Controller, Headers, HttpCode, Ip, Post, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
+import { DeviceService } from '../securityDevices/device.service';
+import { BadRequestException, Body, Controller, Headers, HttpCode, Ip, Post, Req, Res, UnauthorizedException, UseFilters, UseGuards } from "@nestjs/common";
 import { InputDataModelClassAuth, InputDataReqClass, InputDateReqConfirmClass, InputModelNewPasswordClass, emailInputDataClass } from "./auth.class";
 import { Users } from "api/users/user.class";
 import { UsersService } from "api/users/user.service";
 import { JwtService } from "@nestjs/jwt";
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { UserDecorator, UserIdDecorator } from 'infrastructure/decorator/decorator.user';
 import { UsersQueryRepository } from 'api/users/users.queryRepository';
-import { Ratelimits } from '../../infrastructure/guards/auth/rateLimets';
-import { AuthGuard } from '@nestjs/passport';
-import { CheckRefreshToken } from 'infrastructure/guards/auth/checkRefreshToken';
+import { Ratelimits } from '../../guards/auth/rateLimits';
+import { CheckRefreshToken } from 'guards/auth/checkRefreshToken';
+import { HttpExceptionFilter } from 'exceptionFilters.ts/exceptionFilter';
+import { RatelimitsRegistration } from 'guards/auth/rateLimitsRegistration';
+import { CheckRefreshTokenFindMe } from 'guards/auth/checkFindMe';
+import { ObjectId } from 'mongodb';
 
 @Controller('auth')
 export class AuthController {
@@ -22,12 +25,16 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post()
+	@UseGuards(Ratelimits)
+	@UseFilters(new HttpExceptionFilter())
 	async createPasswordRecovery(@Body() emailInputData: emailInputDataClass) {
 		const passwordRecovery = await this.usersService.recoveryPassword(emailInputData.email);
 	}
 
 	@HttpCode(204)
 	@Post()
+	@UseGuards(Ratelimits)
+	@UseFilters(new HttpExceptionFilter())
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
 		const resultUpdatePassword = await this.usersService.setNewPassword(
 			inputDataNewPassword.newPassword,
@@ -38,7 +45,8 @@ export class AuthController {
 
 	@HttpCode(200)
 	@Post()
-	@UseGuards(Ratelimits)
+	@UseGuards(CheckRefreshToken)
+	@UseFilters(new HttpExceptionFilter())
 	async createLogin(@Body() inutDataModel: InputDataModelClassAuth, @Ip() IP: string, @Headers() Headers: any,
 	@Res({passthrough: true}) res: Response) {
 		const user: Users | null = await this.usersService.checkCridential(
@@ -95,12 +103,16 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post()
+	@UseGuards(RatelimitsRegistration)
+	@UseFilters(new HttpExceptionFilter())
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
 		await this.usersService.findUserByConfirmationCode(inputDateRegConfirm.code);
 	}
 
 	@HttpCode(204)
 	@Post()
+	@UseGuards(RatelimitsRegistration)
+	@UseFilters(new HttpExceptionFilter())
 	async creteRegistration(@Body() inputDataReq: InputDataReqClass) {
 		const user = await this.usersService.createNewUser(
 			inputDataReq.login,
@@ -112,6 +124,8 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post()
+	@UseGuards(RatelimitsRegistration)
+	@UseFilters(new HttpExceptionFilter())
 	async createRegistrationEmailResending(@Body() inputDateReqEmailResending: emailInputDataClass) {
 		const confirmUser = await this.usersService.confirmEmailResendCode(
 			inputDateReqEmailResending.email
@@ -121,6 +135,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post()
+	@UseGuards(CheckRefreshToken)
 	async cretaeLogout(@Req() req: Request) {
 		const refreshToken: string = req.cookies.refreshToken;
 		const isDeleteDevice = await this.deviceService.logoutDevice(refreshToken);
@@ -129,23 +144,23 @@ export class AuthController {
 
 	@HttpCode(200)
 	@Post()
+	@UseGuards(CheckRefreshTokenFindMe)
 	async findMe(@Req() req: Request) {
-		if (!req.headers.authorization) throw new UnauthorizedException("Not authorization 401")
-		//   const token: string = req.headers.authorization!.split(" ")[1];
-		const [type, token] = req.headers.authorization?.split(' ') ?? [];
-		return type === 'Bearer' ? token : undefined;
-		  const userId: ObjectId | null = await this.jwtService.getUserIdByToken(
-			token
-		  );
-		  if (!userId) return res.sendStatus(HTTP_STATUS.NOT_AUTHORIZATION_401);
+		if (!req.headers.authorization) throw new UnauthorizedException('Not authorization 401')
+
+		  const token: string = req.headers.authorization!.split(" ")[1];
+		  const userId: ObjectId = await this.jwtService.verifyAsync(token);
+		  if (!userId) throw new UnauthorizedException('Not authorization 401')
+
 		  const currentUser: Users | null = await this.usersQueryRepository.findUserById(
 			userId
 		  );
-		  if (!currentUser) return res.sendStatus(HTTP_STATUS.NOT_AUTHORIZATION_401);
-		  return res.status(HTTP_STATUS.OK_200).send({
+		  if (!currentUser) throw new UnauthorizedException('Not authorization 401')
+
+		  return {
 			userId: currentUser._id.toString(),
 			email: currentUser.accountData.email,
 			login: currentUser.accountData.userName,
-		  });
+		  }
 	}
 }
