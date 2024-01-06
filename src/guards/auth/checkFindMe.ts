@@ -29,7 +29,7 @@ export class CheckRefreshTokenFindMe implements CanActivate {
 
 	  const token: string = req.headers.authorization!.split(" ")[1];
 
-	  const userId: ObjectId = await this.jwtService.verify(token);
+	  const userId: ObjectId = await this.jwtService.verifyAsync(token, {secret: process.env.REFRESH_JWT_SECRET!});
 	  if (!userId) throw new UnauthorizedException("401")
 	  const currentUser: Users | null = await this.usersRepository.findUserById(userId);
 	  if (!currentUser) throw new UnauthorizedException("401")

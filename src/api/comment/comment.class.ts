@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import { CommentViewModel, CommentatorInfo } from "./comment.type";
 import { LikeStatusEnum } from "../../api/likes/likes.emun";
 import { Transform, TransformFnParams } from "class-transformer";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString, Length, Matches } from "class-validator";
 import { applyDecorators } from "@nestjs/common";
 import { isMatch } from "date-fns";
 
@@ -68,8 +68,22 @@ function IsOptional() {
 
 const allowedValues = ['Like', 'Dislike', 'None']
 
-  export class InputModelStatusClass {
+  export class InputModelLikeStatusClass {
 	@IsOptional()
-	@isMatch(new RegExp(`^(${allowedValues.join('|')})$`)).withMessage("Pattern is incorrect")
-	likeStatus: "None"
+	@Matches(new RegExp(`^(${allowedValues.join('|')})$`))
+	likeStatus: string
+  }
+
+  export class inputModelCommentId {
+	commentId: string
+  }
+
+  export class InputModelContent {
+	@IsOptional()
+	@Length(20, 300, {message: "Content should be lenght from 20 to 300 symbols"})
+	content: string
+  }
+
+  export class inputModelId {
+	id: string
   }
