@@ -1,3 +1,4 @@
+import "reflect-metadata"
 import { Injectable } from '@nestjs/common';
 import { UserViewType} from './user.type';
 import { Users } from './user.class';

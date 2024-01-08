@@ -1,5 +1,7 @@
+import { Injectable } from '@nestjs/common';
 import { EmailAdapter } from '../adapter/email.adapter';
 
+@Injectable()
 export class EmailManager {
 	constructor(
 		protected emailAdapter: EmailAdapter

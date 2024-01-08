@@ -20,34 +20,34 @@ export class CommentsController {
 	protected commentRepository: CommentRepository
   ) {}
 
-  @HttpCode(204)
-  @Put('/:commentId/like-status')
-  @UseGuards(CheckRefreshTokenForComments)
-  @UseFilters(new HttpExceptionFilter())
-  async updateByCommentIdLikeStatus(
-    @Body() status: InputModelLikeStatusClass,
-    @Param() id: inputModelCommentId,
-    @UserDecorator() user: Users,
-    @UserIdDecorator() userId: ObjectId,
-  ) {
-    const findCommentById: CommentsDB | null =
-      await this.commentQueryRepository.findCommentByCommentId(id.commentId);
-    if (!findCommentById) throw new NotFoundException('404');
-    const findLike = await this.commentQueryRepository.findLikeCommentByUser(
-      id.commentId,
-      userId,
-    );
-    const commentDBBiew = commentDBToView(
-      findCommentById,
-      findLike?.myStatus ?? null,
-    );
+//   @HttpCode(204)
+//   @Put('/:commentId/like-status')
+//   @UseGuards(CheckRefreshTokenForComments)
+//   @UseFilters(new HttpExceptionFilter())
+//   async updateByCommentIdLikeStatus(
+//     @Body() status: InputModelLikeStatusClass,
+//     @Param() id: inputModelCommentId,
+//     @UserDecorator() user: Users,
+//     @UserIdDecorator() userId: ObjectId,
+//   ) {
+//     const findCommentById: CommentsDB | null =
+//       await this.commentQueryRepository.findCommentByCommentId(id.commentId);
+//     if (!findCommentById) throw new NotFoundException('404');
+//     const findLike = await this.commentQueryRepository.findLikeCommentByUser(
+//       id.commentId,
+//       userId,
+//     );
+//     const commentDBBiew = commentDBToView(
+//       findCommentById,
+//       findLike?.myStatus ?? null,
+//     );
 
-    await this.commentService.updateLikeStatus(
-      status.likeStatus,
-      id.commentId,
-      userId,
-    );
-  }
+//     await this.commentService.updateLikeStatus(
+//       status.likeStatus,
+//       id.commentId,
+//       userId,
+//     );
+//   }
 
   @Put(':commentId')
   @HttpCode(204)

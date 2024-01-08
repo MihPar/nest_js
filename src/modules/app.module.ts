@@ -45,6 +45,7 @@ import { CheckRefreshTokenForPost } from '../infrastructure/guards/post/bearer.a
 import { ForbiddenCalss } from '../infrastructure/guards/securityDevice.ts/forbidden';
 import { AppController } from '../app.controller';
 import { AppService } from '../app.service';
+import { AuthController } from '../api/auth/auth.controller';
 // import { API_DOCUMENT } from '.'
 
 
@@ -107,13 +108,14 @@ const manager = [EmailManager];
     ]),
   ],
   controllers: [
-    UsersController,
+    // UsersController,
     PostController,
     CommentsController,
     BlogsController,
     DeleteAllDataController,
     SecurityDeviceController,
     AppController,
+	AuthController
   ],
   providers: [
 // 	{

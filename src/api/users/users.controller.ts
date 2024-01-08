@@ -13,6 +13,7 @@ export class UsersController {
 	protected usersQueryRepository: UsersQueryRepository,
 	protected usersService: UsersService
 	) {}
+
   @Get()
   @HttpCode(200)
   @UseGuards(AuthBasic)

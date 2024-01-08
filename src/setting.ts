@@ -1,11 +1,12 @@
-import { BadRequestException, INestApplication, INestApplicationContext, ValidationError, ValidationPipe } from "@nestjs/common";
+import { BadRequestException, INestApplication, ValidationError, ValidationPipe } from "@nestjs/common";
 import cookieParser from "cookie-parser";
 import { HttpExceptionFilter } from "./exceptionFilters.ts/exceptionFilter";
 import { AppModule } from "./modules/app.module";
+import { useContainer } from "class-validator";
 
 export const appSettings = (app: INestApplication): void => {
   app.use(cookieParser());
-  useContainer(app.select(AppModule), { fallbackOnError: true });
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -29,9 +30,4 @@ export const appSettings = (app: INestApplication): void => {
   );
   app.enableCors();
   app.useGlobalFilters(new HttpExceptionFilter());
-}
-
-
-function useContainer(arg0: INestApplicationContext, arg1: { fallbackOnError: boolean; }) {
-	throw new Error("Function not implemented.");
 }
