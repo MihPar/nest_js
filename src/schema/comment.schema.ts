@@ -3,8 +3,9 @@ import { HydratedDocument, Types } from "mongoose";
 
 export type CommentDocument = HydratedDocument<CommentClass>
 
-@Schema()
+@Schema({ _id: false, versionKey: false })
 export class ComentatorInfoClass {
+		_id:  Types.ObjectId
 	@Prop({required: true})
 		userId: string
 	@Prop({reuqired: true})

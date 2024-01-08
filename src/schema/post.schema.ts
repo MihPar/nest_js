@@ -3,8 +3,9 @@ import { HydratedDocument, Types } from 'mongoose';
 
 export type PostDocument = HydratedDocument<PostClass>;
 
-@Schema()
+@Schema({ _id: false, versionKey: false })
 export class LikeInfoClass {
+		_id: Types.ObjectId;
 	@Prop({required: true,})
 		likesCount: number
 	@Prop({required: true,})

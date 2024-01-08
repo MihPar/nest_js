@@ -4,8 +4,9 @@ import { HydratedDocument, Types } from "mongoose";
 
 export type UserDocument = HydratedDocument<UserClass>
 
-@Schema()
+@Schema({ _id: false, versionKey: false })
 export class AccountDataClass {
+	_id: Types.ObjectId
 	@Prop({required: true})
 		userName: string
 	@Prop({required: true})
@@ -17,8 +18,9 @@ export class AccountDataClass {
 }
 export const AccountDataSchena = SchemaFactory.createForClass(AccountDataClass);
 
-@Schema()
+@Schema({ _id: false, versionKey: false })
 export class EmailConfirmationClass {
+	_id: Types.ObjectId
 	@Prop({required: true})
 		confirmationCode: string
 	@Prop({required: true})
