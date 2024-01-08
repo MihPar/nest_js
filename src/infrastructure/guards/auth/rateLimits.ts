@@ -2,16 +2,13 @@ import {
   Injectable,
   CanActivate,
   ExecutionContext,
-  Ip,
-  PayloadTooLargeException,
   HttpException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { UsersService } from '../../../api/users/user.service';
 import { ObjectId } from 'mongodb';
-import { CollectionIP } from 'api/CollectionIP/collection.class';
 import { Model } from 'mongoose';
-import { IPCollectionClass, IPCollectionDocument } from 'schema/IP.Schema';
+import { IPCollectionClass, IPCollectionDocument } from '../../../schema/IP.Schema';
 import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
@@ -25,9 +22,9 @@ export class Ratelimits implements CanActivate {
     const req: Request = context.switchToHttp().getRequest();
     console.log(req.headers.authorization);
     console.log(this.userService);
-    const reqData: CollectionIP = {
+    const reqData: IPCollectionClass = {
       _id: new ObjectId(),
-      IP: req.ip,
+      IP: req.ip || '',
       URL: req.originalUrl,
       date: new Date(),
     };

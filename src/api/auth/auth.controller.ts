@@ -1,17 +1,17 @@
 import { DeviceService } from '../securityDevices/device.service';
 import { BadRequestException, Body, Controller, Headers, HttpCode, Ip, Post, Req, Res, UnauthorizedException, UseFilters, UseGuards } from "@nestjs/common";
 import { InputDataModelClassAuth, InputDataReqClass, InputDateReqConfirmClass, InputModelNewPasswordClass, emailInputDataClass } from "./auth.class";
-import { Users } from "api/users/user.class";
-import { UsersService } from "api/users/user.service";
+import { Users } from "../../api/users/user.class";
+import { UsersService } from "../../api/users/user.service";
 import { JwtService } from "@nestjs/jwt";
 import { Request, Response } from 'express';
-import { UserDecorator, UserIdDecorator } from 'infrastructure/decorator/decorator.user';
+import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
 import { UsersQueryRepository } from 'api/users/users.queryRepository';
 import { Ratelimits } from '../../infrastructure/guards/auth/rateLimits';
-import { CheckRefreshToken } from 'infrastructure/guards/auth/checkRefreshToken';
-import { HttpExceptionFilter } from 'exceptionFilters.ts/exceptionFilter';
-import { RatelimitsRegistration } from 'infrastructure/guards/auth/rateLimitsRegistration';
-import { CheckRefreshTokenFindMe } from 'infrastructure/guards/auth/checkFindMe';
+import { CheckRefreshToken } from '../../infrastructure/guards/auth/checkRefreshToken';
+import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
+import { RatelimitsRegistration } from '../../infrastructure/guards/auth/rateLimitsRegistration';
+import { CheckRefreshTokenFindMe } from '../../infrastructure/guards/auth/checkFindMe';
 import { ObjectId } from 'mongodb';
 
 @Controller('auth')

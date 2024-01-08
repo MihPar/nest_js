@@ -24,10 +24,10 @@ import { Users } from '../users/user.class';
 import { Blogs } from '../blogs/blogs.class';
 import { BlogsQueryRepository } from '../blogs/blogs.queryReposity';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
-import { InputModelLikeStatusClass } from 'api/comment/comment.class';
-import { HttpExceptionFilter } from 'exceptionFilters.ts/exceptionFilter';
-import { CheckRefreshTokenForPost } from 'infrastructure/guards/post/bearer.authForPost';
-import { AuthBasic } from 'infrastructure/guards/auth/basic.auth';
+import { InputModelLikeStatusClass } from '../../api/comment/comment.class';
+import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
+import { CheckRefreshTokenForPost } from '../../infrastructure/guards/post/bearer.authForPost';
+import { AuthBasic } from '../../infrastructure/guards/auth/basic.auth';
 import { ObjectId } from 'mongodb';
 
 @Controller('posts')

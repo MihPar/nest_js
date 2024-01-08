@@ -10,7 +10,7 @@ import { CheckRefreshToken } from "../../infrastructure/guards/auth/checkRefresh
 import { ForbiddenCalss } from "../../infrastructure/guards/securityDevice.ts/forbidden";
 
 @Controller('security')
-export class SecurityDevice {
+export class SecurityDeviceController {
   constructor(
     protected deviceQueryRepository: DeviceQueryRepository,
     protected jwtService: JwtService,

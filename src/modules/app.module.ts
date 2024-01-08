@@ -27,59 +27,83 @@ import { PostClass, PostSchema } from '../schema/post.schema';
 import { LikesService } from '../api/likes/likes.service';
 import { UsersService } from '../api/users/user.service';
 import { EmailAdapter } from '../api/adapter/email.adapter';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { DeviceClass, DeviceSchema } from '../schema/device.schema';
-import { SecurityDevice } from '../api/securityDevices/device.controller';
+import { SecurityDeviceController } from '../api/securityDevices/device.controller';
 import { DeviceQueryRepository } from '../api/securityDevices/deviceQuery.repository';
 import { DeviceService } from '../api/securityDevices/device.service';
 import { DeviceRepository } from '../api/securityDevices/device.repository';
+import { IPCollectionClass, IPCollectionSchema } from '../schema/IP.Schema';
+import { AuthBasic } from '../infrastructure/guards/auth/basic.auth';
+import { CheckRefreshTokenFindMe } from '../infrastructure/guards/auth/checkFindMe';
+import { CheckRefreshToken } from '../infrastructure/guards/auth/checkRefreshToken';
+import { Ratelimits } from '../infrastructure/guards/auth/rateLimits';
+import { RatelimitsRegistration } from '../infrastructure/guards/auth/rateLimitsRegistration';
+import { CheckRefreshTokenForComments } from '../infrastructure/guards/comments/bearer.authForComments';
+import { CheckRefreshTokenForGetComments } from '../infrastructure/guards/comments/bearer.authGetComment';
+import { CheckRefreshTokenForPost } from '../infrastructure/guards/post/bearer.authForPost';
+import { ForbiddenCalss } from '../infrastructure/guards/securityDevice.ts/forbidden';
+import { AppController } from '../app.controller';
+import { AppService } from '../app.service';
+// import { API_DOCUMENT } from '.'
 
 
-const blogsProviders = [
-  BlogsQueryRepository,
-  BlogsService,  
-  BlogsRepository, 
-];
 
-const commentProviders = [
-  CommentQueryRepository,
+const services = [
+  BlogsService,
   CommentService,
-  CommentRepository,
-];
-const postProviders = [
-  PostsQueryRepository,  
-  PostsService,  
-  PostsRepository,
-];
-const userProviders = [
-  UsersQueryRepository,
+  LikesService,
+  PostsService,
+  DeviceService,
   UsersService,
-  UsersRepository,
-  EmailManager,
-  EmailAdapter
+  AppService,
 ];
-const deviceProviders = [DeviceQueryRepository, JwtService,  DeviceService, DeviceRepository,]
+const guards = [
+  AuthBasic,
+  CheckRefreshTokenFindMe,
+  CheckRefreshToken,
+  Ratelimits,
+  RatelimitsRegistration,
+  CheckRefreshTokenForComments,
+  CheckRefreshTokenForGetComments,
+  CheckRefreshTokenForPost,
+  ForbiddenCalss,
+];
+const reposponse = [
+  BlogsQueryRepository,
+  BlogsRepository,
+  CommentQueryRepository,
+  CommentRepository,
+  LikesRepository,
+  PostsQueryRepository,
+  PostsRepository,
+  DeviceRepository,
+  DeviceQueryRepository,
+  UsersRepository,
+  UsersQueryRepository,
+];
+const adapter = [EmailAdapter];
+const manager = [EmailManager];
 
 @Module({
   imports: [
-    ConfigModule.forRoot(
-		{
+    ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
-    }
-	),
-	JwtModule.register({
-		secret: process.env.JWT_SECRET, 
-		signOptions: { expiresIn: '600s' }, 
-	}),
-    MongooseModule.forRoot(process.env.MONGO_URL || "mongodb://0.0.0.0:27017"),
+    }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '600s' },
+    }),
+    MongooseModule.forRoot(process.env.MONGO_URL || 'mongodb://0.0.0.0:27017'),
     MongooseModule.forFeature([
-	  { name: PostClass.name, schema: PostSchema },
+      { name: PostClass.name, schema: PostSchema },
       { name: LikeClass.name, schema: LikeSchema },
       { name: UserClass.name, schema: UserSchema },
       { name: CommentClass.name, schema: CommentSchema },
       { name: BlogClass.name, schema: BlogSchema },
-	  { name: DeviceClass.name, schema: DeviceSchema}
+      { name: DeviceClass.name, schema: DeviceSchema },
+      { name: IPCollectionClass.name, schema: IPCollectionSchema },
     ]),
   ],
   controllers: [
@@ -87,18 +111,16 @@ const deviceProviders = [DeviceQueryRepository, JwtService,  DeviceService, Devi
     PostController,
     CommentsController,
     BlogsController,
-	DeleteAllDataController,
-	SecurityDevice
+    DeleteAllDataController,
+    SecurityDeviceController,
+    AppController,
   ],
   providers: [
-    ...blogsProviders,
-    ...commentProviders,
-    LikesRepository,
-	LikesService,
-    ...postProviders,
-    ...userProviders,
-	...deviceProviders
-  ],
+// 	{
+// 	provide: API_DOCUMENT,
+// 	useFactory: () => {},
+//   },
+  ...services, ...guards, ...reposponse, ...adapter, ...manager],
 })
 export class AppModule {}
 

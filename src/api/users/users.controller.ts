@@ -3,8 +3,8 @@ import { UsersQueryRepository } from './users.queryRepository';
 import { UsersService } from './user.service';
 import { InputModelClassCreateBody } from './user.class';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthBasic } from 'infrastructure/guards/auth/basic.auth';
-import { HttpExceptionFilter } from 'exceptionFilters.ts/exceptionFilter';
+import { AuthBasic } from '../../infrastructure/guards/auth/basic.auth';
+import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 
 @UseGuards(AuthGuard)
 @Controller('users')

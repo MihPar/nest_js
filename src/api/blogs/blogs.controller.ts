@@ -10,8 +10,8 @@ import { PostsQueryRepository } from "../posts/postQuery.repository";
 import { Users } from "../users/user.class";
 import { UserDecorator, UserIdDecorator } from "../../infrastructure/decorator/decorator.user";
 import { PaginationType } from "../../types/pagination.types";
-import { AuthBasic } from "infrastructure/guards/auth/basic.auth";
-import { HttpExceptionFilter } from "exceptionFilters.ts/exceptionFilter";
+import { AuthBasic } from "../../infrastructure/guards/auth/basic.auth";
+import { HttpExceptionFilter } from "../../exceptionFilters.ts/exceptionFilter";
 
 @Controller('blogs')
 export class BlogsController {

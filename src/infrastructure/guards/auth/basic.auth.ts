@@ -2,9 +2,9 @@ import { JwtService } from '@nestjs/jwt';
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { Model } from 'mongoose';
-import { IPCollectionClass, IPCollectionDocument } from 'schema/IP.Schema';
+import { IPCollectionClass, IPCollectionDocument } from '../../../schema/IP.Schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { UsersRepository } from 'api/users/user.repository';
+import { UsersRepository } from '../../../api/users/user.repository';
 
 @Injectable()
 export class AuthBasic implements CanActivate {

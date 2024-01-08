@@ -1,6 +1,6 @@
 import { Controller } from "@nestjs/common";
 
-@Controller("likes")
-export class LikesController {
+// @Controller("likes")
+// export class LikesController {
 
-}
+// }

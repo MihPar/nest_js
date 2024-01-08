@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { PostClass, PostDocument } from '../../schema/post.schema';
 import { Injectable } from '@nestjs/common';
-import { LikeStatusEnum } from 'api/likes/likes.emun';
+import { LikeStatusEnum } from '../../api/likes/likes.emun';
 
 @Injectable()
 export class PostsRepository {

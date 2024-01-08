@@ -8,7 +8,7 @@ import { add } from "date-fns";
 import { EmailManager } from "../manager/email.manager";
 import { Users } from "./user.class";
 import { UsersQueryRepository } from "./users.queryRepository";
-import { EmailAdapter } from "api/adapter/email.adapter";
+import { EmailAdapter } from "../../api/adapter/email.adapter";
 
 @Injectable()
 export class UsersService {
