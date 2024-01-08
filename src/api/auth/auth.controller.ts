@@ -6,7 +6,7 @@ import { UsersService } from "../../api/users/user.service";
 import { JwtService } from "@nestjs/jwt";
 import { Request, Response } from 'express';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
-import { UsersQueryRepository } from 'api/users/users.queryRepository';
+import { UsersQueryRepository } from '../../api/users/users.queryRepository';
 import { Ratelimits } from '../../infrastructure/guards/auth/rateLimits';
 import { CheckRefreshToken } from '../../infrastructure/guards/auth/checkRefreshToken';
 import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
