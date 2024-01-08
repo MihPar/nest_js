@@ -7,7 +7,7 @@ import { CommentsDB, InputModelContent, InputModelLikeStatusClass, inputModelCom
 import { CheckRefreshTokenForComments } from '../../infrastructure/guards/comments/bearer.authForComments';
 import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 import { ObjectId } from 'mongodb';
-import { commentDBToView } from 'utils/helpers';
+import { commentDBToView } from '../../utils/helpers';
 import { CommentService } from './comment.service';
 import { CommentRepository } from './comment.repository';
 import { CheckRefreshTokenForGetComments } from '../../infrastructure/guards/comments/bearer.authGetComment';

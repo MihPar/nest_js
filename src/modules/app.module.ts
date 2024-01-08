@@ -46,7 +46,6 @@ import { ForbiddenCalss } from '../infrastructure/guards/securityDevice.ts/forbi
 import { AppController } from '../app.controller';
 import { AppService } from '../app.service';
 import { AuthController } from '../api/auth/auth.controller';
-// import { API_DOCUMENT } from '.'
 
 
 
@@ -108,7 +107,7 @@ const manager = [EmailManager];
     ]),
   ],
   controllers: [
-    // UsersController,
+    UsersController,
     PostController,
     CommentsController,
     BlogsController,
@@ -118,10 +117,6 @@ const manager = [EmailManager];
 	AuthController
   ],
   providers: [
-// 	{
-// 	provide: API_DOCUMENT,
-// 	useFactory: () => {},
-//   },
   ...services, ...guards, ...reposponse, ...adapter, ...manager],
 })
 export class AppModule {}
