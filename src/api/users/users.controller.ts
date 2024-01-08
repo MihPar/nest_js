@@ -6,7 +6,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthBasic } from '../../infrastructure/guards/auth/basic.auth';
 import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(
