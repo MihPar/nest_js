@@ -1,11 +1,7 @@
 import { JwtService } from '@nestjs/jwt';
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
-import { UsersService } from '../../../api/users/user.service';
 import { ObjectId } from 'mongodb';
-import { Model } from 'mongoose';
-import { IPCollectionClass, IPCollectionDocument } from '../../../schema/IP.Schema';
-import { InjectModel } from '@nestjs/mongoose';
 import { DeviceQueryRepository } from '../../../api/securityDevices/deviceQuery.repository';
 import { UsersQueryRepository } from '../../../api/users/users.queryRepository';
 
