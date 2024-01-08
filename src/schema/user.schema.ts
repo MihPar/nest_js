@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument, Types } from "mongoose";
 
 
 export type UserDocument = HydratedDocument<UserClass>
@@ -30,6 +30,7 @@ export const EmailConfirmationSchena = SchemaFactory.createForClass(EmailConfirm
 
 @Schema({ _id: false, versionKey: false })
 export class UserClass {
+	_id: Types.ObjectId
 	@Prop({required: true})
 		accountData: AccountDataClass
 	@Prop({require: true})
