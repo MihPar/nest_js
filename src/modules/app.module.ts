@@ -113,7 +113,7 @@ const manager = [EmailManager];
     BlogsController,
     DeleteAllDataController,
     SecurityDeviceController,
-    AppController,
+    // AppController,
 	AuthController
   ],
   providers: [
