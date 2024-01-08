@@ -4,7 +4,7 @@ import { DeviceService } from './device.service';
 import { DeviceRepository } from './device.repository';
 import { JwtService } from "@nestjs/jwt";
 import { UserDecorator, UserIdDecorator } from "../../infrastructure/decorator/decorator.user";
-import { Users } from "api/users/user.class";
+import { Users } from "../../api/users/user.class";
 import { Request } from "express";
 import { CheckRefreshToken } from "../../infrastructure/guards/auth/checkRefreshToken";
 import { ForbiddenCalss } from "../../infrastructure/guards/securityDevice.ts/forbidden";
