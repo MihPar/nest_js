@@ -8,7 +8,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { UsersService } from '../../api/users/user.service';
+import { UsersService } from '../../../api/users/user.service';
 import { ObjectId } from 'mongodb';
 import { Model } from 'mongoose';
 import { IPCollectionClass, IPCollectionDocument } from 'schema/IP.Schema';
@@ -19,28 +19,31 @@ import { UsersRepository } from 'api/users/user.repository';
 import { Users } from 'api/users/user.class';
 
 @Injectable()
-export class CheckRefreshTokenForGetComments implements CanActivate {
+export class CheckRefreshTokenForPost implements CanActivate {
   constructor(
+    protected userService: UsersService,
     protected jwtService: JwtService,
+    protected deviceQueryRepository: DeviceQueryRepository,
     protected usersQueryRepository: UsersQueryRepository,
-    
+    protected usersRepository: UsersRepository,
+    @InjectModel(IPCollectionClass.name)
+    private ipCollectionModel: Model<IPCollectionDocument>,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const req: Request = context.switchToHttp().getRequest();
-    if (!req.headers.authorization) throw new UnauthorizedException('401');
+	const req: Request = context.switchToHttp().getRequest();
+    if (!req.headers.authorization) throw new UnauthorizedException("401")
+
     const token = req.headers.authorization.split(' ')[1];
-    const userId = await this.jwtService.verifyAsync(token, {
-      secret: process.env.JWT_SECRET!,
-    });
+    const userId = await this.jwtService.verifyAsync(token, {secret: process.env.REFRESH_JWT_SECRET!});
     if (userId) {
-      const resultAuth = await this.usersQueryRepository.findUserById(userId);
-      if (resultAuth) {
-        req['user'] = resultAuth;
-        return true;
+      const user = await this.usersQueryRepository.findUserById(userId);
+      if (user) {
+        req['user'] = user;
+        return true
       }
-      return true;
+      throw new UnauthorizedException("401")
     } else {
-      return true;
+      throw new UnauthorizedException("401")
     }
   }
 }

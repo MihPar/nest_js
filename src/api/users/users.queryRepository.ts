@@ -79,7 +79,7 @@ export class UsersQueryRepository {
 	  }
 
 	  async findUserById(userId: ObjectId): Promise<Users | null> {
-		let user = await this.userModel.findOne({ _id: new ObjectId(userId) }).lean();
+		let user: Users | null = await this.userModel.findOne({ _id: new ObjectId(userId) }).lean();
 		return user;
 	  }
 }

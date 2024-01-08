@@ -2,6 +2,9 @@ import { ObjectId } from "mongodb";
 import { CommentRepository } from "./comment.repository";
 import { Injectable } from "@nestjs/common";
 import { LikesRepository } from "api/likes/likes.repository";
+import { CommentViewModel } from "./comment.type";
+import { CommentsDB } from "./comment.class";
+import { LikeStatusEnum } from "api/likes/likes.emun";
 
 @Injectable()
 export class CommentService {
@@ -57,5 +60,16 @@ async updateCommentByCommentId(
       content
     );
     return updateCommentId;
+  }
+
+  async createNewCommentByPostId(
+    postId: string,
+    content: string,
+    userId: string,
+    userLogin: string
+  ): Promise<CommentViewModel | null> {
+	const newComment: CommentsDB = new CommentsDB(content, postId, {userId, userLogin}) 
+    const createNewCommentawait: CommentsDB = await this.commentRepositories.createNewCommentPostId(newComment);
+	return createNewCommentawait.getNewComment(LikeStatusEnum.None)
   }
 }

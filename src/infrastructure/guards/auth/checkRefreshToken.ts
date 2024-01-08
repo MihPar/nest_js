@@ -1,7 +1,7 @@
 import { JwtService } from '@nestjs/jwt';
 import { Injectable, CanActivate, ExecutionContext, Ip, PayloadTooLargeException, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
-import { UsersService } from '../../api/users/user.service';
+import { UsersService } from '../../../api/users/user.service';
 import { ObjectId } from 'mongodb';
 import { Model } from 'mongoose';
 import { IPCollectionClass, IPCollectionDocument } from 'schema/IP.Schema';

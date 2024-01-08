@@ -10,7 +10,7 @@ import { PostsQueryRepository } from "../posts/postQuery.repository";
 import { Users } from "../users/user.class";
 import { UserDecorator, UserIdDecorator } from "../../infrastructure/decorator/decorator.user";
 import { PaginationType } from "../../types/pagination.types";
-import { AuthBasic } from "guards/auth/basic.auth";
+import { AuthBasic } from "infrastructure/guards/auth/basic.auth";
 import { HttpExceptionFilter } from "exceptionFilters.ts/exceptionFilter";
 
 @Controller('blogs')
@@ -73,7 +73,6 @@ export class BlogsController {
   ) {
 	if(!userId) return null
     const blog = await this.blogsQueryRepository.findBlogById(blogId);
-	// console.log("find blog by id, str 72: ", blog)
     if (!blog) throw new NotFoundException('Blogs by id not found');
     const getPosts: PaginationType<Posts> =
       await this.postsQueryRepository.findPostsByBlogsId(

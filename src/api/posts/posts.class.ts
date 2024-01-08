@@ -108,3 +108,13 @@ export class inputModelPostClass {
 	@IsOptional()
 	blogId: string
   }
+
+  export class InputModelClassPostId {
+	postId: string
+  }
+
+  export class InputModelContentePostClass {
+	@IsOptional()
+	@Length(20, 300, {message: "Content should be lenght from 20 to 300 symbols"})
+	content: string
+  }

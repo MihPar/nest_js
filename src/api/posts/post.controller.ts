@@ -9,10 +9,12 @@ import {
   Post,
   Put,
   Query,
+  UseFilters,
+  UseGuards,
 } from '@nestjs/common';
 import { PaginationType } from '../../types/pagination.types';
-import { CommentViewType } from '../comment/comment.type';
-import { Posts, inputModelPostClass } from './posts.class';
+import { CommentViewModel, CommentViewType } from '../comment/comment.type';
+import { InputModelClassPostId, InputModelContentePostClass, Posts, inputModelPostClass } from './posts.class';
 import { CommentService } from '../comment/comment.service';
 import { PostsService } from './posts.service';
 import { CommentQueryRepository } from '../comment/comment.queryRepository';
@@ -22,6 +24,11 @@ import { Users } from '../users/user.class';
 import { Blogs } from '../blogs/blogs.class';
 import { BlogsQueryRepository } from '../blogs/blogs.queryReposity';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
+import { InputModelLikeStatusClass } from 'api/comment/comment.class';
+import { HttpExceptionFilter } from 'exceptionFilters.ts/exceptionFilter';
+import { CheckRefreshTokenForPost } from 'infrastructure/guards/post/bearer.authForPost';
+import { AuthBasic } from 'infrastructure/guards/auth/basic.auth';
+import { ObjectId } from 'mongodb';
 
 @Controller('posts')
 export class PostController {
@@ -32,6 +39,30 @@ export class PostController {
     protected postsService: PostsService,
     protected blogsQueryRepository: BlogsQueryRepository,
   ) {}
+
+  @Post()
+  @HttpCode(204)
+  @UseFilters(new HttpExceptionFilter())
+  @UseGuards(CheckRefreshTokenForPost)
+  async updateLikeStatus(
+	@Param() dto: InputModelClassPostId, 
+	@Body() status: InputModelLikeStatusClass,
+	@UserDecorator() user: Users,
+    @UserIdDecorator() userId: string | null,
+	) {
+    const userLogin = user.accountData.userName;
+	if(!userId) return null
+    const findPost = await this.postsQueryRepository.findPostById(dto.postId);
+    if (!findPost) throw new NotFoundException('404')
+
+    const result = await this.postsService.updateLikeStatus(
+      status.likeStatus,
+      dto.postId,
+      new ObjectId(userId),
+      userLogin
+    );
+    if (!result) throw new NotFoundException('404')
+  }
 
   @Get(':postId/comments')
   @HttpCode(200)
@@ -48,9 +79,7 @@ export class PostController {
     },
   ) {
 	if(!userId) return null
-	// console.log("get comment by postId str 52: ", postId)
     const isExistPots = await this.postsQueryRepository.findPostById(postId);
-	// console.log("postController 54 str, isExistPots: ", isExistPots)
     if (!isExistPots) throw new NotFoundException('Blogs by id not found');
     const commentByPostsId: PaginationType<CommentViewType> | null =
       await this.commentQueryRepository.findCommentByPostId(
@@ -61,8 +90,33 @@ export class PostController {
         (query.sortDirection || 'desc'),
         userId,
       );
-    if (!commentByPostsId) throw new NotFoundException('Blogs by id not found');
+    if (!commentByPostsId) throw new NotFoundException('Blogs by id not found 404');
     return commentByPostsId;
+  }
+
+  @Post(':postId/comments')
+  @HttpCode(201)
+  @UseFilters(new HttpExceptionFilter())
+  @UseGuards(CheckRefreshTokenForPost)
+  async createNewCommentByPostId(
+	@Param() dto: InputModelClassPostId, 
+	@Body() inputModelContent: InputModelContentePostClass,
+  	@UserDecorator() user: Users,
+    @UserIdDecorator() userId: string | null
+	) {
+    const post: Posts | null = await this.postsQueryRepository.findPostById(dto.postId)
+
+    if (!post) throw new NotFoundException('Blogs by id not found 404')
+
+	if(!userId) return null
+    const createNewCommentByPostId: CommentViewModel | null =
+      await this.commentService.createNewCommentByPostId(
+        dto.postId,
+        inputModelContent.content,
+        userId,
+        user.accountData.userName
+      );
+    if (!createNewCommentByPostId) throw new NotFoundException('Blogs by id not found 404')
   }
 
   @Get()
@@ -91,6 +145,9 @@ export class PostController {
   }
 
   @Post()
+  @HttpCode(201)
+  @UseGuards(AuthBasic)
+  @UseFilters(new HttpExceptionFilter())
   async createPost(@Body() inputModelPost: inputModelPostClass) {
     const findBlog: Blogs | null = await this.blogsQueryRepository.findBlogById(
       inputModelPost.blogId,
@@ -124,6 +181,8 @@ export class PostController {
 
   @Put(':id')
   @HttpCode(204)
+  @UseGuards(AuthBasic)
+  @UseFilters(new HttpExceptionFilter())
   async updatePostById(
     @Param('id') postId: string,
     @Body() inputModelData: inputModelPostClass,
@@ -135,15 +194,16 @@ export class PostController {
       inputModelData.content,
       inputModelData.blogId,
     );
-    if (!updatePost) throw new NotFoundException('Blogs by id not found');
+    if (!updatePost) throw new NotFoundException('Blogs by id not found 404');
     return updatePost;
   }
 
   @Delete(':id')
   @HttpCode(204)
+  @UseGuards(AuthBasic)
   async deletePostById(@Param('id') postId: string): Promise<boolean> {
     const deletPost: boolean = await this.postsService.deletePostId(postId);
-    if (!deletPost) throw new NotFoundException('Blogs by id not found');
+    if (!deletPost) throw new NotFoundException('Blogs by id not found 404');
     return true;
   }
 }

@@ -7,11 +7,11 @@ import { JwtService } from "@nestjs/jwt";
 import { Request, Response } from 'express';
 import { UserDecorator, UserIdDecorator } from 'infrastructure/decorator/decorator.user';
 import { UsersQueryRepository } from 'api/users/users.queryRepository';
-import { Ratelimits } from '../../guards/auth/rateLimits';
-import { CheckRefreshToken } from 'guards/auth/checkRefreshToken';
+import { Ratelimits } from '../../infrastructure/guards/auth/rateLimits';
+import { CheckRefreshToken } from 'infrastructure/guards/auth/checkRefreshToken';
 import { HttpExceptionFilter } from 'exceptionFilters.ts/exceptionFilter';
-import { RatelimitsRegistration } from 'guards/auth/rateLimitsRegistration';
-import { CheckRefreshTokenFindMe } from 'guards/auth/checkFindMe';
+import { RatelimitsRegistration } from 'infrastructure/guards/auth/rateLimitsRegistration';
+import { CheckRefreshTokenFindMe } from 'infrastructure/guards/auth/checkFindMe';
 import { ObjectId } from 'mongodb';
 
 @Controller('auth')

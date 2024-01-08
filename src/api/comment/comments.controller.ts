@@ -4,13 +4,13 @@ import { CommentViewModel } from './comment.type';
 import { Users } from '../users/user.class';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
 import { CommentsDB, InputModelContent, InputModelLikeStatusClass, inputModelCommentId, inputModelId } from './comment.class';
-import { CheckRefreshTokenForComments } from 'guards/auth/bearer.authForComments';
+import { CheckRefreshTokenForComments } from 'infrastructure/guards/comments/bearer.authForComments';
 import { HttpExceptionFilter } from 'exceptionFilters.ts/exceptionFilter';
 import { ObjectId } from 'mongodb';
 import { commentDBToView } from 'utils/helpers';
 import { CommentService } from './comment.service';
 import { CommentRepository } from './comment.repository';
-import { CheckRefreshTokenForGetComments } from 'guards/auth/bearer.authGetComment';
+import { CheckRefreshTokenForGetComments } from 'infrastructure/guards/comments/bearer.authGetComment';
 
 @Controller('comments')
 export class CommentsController {

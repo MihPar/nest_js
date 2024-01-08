@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query, UseFilters, UseGuards } from '@nestjs/common';
 import { UsersQueryRepository } from './users.queryRepository';
 import { UsersService } from './user.service';
 import { InputModelClassCreateBody } from './user.class';
 import { AuthGuard } from '@nestjs/passport';
+import { AuthBasic } from 'infrastructure/guards/auth/basic.auth';
+import { HttpExceptionFilter } from 'exceptionFilters.ts/exceptionFilter';
 
 @UseGuards(AuthGuard)
 @Controller('users')
@@ -13,6 +15,7 @@ export class UsersController {
 	) {}
   @Get()
   @HttpCode(200)
+  @UseGuards(AuthBasic)
   async getAllUsers(
     @Query()
     query: {
@@ -42,7 +45,10 @@ export class UsersController {
 	return users
   }
 
+  @HttpCode(201)
   @Post()
+  @UseGuards(AuthBasic)
+  @UseFilters(new HttpExceptionFilter())
   async createUser(@Body() body: InputModelClassCreateBody) {
 	const createUser = await this.usersService.createNewUser(body.login, body.password, body.email)
 	return createUser
@@ -50,8 +56,9 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(204)
+  @UseGuards(AuthBasic)
   async deleteUserById(@Param('id') userId: string) {
 	const deleteUserById = await this.usersService.deleteUserById(userId)
-	if (!deleteUserById) throw new NotFoundException("Blogs by id not found")
+	if (!deleteUserById) throw new NotFoundException("Blogs by id not found 404")
   }
 }

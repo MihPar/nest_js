@@ -26,9 +26,14 @@ import { BlogClass, BlogSchema } from '../schema/blogs.schema';
 import { PostClass, PostSchema } from '../schema/post.schema';
 import { LikesService } from '../api/likes/likes.service';
 import { UsersService } from '../api/users/user.service';
-import { EmailAdapter } from 'api/adapter/email.adapter';
-import { JwtModule } from '@nestjs/jwt';
-import { DeviceClass, DeviceSchema } from 'schema/device.schema';
+import { EmailAdapter } from '../api/adapter/email.adapter';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { DeviceClass, DeviceSchema } from '../schema/device.schema';
+import { SecurityDevice } from '../api/securityDevices/device.controller';
+import { DeviceQueryRepository } from '../api/securityDevices/deviceQuery.repository';
+import { DeviceService } from '../api/securityDevices/device.service';
+import { DeviceRepository } from '../api/securityDevices/device.repository';
+
 
 const blogsProviders = [
   BlogsQueryRepository,
@@ -53,6 +58,7 @@ const userProviders = [
   EmailManager,
   EmailAdapter
 ];
+const deviceProviders = [DeviceQueryRepository, JwtService,  DeviceService, DeviceRepository,]
 
 @Module({
   imports: [
@@ -81,7 +87,8 @@ const userProviders = [
     PostController,
     CommentsController,
     BlogsController,
-	DeleteAllDataController
+	DeleteAllDataController,
+	SecurityDevice
   ],
   providers: [
     ...blogsProviders,
@@ -90,6 +97,7 @@ const userProviders = [
 	LikesService,
     ...postProviders,
     ...userProviders,
+	...deviceProviders
   ],
 })
 export class AppModule {}

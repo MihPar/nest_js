@@ -11,7 +11,6 @@ export class DeviceRepository {
 	) {}
   async terminateSession(deviceId: string) {
     const deletedOne = this.deviceModel.deleteOne({ deviceId });
-    // return deletedOne.deletedCount === 1;
 	return deletedOne.deleteOne()
   }
 

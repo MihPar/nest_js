@@ -83,4 +83,39 @@ export class PostsService {
   async deleteAllPosts() {
   	return await this.postsRepository.deleteRepoPosts();
   }
+
+  async updateLikeStatus(likeStatus: string, postId: string, userId: ObjectId, userLogin: string): Promise<boolean | void> {
+	const findLike = await this.likesRepository.findLikePostByUser(postId, userId)
+	if(!findLike) {
+		await this.likesRepository.saveLikeForPost(postId, userId, likeStatus, userLogin)
+		const resultCheckListOrDislike = await this.postsRepository.increase(postId, likeStatus)
+		return true
+	} 
+	
+	if((findLike.myStatus === 'Dislike' || findLike.myStatus === 'Like') && likeStatus === 'None'){
+		await this.likesRepository.updateLikeStatusForPost(postId, userId, likeStatus)
+		const resultCheckListOrDislike = await this.postsRepository.decrease(postId, findLike.myStatus)
+		return true
+	}
+
+	if(findLike.myStatus === 'None' && (likeStatus === 'Dislike' || likeStatus === 'Like')) {
+		await this.likesRepository.updateLikeStatusForPost(postId, userId, likeStatus)
+		const resultCheckListOrDislike = await this.postsRepository.increase(postId, likeStatus)
+		return true
+	}
+
+	if(findLike.myStatus === 'Dislike' && likeStatus === 'Like') {
+		await this.likesRepository.updateLikeStatusForPost(postId, userId, likeStatus)
+		const changeDislikeOnLike = await this.postsRepository.increase(postId, likeStatus)
+		const changeLikeOnDislike = await this.postsRepository.decrease(postId, findLike.myStatus)
+		return true
+	}
+	if(findLike.myStatus === 'Like' && likeStatus === 'Dislike') {
+		await this.likesRepository.updateLikeStatusForPost(postId, userId, likeStatus)
+		const changeLikeOnDislike = await this.postsRepository.decrease(postId, findLike.myStatus)
+		const changeDislikeOnLike = await this.postsRepository.increase(postId, likeStatus)
+		return true
+	}
+	return true
+}
 }

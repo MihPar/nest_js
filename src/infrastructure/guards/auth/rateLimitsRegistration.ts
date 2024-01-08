@@ -7,9 +7,9 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { UsersService } from '../../api/users/user.service';
+import { UsersService } from '../../../api/users/user.service';
 import { ObjectId } from 'mongodb';
-import { CollectionIP } from 'api/adapter/CollectionIP/collection.class';
+import { CollectionIP } from 'api/CollectionIP/collection.class';
 import { Model } from 'mongoose';
 import { IPCollectionClass, IPCollectionDocument } from 'schema/IP.Schema';
 import { InjectModel } from '@nestjs/mongoose';

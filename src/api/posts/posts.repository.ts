@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { PostClass, PostDocument } from '../../schema/post.schema';
 import { Injectable } from '@nestjs/common';
+import { LikeStatusEnum } from 'api/likes/likes.emun';
 
 @Injectable()
 export class PostsRepository {
@@ -45,5 +46,35 @@ export class PostsRepository {
   async deleteRepoPosts() {
     const deletedAll = await this.postModel.deleteMany({});
     return deletedAll.deletedCount === 1;
+  }
+
+  async increase(postId: string, likeStatus: string) {
+    if (likeStatus === LikeStatusEnum.None) {
+      return;
+    }
+    return await this.postModel.updateOne(
+      { _id: new ObjectId(postId) },
+      {
+        $inc:
+          likeStatus === 'Dislike'
+            ? { 'extendedLikesInfo.dislikesCount': 1 }
+            : { 'extendedLikesInfo.likesCount': 1 },
+      },
+    );
+  }
+
+  async decrease(postId: string, likeStatus: string) {
+    if (likeStatus === LikeStatusEnum.None) {
+      return;
+    }
+    return await this.postModel.updateOne(
+      { _id: new ObjectId(postId) },
+      {
+        $inc:
+          likeStatus === 'Dislike'
+            ? { 'extendedLikesInfo.dislikesCount': -1 }
+            : { 'extendedLikesInfo.likesCount': -1 },
+      },
+    );
   }
 }
