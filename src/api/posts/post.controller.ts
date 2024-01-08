@@ -40,29 +40,29 @@ export class PostController {
     protected blogsQueryRepository: BlogsQueryRepository,
   ) {}
 
-//   @Put()
-//   @HttpCode(204)
-//   @UseFilters(new HttpExceptionFilter())
-//   @UseGuards(CheckRefreshTokenForPost)
-//   async updateLikeStatus(
-// 	@Param() dto: InputModelClassPostId, 
-// 	@Body() status: InputModelLikeStatusClass,
-// 	@UserDecorator() user: Users,
-//     @UserIdDecorator() userId: string | null,
-// 	) {
-//     const userLogin = user.accountData.userName;
-// 	if(!userId) return null
-//     const findPost = await this.postsQueryRepository.findPostById(dto.postId);
-//     if (!findPost) throw new NotFoundException('404')
+  @Put()
+  @HttpCode(204)
+  @UseFilters(new HttpExceptionFilter())
+  @UseGuards(CheckRefreshTokenForPost)
+  async updateLikeStatus(
+	@Param() dto: InputModelClassPostId, 
+	@Body() status: InputModelLikeStatusClass,
+	@UserDecorator() user: Users,
+    @UserIdDecorator() userId: string | null,
+	) {
+    const userLogin = user.accountData.userName;
+	if(!userId) return null
+    const findPost = await this.postsQueryRepository.findPostById(dto.postId);
+    if (!findPost) throw new NotFoundException('404')
 
-//     const result = await this.postsService.updateLikeStatus(
-//       status.likeStatus,
-//       dto.postId,
-//       new ObjectId(userId),
-//       userLogin
-//     );
-//     if (!result) throw new NotFoundException('404')
-//   }
+    const result = await this.postsService.updateLikeStatus(
+      status.likeStatus,
+      dto.postId,
+      new ObjectId(userId),
+      userLogin
+    );
+    if (!result) throw new NotFoundException('404')
+  }
 
   @Get(':postId/comments')
   @HttpCode(200)

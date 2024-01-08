@@ -19,7 +19,7 @@ export class SecurityDeviceController {
   ) {}
   @Get('/devices')
   @HttpCode(200)
-//   @UseGuards(CheckRefreshToken)
+  @UseGuards(CheckRefreshToken)
   async getDevicesUser(
     @UserDecorator() user: Users,
     @UserIdDecorator() userId: string | null,
@@ -29,7 +29,7 @@ export class SecurityDeviceController {
   }
 
   @Delete('/devices')
-//   @UseGuards(CheckRefreshToken)
+  @UseGuards(CheckRefreshToken)
   @HttpCode(204)
   async terminateCurrentSession(
     @UserDecorator() user: Users,
@@ -53,8 +53,8 @@ export class SecurityDeviceController {
 
   @Delete('/devices/:deviceId')
   @HttpCode(204)
-//   @UseGuards(CheckRefreshToken)
-//   @UseGuards(ForbiddenCalss)
+  @UseGuards(CheckRefreshToken)
+  @UseGuards(ForbiddenCalss)
   async terminateSessionById(@Param('deviceId') deviceId: string) {
 	const deleteDeviceById = await this.deviceRepository.terminateSession(deviceId);
 	if (!deleteDeviceById) throw new NotFoundException("404")
