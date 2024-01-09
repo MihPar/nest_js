@@ -1,17 +1,10 @@
-import { JwtService } from '@nestjs/jwt';
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
-import { Model } from 'mongoose';
-import { IPCollectionClass, IPCollectionDocument } from '../../../schema/IP.Schema';
-import { InjectModel } from '@nestjs/mongoose';
-import { UsersRepository } from '../../../api/users/user.repository';
+
 
 @Injectable()
 export class AuthBasic implements CanActivate {
 	constructor(
-		protected jwtService: JwtService,
-		protected usersRepository: UsersRepository,
-		@InjectModel(IPCollectionClass.name) private ipCollectionModel: Model<IPCollectionDocument>
 	) {}
   async canActivate(
     context: ExecutionContext,
@@ -27,7 +20,8 @@ export class AuthBasic implements CanActivate {
 		if(value !== encoding) throw new UnauthorizedException("401")
 		return true
 	  } catch (e) {
-		return false;
+		console.log(e)
+		throw new UnauthorizedException("401")
 	  }
 }
 }

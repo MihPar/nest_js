@@ -47,8 +47,6 @@ import { AppController } from '../app.controller';
 import { AppService } from '../app.service';
 import { AuthController } from '../api/auth/auth.controller';
 
-
-
 const services = [
   BlogsService,
   CommentService,

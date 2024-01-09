@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Types } from 'mongoose';
+import mongoose, { HydratedDocument, Types } from 'mongoose';
 import { LikeStatusEnum } from '../api/likes/likes.emun';
 import { ObjectId } from 'mongodb';
 
@@ -7,7 +7,7 @@ export type LikeDocument = HydratedDocument<LikeClass>;
 
 @Schema({ _id: false, versionKey: false })
 export class LikeClass {
-	_id: Types.ObjectId
+	_id?: mongoose.Types.ObjectId;
   @Prop({required: true})
   	userId: ObjectId;
   @Prop({required: true})

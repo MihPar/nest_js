@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument, Types } from "mongoose";
+import mongoose, { HydratedDocument, Types } from "mongoose";
 
 export type DeviceDocument = HydratedDocument<DeviceClass>;
 
 @Schema({ _id: false, versionKey: false })
 export class DeviceClass {
-	_id: Types.ObjectId
+		_id?: mongoose.Types.ObjectId;
 	@Prop({required: true})
 		ip: string;
 	@Prop({required: true})

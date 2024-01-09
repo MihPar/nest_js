@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Types } from 'mongoose';
+import mongoose, { HydratedDocument, Types } from 'mongoose';
 
 export type PostDocument = HydratedDocument<PostClass>;
 
 @Schema({ _id: false, versionKey: false })
 export class LikeInfoClass {
-		_id: Types.ObjectId;
+		_id?: mongoose.Types.ObjectId;
 	@Prop({required: true,})
 		likesCount: number
 	@Prop({required: true,})
@@ -16,7 +16,7 @@ export const LikeInfoSchema = SchemaFactory.createForClass(LikeInfoClass);
 
 @Schema({ _id: false, versionKey: false })
 export class PostClass {
-  	_id: Types.ObjectId;
+  	_id?: mongoose.Types.ObjectId;
   @Prop({required: true, type: String})
   	title: string;
   @Prop({type: String, required: true})

@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument, Types } from "mongoose";
+import mongoose, { HydratedDocument, Types } from "mongoose";
 
 export type CommentDocument = HydratedDocument<CommentClass>
 
 @Schema({ _id: false, versionKey: false })
 export class ComentatorInfoClass {
-		_id:  Types.ObjectId
+		_id?: mongoose.Types.ObjectId;
 	@Prop({required: true})
 		userId: string
 	@Prop({reuqired: true})
@@ -16,7 +16,7 @@ export const ComentatorInfoSchema = SchemaFactory.createForClass(ComentatorInfoC
 
 @Schema({ _id: false, versionKey: false })
 export class CommentClass {
-		_id:  Types.ObjectId
+		_id?: mongoose.Types.ObjectId;
 	@Prop({requierd: true})
 		content: string
 	@Prop({required: true})
