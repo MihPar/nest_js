@@ -24,7 +24,7 @@ export class AuthController {
 	) {}
 
 	@HttpCode(204)
-	@Post()
+	@Post("password-recovery")
 	@UseGuards(Ratelimits)
 	@UseFilters(new HttpExceptionFilter())
 	async createPasswordRecovery(@Body() emailInputData: emailInputDataClass) {
@@ -32,7 +32,7 @@ export class AuthController {
 	}
 
 	@HttpCode(204)
-	@Post()
+	@Post("new-password")
 	@UseGuards(Ratelimits)
 	@UseFilters(new HttpExceptionFilter())
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
@@ -43,8 +43,8 @@ export class AuthController {
 		  if (!resultUpdatePassword) throw new BadRequestException("recovery code is incorrect, 400")
 	}
 
+	@Post('login')
 	@HttpCode(200)
-	@Post()
 	@UseGuards(CheckRefreshToken)
 	@UseFilters(new HttpExceptionFilter())
 	async createLogin(@Body() inutDataModel: InputDataModelClassAuth, @Ip() IP: string, @Headers() Headers: any,
@@ -70,7 +70,7 @@ export class AuthController {
 		  }
 	}
 	@HttpCode(200)
-	@Post()
+	@Post("refresh-token")
 	@UseGuards(CheckRefreshToken)
 	async cretaeRefreshToken(
 		@Req() req: Request,
@@ -102,7 +102,7 @@ export class AuthController {
 		}
 
 	@HttpCode(204)
-	@Post()
+	@Post("registration-confirmation")
 	@UseGuards(RatelimitsRegistration)
 	@UseFilters(new HttpExceptionFilter())
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
@@ -110,7 +110,7 @@ export class AuthController {
 	}
 
 	@HttpCode(204)
-	@Post()
+	@Post("registration")
 	@UseGuards(RatelimitsRegistration)
 	@UseFilters(new HttpExceptionFilter())
 	async creteRegistration(@Body() inputDataReq: InputDataReqClass) {
@@ -123,7 +123,7 @@ export class AuthController {
 	}
 
 	@HttpCode(204)
-	@Post()
+	@Post("registration-email-resending")
 	@UseGuards(RatelimitsRegistration)
 	@UseFilters(new HttpExceptionFilter())
 	async createRegistrationEmailResending(@Body() inputDateReqEmailResending: emailInputDataClass) {
@@ -134,7 +134,7 @@ export class AuthController {
 	}
 
 	@HttpCode(204)
-	@Post()
+	@Post("logout")
 	@UseGuards(CheckRefreshToken)
 	async cretaeLogout(@Req() req: Request) {
 		const refreshToken: string = req.cookies.refreshToken;
@@ -143,7 +143,7 @@ export class AuthController {
 	}
 
 	@HttpCode(200)
-	@Post()
+	@Post("me")
 	@UseGuards(CheckRefreshTokenFindMe)
 	async findMe(@Req() req: Request) {
 		if (!req.headers.authorization) throw new UnauthorizedException('Not authorization 401')

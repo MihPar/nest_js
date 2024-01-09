@@ -110,7 +110,7 @@ export class UsersService {
 	  return true
     //   return recoveryCode;
     } catch (e) {
-      console.log("email: ", e);
+    //   console.log("email: ", e);
       return false;
     }
   }

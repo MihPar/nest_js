@@ -137,7 +137,7 @@ export class BlogsController {
 	return isUpdateBlog
   }
 
-  @Delete('/:id')
+  @Delete(':id')
   @HttpCode(204)
   @UseGuards(AuthBasic)
   async deleteBlogsById(@Param('id') id: string) {

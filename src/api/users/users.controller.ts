@@ -7,6 +7,7 @@ import { AuthBasic } from '../../infrastructure/guards/auth/basic.auth';
 import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 
 // @UseGuards(AuthGuard)
+@UseGuards(AuthBasic)
 @Controller('users')
 export class UsersController {
   constructor(
@@ -16,7 +17,7 @@ export class UsersController {
 
   @Get()
   @HttpCode(200)
-  @UseGuards(AuthBasic)
+//   @UseGuards(AuthBasic)
   async getAllUsers(
     @Query()
     query: {
@@ -48,8 +49,8 @@ export class UsersController {
 
   @HttpCode(201)
   @Post()
-  @UseGuards(AuthBasic)
-//   @UseFilters(new HttpExceptionFilter())
+//   @UseGuards(AuthBasic)
+  @UseFilters(new HttpExceptionFilter())
   async createUser(@Body() body: InputModelClassCreateBody) {
 	console.log("1:", 1)
 	const createUser = await this.usersService.createNewUser(body.login, body.password, body.email)
@@ -58,7 +59,7 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(204)
-  @UseGuards(AuthBasic)
+//   @UseGuards(AuthBasic)
   async deleteUserById(@Param('id') userId: string) {
 	const deleteUserById = await this.usersService.deleteUserById(userId)
 	if (!deleteUserById) throw new NotFoundException("Blogs by id not found 404")
