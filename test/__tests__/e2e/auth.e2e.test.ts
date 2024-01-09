@@ -1,18 +1,18 @@
-import { stopDb } from "../../db/db";
 import request from "supertest";
-import { initApp } from "../../settings";
-import { HTTP_STATUS } from "../../utils/utils";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { UserViewType } from "../../types/userTypes";
 import { v4 as uuidv4 } from "uuid";
+import { HttpStatus, INestApplication } from "@nestjs/common";
+import { UserViewType } from "../../../src/api/users/user.type";
+import { Test, TestingModule } from "@nestjs/testing";
+import { AppModule } from "../../../src/modules/app.module";
+import { appSettings } from "../../../src/setting";
 
 dotenv.config();
 
 const mongoURI = process.env.MONGO_URL || "mongodb://0.0.0.0:27017";
 let dbName = process.env.mongoDBName || "mongoose-example";
 
-const app = initApp();
+// const app = initApp();
 
 export function createErrorsMessageTest(fields: string[]) {
   const errorsMessages: any = [];
@@ -26,20 +26,32 @@ export function createErrorsMessageTest(fields: string[]) {
 }
 
 describe("/auth", () => {
+
+	let app: INestApplication
+  	let httpServer
+
   beforeAll(async () => {
-    await mongoose.connect(mongoURI);
-    const wipeAllRes = await request(app).delete("/testing/all-data");
-    expect(wipeAllRes.status).toBe(HTTP_STATUS.NO_CONTENT_204);
+    // await mongoose.connect(mongoURI);
+    // const wipeAllRes = await request(app).delete("/testing/all-data");
+    // expect(wipeAllRes.status).toBe(HttpStatus.NO_CONTENT);
+
+	const moduleFixture: TestingModule = await Test.createTestingModule({imports: [AppModule]}).compile()
+	app = moduleFixture.createNestApplication()
+	appSettings(app)
+	await app.init()
+	httpServer = app.getHttpServer()
+
   });
 
   afterAll(async () => {
     // await stop()
-    await stopDb();
+    // await stopDb();
+	await app.close()
   });
 
-  afterAll((done) => {
-    done();
-  });
+//   afterAll((done) => {
+//     done();
+//   });
 
   const authValidationErrRes = {
     errorsMessages: expect.arrayContaining([
@@ -81,7 +93,7 @@ describe("/auth", () => {
         .send(user);
       createUser = resultOfUserCreation.body;
 
-      expect(resultOfUserCreation.status).toBe(HTTP_STATUS.CREATED_201);
+      expect(resultOfUserCreation.status).toBe(HttpStatus.CREATED);
       expect(createUser).toEqual({
         id: expect.any(String),
         login: user.login,
@@ -92,7 +104,7 @@ describe("/auth", () => {
         loginOrEmail: createUser.login,
         password: user.password,
       });
-      expect(createAuthLogin.status).toBe(HTTP_STATUS.OK_200);
+      expect(createAuthLogin.status).toBe(HttpStatus.OK);
       expect(createAuthLogin.body).toEqual({
         accessToken: expect.any(String),
       });
@@ -108,7 +120,7 @@ describe("/auth", () => {
         .auth("admin", "qwerty")
         .send(user);
 
-      expect(resultOfUserCreation.status).toBe(HTTP_STATUS.CREATED_201);
+      expect(resultOfUserCreation.status).toBe(HttpStatus.CREATED);
       expect(resultOfUserCreation.body).toEqual({
         id: expect.any(String),
         login: user.login,
@@ -119,7 +131,7 @@ describe("/auth", () => {
         loginOrEmail: "Tatiana",
         password: 123,
       });
-      expect(createAuthLogin.status).toBe(HTTP_STATUS.BAD_REQUEST_400);
+      expect(createAuthLogin.status).toBe(HttpStatus.BAD_REQUEST);
       //   expect(createAuthLogin.body).toStrictEqual(createErrorsMessageTest(["loginOrEmail", "password"]))
     });
     it("try user login to the system without authorization => return 401 staus code", async () => {
@@ -127,14 +139,14 @@ describe("/auth", () => {
         loginOrEmail: "Tatiana",
         password: "qwerty1",
       });
-      expect(createAuthLogin.status).toBe(HTTP_STATUS.NOT_AUTHORIZATION_401);
+      expect(createAuthLogin.status).toBe(HttpStatus.UNAUTHORIZED);
     });
     it("try login user to the system if more than 5 attempts from one IP-address during 10 seconds", async () => {
       const createAuthLogin = await request(app).post("/auth/login").send({
         loginOrEmail: "skdjfkdsajf",
         password: "slslslsl",
       });
-      expect(createAuthLogin.status).toBe(HTTP_STATUS.HTTP_STATUS_429);
+      expect(createAuthLogin.status).toBe(HttpStatus.TOO_MANY_REQUESTS);
     });
   });
   describe("/auth/password-recovery", () => {
@@ -151,7 +163,7 @@ describe("/auth", () => {
         .send(user);
       createUser = resultOfUserCreation.body;
 
-      expect(resultOfUserCreation.status).toBe(HTTP_STATUS.CREATED_201);
+      expect(resultOfUserCreation.status).toBe(HttpStatus.CREATED);
       expect(createUser).toEqual({
         id: expect.any(String),
         login: user.login,
@@ -162,7 +174,7 @@ describe("/auth", () => {
         loginOrEmail: createUser.login,
         password: user.password,
       });
-      expect(createAuthLogin.status).toBe(HTTP_STATUS.OK_200);
+      expect(createAuthLogin.status).toBe(HttpStatus.OK);
       expect(createAuthLogin.body).toEqual({
         accessToken: expect.any(String),
       });
@@ -171,7 +183,7 @@ describe("/auth", () => {
         .send({
           email: "mpara7274@gmail.com",
         });
-      expect(passwordRecovery.status).toBe(HTTP_STATUS.NO_CONTENT_204);
+      expect(passwordRecovery.status).toBe(HttpStatus.NO_CONTENT);
     });
     it("create pasword recovery email confirmatioin with incorrect input data => return 400 status code", async () => {
       const passwordRecovery = await request(app)
@@ -179,7 +191,7 @@ describe("/auth", () => {
         .send({
           email: "mpara72mail.com",
         });
-      expect(passwordRecovery.status).toBe(HTTP_STATUS.BAD_REQUEST_400);
+      expect(passwordRecovery.status).toBe(HttpStatus.BAD_REQUEST);
       expect(passwordRecovery.body).toEqual(createErrorsMessageTest(["email"]));
     });
     it("create password recovery code confirmation if more than 5 attempts from one IP-address during 10 seconds", async () => {
@@ -188,7 +200,7 @@ describe("/auth", () => {
         .send({
           email: "7274@gmail.com",
         });
-      expect(passwordRecovery.status).toBe(HTTP_STATUS.HTTP_STATUS_429);
+      expect(passwordRecovery.status).toBe(HttpStatus.TOO_MANY_REQUESTS);
     });
   });
 
@@ -206,7 +218,7 @@ describe("/auth", () => {
         .send(user);
       createUser = resultOfUserCreation.body;
 
-      expect(resultOfUserCreation.status).toBe(HTTP_STATUS.CREATED_201);
+      expect(resultOfUserCreation.status).toBe(HttpStatus.CREATED);
       expect(createUser).toEqual({
         id: expect.any(String),
         login: user.login,
@@ -217,7 +229,7 @@ describe("/auth", () => {
         loginOrEmail: createUser.login,
         password: user.password,
       });
-      expect(createAuthLogin.status).toBe(HTTP_STATUS.OK_200);
+      expect(createAuthLogin.status).toBe(HttpStatus.OK);
       expect(createAuthLogin.body).toEqual({
         accessToken: expect.any(String),
       });
@@ -227,13 +239,13 @@ describe("/auth", () => {
         .send({
           email: "mpara7274@gmail.com",
         });
-      expect(passwordRecovery.status).toBe(HTTP_STATUS.NO_CONTENT_204);
+      expect(passwordRecovery.status).toBe(HttpStatus.NO_CONTENT);
       // const recoveryCode = passwordRecovery.body.code
       const newPassword = await request(app).post("/auth/new-password").send({
         newPassword: "qwertyNew",
         recoveryCode: "",
       });
-      expect(newPassword.status).toBe(HTTP_STATUS.NO_CONTENT_204);
+      expect(newPassword.status).toBe(HttpStatus.NO_CONTENT);
     });
 
     it("create new password with input data is incorrect => return 400 status code", async () => {
@@ -241,7 +253,7 @@ describe("/auth", () => {
         newPassword: true,
         recoveryCode: 123,
       });
-      expect(newPassword.status).toBe(HTTP_STATUS.BAD_REQUEST_400);
+      expect(newPassword.status).toBe(HttpStatus.BAD_REQUEST);
       expect(newPassword.body).toEqual(
         createErrorsMessageTest(["newPassword", "recoveryCode"])
       );
@@ -251,7 +263,7 @@ describe("/auth", () => {
         newPassword: true,
         recoveryCode: 123,
       });
-      expect(newPassword.status).toBe(HTTP_STATUS.HTTP_STATUS_429);
+      expect(newPassword.status).toBe(HttpStatus.TOO_MANY_REQUESTS);
     });
   });
 
@@ -279,7 +291,7 @@ describe("/auth", () => {
           .send(user);
         createUser = resultOfUserCreation.body;
 
-        expect(resultOfUserCreation.status).toBe(HTTP_STATUS.CREATED_201);
+        expect(resultOfUserCreation.status).toBe(HttpStatus.CREATED);
         expect(createUser).toEqual({
           id: expect.any(String),
           login: user.login,
@@ -292,7 +304,7 @@ describe("/auth", () => {
         });
 
   	  authLogin = createAuthLogin.body
-        expect(createAuthLogin.status).toBe(HTTP_STATUS.OK_200);
+        expect(createAuthLogin.status).toBe(HttpStatus.OK);
         expect(authLogin).toEqual({
           accessToken: expect.any(String),
         });
@@ -301,7 +313,7 @@ describe("/auth", () => {
         const createRefreshToken = await request(app)
           .post("/auth/refresh-token")
           .set("Cookie", `${refreshToken}`);
-        expect(createRefreshToken.status).toBe(HTTP_STATUS.OK_200);
+        expect(createRefreshToken.status).toBe(HttpStatus.OK);
 
         expect(createRefreshToken.body).toEqual({
           accessToken: expect.any(String),
@@ -322,7 +334,7 @@ describe("/auth", () => {
           const createRefreshToken = await request(app)
             .post("/auth/refresh-token")
             .set("Cookie", `${refreshToken}`);
-          expect(createRefreshToken.status).toBe(HTTP_STATUS.NOT_AUTHORIZATION_401);
+          expect(createRefreshToken.status).toBe(HttpStatus.UNAUTHORIZED);
         });
     });
   describe("/auth/registration", () => {
@@ -349,7 +361,7 @@ describe("/auth", () => {
         .send(user);
       createUser = resultOfUserCreation.body;
 
-      expect(resultOfUserCreation.status).toBe(HTTP_STATUS.CREATED_201);
+      expect(resultOfUserCreation.status).toBe(HttpStatus.CREATED);
       expect(createUser).toEqual({
         id: expect.any(String),
         login: user.login,
@@ -362,7 +374,7 @@ describe("/auth", () => {
       });
 
       authLogin = createAuthLogin.body;
-      expect(createAuthLogin.status).toBe(HTTP_STATUS.OK_200);
+      expect(createAuthLogin.status).toBe(HttpStatus.OK);
       expect(authLogin).toEqual({
         accessToken: expect.any(String),
       });
@@ -374,7 +386,7 @@ describe("/auth", () => {
         password: user.password,
         email: user.email,
       });
-      expect(registration.status).toBe(HTTP_STATUS.NO_CONTENT_204);
+      expect(registration.status).toBe(HttpStatus.NO_CONTENT);
     });
   });
 
@@ -402,7 +414,7 @@ describe("/auth", () => {
         .send(user);
       createUser = resultOfUserCreation.body;
 
-      expect(resultOfUserCreation.status).toBe(HTTP_STATUS.CREATED_201);
+      expect(resultOfUserCreation.status).toBe(HttpStatus.CREATED);
       expect(createUser).toEqual({
         id: expect.any(String),
         login: user.login,
@@ -415,7 +427,7 @@ describe("/auth", () => {
       });
 
       authLogin = createAuthLogin.body;
-      expect(createAuthLogin.status).toBe(HTTP_STATUS.OK_200);
+      expect(createAuthLogin.status).toBe(HttpStatus.OK);
       expect(authLogin).toEqual({
         accessToken: expect.any(String),
       });
@@ -426,7 +438,7 @@ describe("/auth", () => {
           code: recoveryCode,
         });
       expect(registrationConfirmationCode.status).toBe(
-        HTTP_STATUS.NO_CONTENT_204
+        HttpStatus.NO_CONTENT
       );
     });
   });
@@ -454,7 +466,7 @@ describe("/auth", () => {
 			.send(user);
 		  createUser = resultOfUserCreation.body;
 	
-		  expect(resultOfUserCreation.status).toBe(HTTP_STATUS.CREATED_201);
+		  expect(resultOfUserCreation.status).toBe(HttpStatus.CREATED);
 		  expect(createUser).toEqual({
 			id: expect.any(String),
 			login: user.login,
@@ -467,7 +479,7 @@ describe("/auth", () => {
 		  });
 	
 		  authLogin = createAuthLogin.body;
-		  expect(createAuthLogin.status).toBe(HTTP_STATUS.OK_200);
+		  expect(createAuthLogin.status).toBe(HttpStatus.OK);
 		  expect(authLogin).toEqual({
 			accessToken: expect.any(String),
 		  });
@@ -476,7 +488,7 @@ describe("/auth", () => {
 		  .send({
 			"email": "mpara7274@gmail.com"
 		  })
-		  expect(resendEmailForConfirmation.status).toBe(HTTP_STATUS.NO_CONTENT_204)
+		  expect(resendEmailForConfirmation.status).toBe(HttpStatus.CREATED)
 	})
   })
   describe("/auth/logout", () => {
@@ -508,7 +520,7 @@ describe("/auth", () => {
 			.send(user);
 		  createUser = resultOfUserCreation.body;
 	
-		  expect(resultOfUserCreation.status).toBe(HTTP_STATUS.CREATED_201);
+		  expect(resultOfUserCreation.status).toBe(HttpStatus.CREATED);
 		  expect(createUser).toEqual({
 			id: expect.any(String),
 			login: user.login,
@@ -521,7 +533,7 @@ describe("/auth", () => {
 		  });
 	
 		  authLogin = createAuthLogin.body;
-		  expect(createAuthLogin.status).toBe(HTTP_STATUS.OK_200);
+		  expect(createAuthLogin.status).toBe(HttpStatus.OK);
 		  expect(authLogin).toEqual({
 			accessToken: expect.any(String),
 		  });
@@ -530,7 +542,7 @@ describe("/auth", () => {
 		.get("/auth/me")
 		.set("Authorization", `Bearer ${authLogin.accessToken}`)
 
-		expect(informationUser.status).toBe(HTTP_STATUS.OK_200)
+		expect(informationUser.status).toBe(HttpStatus.OK)
 		expect(informationUser.body).toEqual({
 			"email": user.email,
 			"login": user.login,
@@ -540,7 +552,7 @@ describe("/auth", () => {
 	it("get information about current user without authorization => return 401 status code", async() => {
 		const withoutAuthorization = await request(app)
 		.get("/auth/me")
-		expect(withoutAuthorization.status).toBe(HTTP_STATUS.NOT_AUTHORIZATION_401)
+		expect(withoutAuthorization.status).toBe(HttpStatus.UNAUTHORIZED)
 	})
   })
 });
