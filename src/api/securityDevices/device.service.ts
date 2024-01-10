@@ -4,6 +4,8 @@ import { Devices } from "./device.class";
 import { ObjectId } from "mongodb";
 import { JwtService } from "@nestjs/jwt";
 import { DeviceRepository } from './device.repository';
+import { DeviceClass } from 'schema/device.schema';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class DeviceService {
@@ -44,15 +46,15 @@ export class DeviceService {
 		} catch(error) {
 			return null
 		}
-		const device: Devices = {
-		  _id: new ObjectId(),
-		  ip: ip,
-		  title: title,
-		  deviceId: payload.deviceId,
-		  userId: payload.userId,
-		  lastActiveDate: new Date(payload.iat * 1000).toISOString(),
-		};
-	
+		console.log('payload', payload)
+		const device  = new DeviceClass()
+		device.ip = ip
+		device._id = new mongoose.Types.ObjectId()
+		device.deviceId = payload.deviceId
+		device.lastActiveDate = new Date(payload.iat * 1000).toISOString()
+		device.title = title
+		device.userId = payload.userId
+		
 		const createDevice: Devices =
 		  await this.deviceRepository.createDevice(device);
 		return createDevice;

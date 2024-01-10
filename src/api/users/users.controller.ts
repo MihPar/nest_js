@@ -52,7 +52,7 @@ export class UsersController {
 //   @UseGuards(AuthBasic)
   @UseFilters(new HttpExceptionFilter())
   async createUser(@Body() body: InputModelClassCreateBody) {
-	console.log("1:", 1)
+	// console.log("1:", 1)
 	const createUser = await this.usersService.createNewUser(body.login, body.password, body.email)
 	return createUser
   }

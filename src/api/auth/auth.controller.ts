@@ -13,6 +13,7 @@ import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 import { RatelimitsRegistration } from '../../infrastructure/guards/auth/rateLimitsRegistration';
 import { CheckRefreshTokenFindMe } from '../../infrastructure/guards/auth/checkFindMe';
 import { ObjectId } from 'mongodb';
+import { randomUUID } from 'crypto';
 
 @Controller('auth')
 export class AuthController {
@@ -45,9 +46,12 @@ export class AuthController {
 
 	@Post('login')
 	@HttpCode(200)
-	@UseGuards(CheckRefreshToken)
+	//@UseGuards(CheckRefreshToken)
 	@UseFilters(new HttpExceptionFilter())
-	async createLogin(@Body() inutDataModel: InputDataModelClassAuth, @Ip() IP: string, @Headers() Headers: any,
+	async createLogin(
+		@Body() inutDataModel: InputDataModelClassAuth,
+		@Ip() IP: string, 
+		@Headers() Headers: any,
 	@Res({passthrough: true}) res: Response) {
 		const user: Users | null = await this.usersService.checkCridential(
 			inutDataModel.loginOrEmail,
@@ -56,10 +60,10 @@ export class AuthController {
 		  if (!user) {
 			throw new UnauthorizedException("Not authorization 401")
 		  } else {
-			const token: string = await this.jwtService.signAsync(user);
+			const token: string = await this.jwtService.signAsync({userId: user._id.toString()}, {expiresIn: "60s"});
 			const ip = IP || "unknown";
 			const title = Headers["user-agent"] || "unknown";
-			const refreshToken = await this.jwtService.signAsync({payload: user._id.toString()}, {expiresIn: "600s"});
+			const refreshToken = await this.jwtService.signAsync({userId: user._id.toString(), deviceId: randomUUID()}, {expiresIn: "600s"});
 			await this.deviceService.createDevice(ip, title, refreshToken);
 
 			res.cookie('refreshToken', refreshToken, {
