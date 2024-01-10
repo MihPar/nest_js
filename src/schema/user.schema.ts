@@ -6,7 +6,7 @@ export type UserDocument = HydratedDocument<UserClass>
 
 @Schema({ _id: false, versionKey: false })
 export class AccountDataClass {
-		_id?: mongoose.Types.ObjectId;
+		//_id?: mongoose.Types.ObjectId;
 	@Prop({required: true})
 		userName: string
 	@Prop({required: true})
@@ -20,7 +20,7 @@ export const AccountDataSchena = SchemaFactory.createForClass(AccountDataClass);
 
 @Schema({ _id: false, versionKey: false })
 export class EmailConfirmationClass {
-		_id?: mongoose.Types.ObjectId;
+		//_id?: mongoose.Types.ObjectId;
 	@Prop({required: true})
 		confirmationCode: string
 	@Prop({required: true})
@@ -32,7 +32,7 @@ export const EmailConfirmationSchena = SchemaFactory.createForClass(EmailConfirm
 
 @Schema({ _id: false, versionKey: false })
 export class UserClass {
-		_id?: Types.ObjectId
+		_id?: mongoose.Types.ObjectId
 	@Prop({required: true})
 		accountData: AccountDataClass
 	@Prop({require: true})

@@ -5,6 +5,7 @@ import { PostsViewModel } from "./posts.type";
 import { Transform, TransformFnParams } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
 import { IsNotEmpty, IsString, Length } from "class-validator";
+import mongoose from "mongoose";
 
 export class Posts {
 	public createdAt: string;
@@ -34,7 +35,7 @@ export class Posts {
 	  blogName: string,
 	) {
 	  super(title, shortDescription, content, blogId, blogName);
-	  this._id = new ObjectId();
+	  this._id = new mongoose.Types.ObjectId();
 	}
 	static getPostsViewModel(post: PostsDB, myStatus: LikeStatusEnum,
 	  newestLikes: newestLikesType[]): PostsViewModel {

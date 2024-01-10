@@ -1,8 +1,10 @@
 import { ObjectId } from "mongodb";
+import mongoose from "mongoose";
 
 export class Devices {
 	constructor(
-	  public _id: ObjectId,
+	  public _id = new mongoose.Types.ObjectId(),
+	//   public _id: ObjectId,
 	  public ip: string,
 	  public title: string,
 	  public deviceId: string,

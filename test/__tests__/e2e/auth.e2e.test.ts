@@ -134,8 +134,11 @@ describe("/auth", () => {
       expect(createAuthLogin.status).toBe(HttpStatus.BAD_REQUEST);
       //   expect(createAuthLogin.body).toStrictEqual(createErrorsMessageTest(["loginOrEmail", "password"]))
     });
+
     it("try user login to the system without authorization => return 401 staus code", async () => {
-      const createAuthLogin = await request(app).post("/auth/login").send({
+      const createAuthLogin = await request(app)
+	  .post("/auth/login")
+	  .send({
         loginOrEmail: "Tatiana",
         password: "qwerty1",
       });

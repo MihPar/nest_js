@@ -3,9 +3,9 @@ import mongoose, { HydratedDocument, Types } from "mongoose";
 
 export type DeviceDocument = HydratedDocument<DeviceClass>;
 
-@Schema({ _id: false, versionKey: false })
+@Schema({ versionKey: false })
 export class DeviceClass {
-		_id?: mongoose.Types.ObjectId;
+		_id: mongoose.Types.ObjectId;
 	@Prop({required: true})
 		ip: string;
 	@Prop({required: true})

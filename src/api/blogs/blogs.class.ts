@@ -3,6 +3,7 @@ import { BlogsViewType } from "./blogs.type"
 import { IsNotEmpty, IsString, IsUrl, Length } from "class-validator";
 import { Transform, TransformFnParams } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
+import mongoose from "mongoose";
 
 export class Blogs {
 	public createdAt: string
@@ -26,7 +27,7 @@ export class Blogs {
 				description,
 				websiteUrl,
 				isMembership)
-				this._id = new ObjectId()
+				this._id = new mongoose.Types.ObjectId()
 		 }
 		static getBlogsViewModel(blog: BlogsDB): BlogsViewType {
 			return {

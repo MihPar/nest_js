@@ -1,11 +1,12 @@
 import { ObjectId } from "mongodb";
 import { AccountDataType, EmailConfirmationType, UserViewType } from "./user.type";
 import { IsEmail, IsNotEmpty, Length 	} from "class-validator";
+import mongoose from "mongoose";
 
 export class DbId {
 	_id: ObjectId
 	constructor() {
-		this._id = new ObjectId()
+		this._id = new mongoose.Types.ObjectId()
 	}
 }
 

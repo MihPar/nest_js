@@ -5,7 +5,7 @@ export type CommentDocument = HydratedDocument<CommentClass>
 
 @Schema({ _id: false, versionKey: false })
 export class ComentatorInfoClass {
-		_id?: mongoose.Types.ObjectId;
+		// _id?: mongoose.Types.ObjectId;
 	@Prop({required: true})
 		userId: string
 	@Prop({reuqired: true})
