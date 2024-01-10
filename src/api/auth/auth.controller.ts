@@ -46,7 +46,6 @@ export class AuthController {
 
 	@Post('login')
 	@HttpCode(200)
-	//@UseGuards(CheckRefreshToken)
 	@UseFilters(new HttpExceptionFilter())
 	async createLogin(
 		@Body() inutDataModel: InputDataModelClassAuth,
