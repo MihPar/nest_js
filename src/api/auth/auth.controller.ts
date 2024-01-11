@@ -14,7 +14,7 @@ import { CheckRefreshTokenFindMe } from '../../infrastructure/guards/auth/checkF
 import { ObjectId } from 'mongodb';
 import { randomUUID } from 'crypto';
 import { UserClass } from '../../schema/user.schema';
-import { CheckLoginOrEmail } from '../../infrastructure/guards/auth/checkEmailOrLogin';
+// import { CheckLoginOrEmail } from '../../infrastructure/guards/auth/checkEmailOrLogin';
 
 @Controller('auth')
 export class AuthController {
@@ -116,7 +116,7 @@ export class AuthController {
 	@Post("registration")
 	@HttpCode(204)
 	@UseGuards(RatelimitsRegistration)
-	@UseGuards(CheckLoginOrEmail)
+	// @UseGuards(CheckLoginOrEmail)
 	@UseFilters(new HttpExceptionFilter())
 	async creteRegistration(@Body() inputDataReq: InputDataReqClass) {
 		const user = await this.usersService.createNewUser(
