@@ -14,14 +14,19 @@ export class IsExistEmailUser implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
     const email = req.body.email;
+	console.log(email, " email")
 
     const user: UserClass | null =
       await this.usersQueryRepository.findByLoginOrEmail(email);
     if (!user) {
       throw new BadRequestException([
-        { message: 'Incorrect email!', field: 'email' },
+        { message: 'User does not exist in DB', field: 'email' }, 
       ]);
-    }
+    } else if(user.emailConfirmation.isConfirmed === true) {
+		throw new BadRequestException([
+			{ message: 'Email is already exist in DB', field: 'email' },
+		  ]);
+	}
     return true;
   }
 }

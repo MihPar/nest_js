@@ -127,9 +127,11 @@ export class AuthController {
 	@Post("registration-email-resending")
 	@UseGuards(RatelimitsRegistration, IsExistEmailUser)
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
+		console.log("registration-email-resending", inputDateReqEmailResending.email)
 		const confirmUser = await this.usersService.confirmEmailResendCode(
 			inputDateReqEmailResending.email
 		  );
+		  console.log(confirmUser, " confirmUser")
 		  if (!confirmUser) throw new BadRequestException("400")
 		  return
 	}

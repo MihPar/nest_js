@@ -16,7 +16,7 @@ export class RatelimitsRegistration implements CanActivate {
     protected deviceRepository: DeviceRepository,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
-	console.log('ratelimit')
+	// console.log('ratelimit')
     const req: Request = context.switchToHttp().getRequest();
     const reqData: CollectionIP = {
       _id: new ObjectId(),
