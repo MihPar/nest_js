@@ -116,7 +116,7 @@ export class AuthController {
 	@Post("registration")
 	@HttpCode(204)
 	@UseGuards(RatelimitsRegistration)
-	@UseGuards(CheckLoginOrEmail)
+	// @UseGuards(CheckLoginOrEmail)
 	@UseFilters(new HttpExceptionFilter())
 	async creteRegistration(@Body() inputDataReq: InputDataReqClass) {
 		const user = await this.usersService.createNewUser(
