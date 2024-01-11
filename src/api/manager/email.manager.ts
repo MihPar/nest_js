@@ -8,11 +8,10 @@ export class EmailManager {
 	) {
 	}
 	async sendEamilConfirmationMessage(email: string, code: string): Promise<void> {
-		const result = await this.emailAdapter.sendEmail(email, code)
-		return result
+		await this.emailAdapter.sendEmail(email, code)
 	}
 	async sendEamilRecoveryCode(email: string, recoveryCode: string) {
 		const result = await this.emailAdapter.sendEmailByRecoveryCode(email, recoveryCode)
-		return result
+		// return result
 	}
 }

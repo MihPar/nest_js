@@ -26,6 +26,7 @@ export class EmailAdapter {
 		}
 		main().catch(console.error);
 	  }
+	  
 	  async sendEmailByRecoveryCode(email: string, code: string) {
 		const transporter = nodemailer.createTransport({
 		  service: "gmail",

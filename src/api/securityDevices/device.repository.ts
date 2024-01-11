@@ -2,11 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { DeviceClass, DeviceDocument } from '../../schema/device.schema';
+import { CollectionIP } from 'api/CollectionIP/collection.class';
+import { IPCollectionClass, IPCollectionDocument } from 'schema/IP.Schema';
 
 @Injectable()
 export class DeviceRepository {
 	constructor(
-		@InjectModel(DeviceClass.name) private deviceModel: Model<DeviceDocument>
+		@InjectModel(DeviceClass.name) private deviceModel: Model<DeviceDocument>,
+		@InjectModel(IPCollectionClass.name) private collectioinIPModel: Model<IPCollectionDocument>
 	) {}
   async terminateSession(deviceId: string) {
     const deletedOne = this.deviceModel.deleteOne({ deviceId });
@@ -40,14 +43,14 @@ export class DeviceRepository {
 	return decayResult.deletedCount === 1
   }
 
-  async createCollectionIP(reqData: any) {
-	await this.deviceModel.insertMany(reqData);
+  async createCollectionIP(reqData: CollectionIP) {
+	await this.collectioinIPModel.insertMany(reqData);
 	return reqData;
   }
 
 
   async countDocs(filter: any) {
-	const result = await this.deviceModel.countDocuments(filter);
+	const result = await this.collectioinIPModel.countDocuments(filter);
 	return result
   }
 }
