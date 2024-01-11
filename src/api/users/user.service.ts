@@ -47,7 +47,7 @@ export class UsersService {
 		minutes: 10,
 	  }), false)
 
-	console.log(newUser, "newUser")
+	//console.log(newUser, "newUser")
 	// newUser._id = new mongoose.Types.ObjectId()
 	// // newUser.accountData.email = new Date().toISOString()
 	// newUser.accountData.email = email
@@ -114,7 +114,7 @@ export class UsersService {
     // };
   }
   async _generateHash(password: string): Promise<string> {
-	console.log(password, ": password")
+	//console.log(password, ": password")
     const hash: string = await bcrypt.hash(password, 3);
     return hash;
   }

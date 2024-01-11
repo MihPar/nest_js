@@ -45,6 +45,7 @@ import { CheckRefreshTokenForPost } from '../infrastructure/guards/post/bearer.a
 import { ForbiddenCalss } from '../infrastructure/guards/securityDevice.ts/forbidden';
 import { AppService } from '../app.service';
 import { AuthController } from '../api/auth/auth.controller';
+import { CheckLoginOrEmail } from 'infrastructure/guards/auth/checkEmailOrLogin';
 
 const services = [
   BlogsService,
@@ -59,6 +60,7 @@ const guards = [
   AuthBasic,
   CheckRefreshTokenFindMe,
   CheckRefreshToken,
+  CheckLoginOrEmail,
   Ratelimits,
   RatelimitsRegistration,
   CheckRefreshTokenForComments,

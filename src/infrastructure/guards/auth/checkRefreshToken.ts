@@ -15,6 +15,8 @@ export class CheckRefreshToken implements CanActivate {
   async canActivate(
     context: ExecutionContext,
   ): Promise<boolean>  {
+
+	console.log('refresh token')
 	const req: Request = context.switchToHttp().getRequest();
 	const refreshToken = req.cookies.refreshToken;
 	if (!refreshToken) throw new UnauthorizedException("401")
