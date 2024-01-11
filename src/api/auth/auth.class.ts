@@ -1,6 +1,8 @@
 import { applyDecorators } from "@nestjs/common"
+import { UsersQueryRepository } from "api/users/users.queryRepository"
 import { Transform, TransformFnParams } from "class-transformer"
 import { IsEmail, IsNotEmpty, IsString, Length } from "class-validator"
+import { UserClass } from "schema/user.schema"
 
 export class InputDataModelClassAuth {
 	@IsString()
@@ -33,6 +35,16 @@ export class InputDateReqConfirmClass {
 	@IsOptional()
 	code: string
 }
+
+// const CheckLoginOrEmail = () => Transform(async ({ value }: TransformFnParams) => 
+// 	{const user: UserClass | null = await this.userModel.findOne({
+// 		$or: [
+// 		  { "accountData.email": loginOrEmail },
+// 		  { "accountData.userName": loginOrEmail },
+// 		],
+// 	  }).lean(); 
+// 	  return user}
+// )
 
 export class InputDataReqClass {
 	@IsOptional()

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { log } from 'console';
 import nodemailer from "nodemailer"
 
 
@@ -13,8 +14,7 @@ export class EmailAdapter {
 		  },
 		});
 		// console.log("recoveryCode: ", code);
-		async function main() {
-		  const info = await transporter.sendMail({
+		await transporter.sendMail({
 			from: "Mihail <mpara7274@gmail.com>", // sender address
 			to: email, // list of receivers
 			subject: "Hello worlds", // Subject line
@@ -22,11 +22,11 @@ export class EmailAdapter {
 				  <p>To finish password recovery please follow the link below:
 				  <a href='https://somesite.com/confirm-email?code=${code}'>complete registration</a>
 				  </p>`,
+		  }).catch(err => {
+			console.log(err, 'err with transport')
 		  });
-		}
-		main().catch(console.error);
 	  }
-	  
+
 	  async sendEmailByRecoveryCode(email: string, code: string) {
 		const transporter = nodemailer.createTransport({
 		  service: "gmail",

@@ -92,7 +92,7 @@ export class UsersService {
         user.emailConfirmation.confirmationCode
       );
     } catch (error) {
-      console.log(error);
+      console.log(error, 'error with send mail');
     }
 
 	return user.getViewUser()
