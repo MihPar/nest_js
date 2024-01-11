@@ -1,7 +1,6 @@
 import "reflect-metadata"
 import { Injectable } from '@nestjs/common';
 import { UserViewType} from './user.type';
-import { Users } from './user.class';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserClass, UserDocument } from '../../schema/user.schema';
 import { Model } from 'mongoose';
@@ -30,7 +29,7 @@ export class UsersQueryRepository {
 		if(sortBy === "login") {
 			sortBy = "userName"
 		}
-		const getAllUsers: Users[] = await this.userModel.find(filter)
+		const getAllUsers: UserClass[] = await this.userModel.find(filter)
 		  .sort({ [`accountData.${sortBy}`]: sortDirection === "asc" ? 1 : -1 })
 		  .skip((+pageNumber - 1) * +pageSize)
 		  .limit(+pageSize)
@@ -43,7 +42,7 @@ export class UsersQueryRepository {
 		  page: +pageNumber,
 		  pageSize: +pageSize,
 		  totalCount: totalCount,
-		  items: getAllUsers.map((user: Users): UserViewType => ({
+		  items: getAllUsers.map((user: UserClass): UserViewType => ({
 				id: user._id.toString(),
 				login: user.accountData.userName,
 				email: user.accountData.email,
@@ -52,8 +51,8 @@ export class UsersQueryRepository {
 		};
 	  }
 
-	  async findByLoginOrEmail(loginOrEmail: string): Promise<Users | null> {
-		const user: Users | null = await this.userModel.findOne({
+	  async findByLoginOrEmail(loginOrEmail: string): Promise<UserClass | null> {
+		const user: UserClass | null = await this.userModel.findOne({
 		  $or: [
 			{ "accountData.email": loginOrEmail },
 			{ "accountData.userName": loginOrEmail },
@@ -66,21 +65,21 @@ export class UsersQueryRepository {
 		return this.userModel.findOne({ "accountData.email": email }).lean();
 	  }
 
-	  async findUserByCode(recoveryCode: string): Promise<WithId<Users> | null> {
+	  async findUserByCode(recoveryCode: string): Promise<WithId<UserClass> | null> {
 		return this.userModel.findOne({
 		  "emailConfirmation.confirmationCode": recoveryCode,
 		}).lean();
 	  }
 
-	  async findUserByConfirmation(code: string): Promise<Users | null> {
-		const user: Users | null = await this.userModel.findOne({
+	  async findUserByConfirmation(code: string): Promise<UserClass | null> {
+		const user: UserClass | null = await this.userModel.findOne({
 		  "emailConfirmation.confirmationCode": code,
 		}).lean();
 		return user;
 	  }
 
-	  async findUserById(userId: ObjectId): Promise<Users | null> {
-		let user: Users | null = await this.userModel.findOne({ _id: new ObjectId(userId) }).lean();
+	  async findUserById(userId: ObjectId): Promise<UserClass | null> {
+		let user: UserClass | null = await this.userModel.findOne({ _id: new ObjectId(userId) }).lean();
 		return user;
 	  }
 }

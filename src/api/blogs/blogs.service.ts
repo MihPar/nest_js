@@ -1,4 +1,4 @@
-import { BlogsDB, bodyBlogsModel } from './blogs.class';
+import { bodyBlogsModel } from './blogs.class';
 import { BlogsViewType } from './blogs.type';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -11,8 +11,8 @@ export class BlogsService {
     protected blogsRepository: BlogsRepository,
   ) {}
   async createNewBlog(inputDateModel: bodyBlogsModel): Promise<BlogsViewType> {
-    const newBlog: BlogsDB = new BlogsDB(inputDateModel.name, inputDateModel.description, inputDateModel.websiteUrl, false)
-    const createBlog: BlogsDB = await this.blogsRepository.createNewBlogs(newBlog);
+    const newBlog: BlogClass = new BlogClass (inputDateModel.name, inputDateModel.description, inputDateModel.websiteUrl, false)
+    const createBlog: BlogClass = await this.blogsRepository.createNewBlogs(newBlog);
     return createBlog.getBlogViewModel();
   }
 

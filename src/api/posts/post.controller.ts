@@ -19,9 +19,6 @@ import { CommentService } from '../comment/comment.service';
 import { PostsService } from './posts.service';
 import { CommentQueryRepository } from '../comment/comment.queryRepository';
 import { PostsQueryRepository } from './postQuery.repository';
-import { Users } from '../users/user.class';
-
-import { Blogs } from '../blogs/blogs.class';
 import { BlogsQueryRepository } from '../blogs/blogs.queryReposity';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
 import { InputModelLikeStatusClass } from '../../api/comment/comment.class';
@@ -29,6 +26,8 @@ import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 import { CheckRefreshTokenForPost } from '../../infrastructure/guards/post/bearer.authForPost';
 import { AuthBasic } from '../../infrastructure/guards/auth/basic.auth';
 import { ObjectId } from 'mongodb';
+import { UserClass } from 'schema/user.schema';
+import { BlogClass } from 'schema/blogs.schema';
 
 @Controller('posts')
 export class PostController {
@@ -47,7 +46,7 @@ export class PostController {
   async updateLikeStatus(
 	@Param() dto: InputModelClassPostId, 
 	@Body() status: InputModelLikeStatusClass,
-	@UserDecorator() user: Users,
+	@UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
 	) {
     const userLogin = user.accountData.userName;
@@ -68,7 +67,7 @@ export class PostController {
   @HttpCode(200)
   async getCommentByPostId(
     @Param('postId') postId: string,
-    @UserDecorator() user: Users,
+    @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
     @Query()
     query: {
@@ -101,7 +100,7 @@ export class PostController {
   async createNewCommentByPostId(
 	@Param() dto: InputModelClassPostId, 
 	@Body() inputModelContent: InputModelContentePostClass,
-  	@UserDecorator() user: Users,
+  	@UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null
 	) {
     const post: Posts | null = await this.postsQueryRepository.findPostById(dto.postId)
@@ -122,7 +121,7 @@ export class PostController {
   @Get()
   @HttpCode(200)
   async getPosts(
-    @UserDecorator() user: Users,
+    @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
     @Query()
     query: {
@@ -149,7 +148,7 @@ export class PostController {
   @UseGuards(AuthBasic)
   @UseFilters(new HttpExceptionFilter())
   async createPost(@Body() inputModelPost: inputModelPostClass) {
-    const findBlog: Blogs | null = await this.blogsQueryRepository.findBlogById(
+    const findBlog: BlogClass | null = await this.blogsQueryRepository.findRawBlogById(
       inputModelPost.blogId,
     );
     if (!findBlog) throw new NotFoundException('Blogs by id not found');
@@ -167,7 +166,7 @@ export class PostController {
   @HttpCode(200)
   async getPostById(
     @Param('id') postId: string,
-    @UserDecorator() user: Users,
+    @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
   ) {
 	if(!userId) return null

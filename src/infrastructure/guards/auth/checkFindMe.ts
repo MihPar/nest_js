@@ -3,7 +3,7 @@ import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from
 import { Request } from 'express';
 import { ObjectId } from 'mongodb';
 import { UsersRepository } from '../../../api/users/user.repository';
-import { Users } from '../../../api/users/user.class';
+import { UserClass } from 'schema/user.schema';
 
 @Injectable()
 export class CheckRefreshTokenFindMe implements CanActivate {
@@ -21,7 +21,7 @@ export class CheckRefreshTokenFindMe implements CanActivate {
 
 	  const userId: ObjectId = await this.jwtService.verifyAsync(token, {secret: process.env.REFRESH_JWT_SECRET!});
 	  if (!userId) throw new UnauthorizedException("401")
-	  const currentUser: Users | null = await this.usersRepository.findUserById(userId);
+	  const currentUser: UserClass | null = await this.usersRepository.findUserById(userId);
 	  if (!currentUser) throw new UnauthorizedException("401")
 	  return true
 }

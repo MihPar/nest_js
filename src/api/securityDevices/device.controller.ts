@@ -4,10 +4,10 @@ import { DeviceService } from './device.service';
 import { DeviceRepository } from './device.repository';
 import { JwtService } from "@nestjs/jwt";
 import { UserDecorator, UserIdDecorator } from "../../infrastructure/decorator/decorator.user";
-import { Users } from "../../api/users/user.class";
 import { Request } from "express";
 import { CheckRefreshToken } from "../../infrastructure/guards/auth/checkRefreshToken";
 import { ForbiddenCalss } from "../../infrastructure/guards/securityDevice.ts/forbidden";
+import { UserClass } from "schema/user.schema";
 
 @Controller('security')
 export class SecurityDeviceController {
@@ -21,7 +21,7 @@ export class SecurityDeviceController {
   @HttpCode(200)
   @UseGuards(CheckRefreshToken)
   async getDevicesUser(
-    @UserDecorator() user: Users,
+    @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
   ) {
     if (!userId) return null;
@@ -32,7 +32,7 @@ export class SecurityDeviceController {
   @UseGuards(CheckRefreshToken)
   @HttpCode(204)
   async terminateCurrentSession(
-    @UserDecorator() user: Users,
+    @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
     @Res({ passthrough: true }) res: Response,
     @Req() req: Request,

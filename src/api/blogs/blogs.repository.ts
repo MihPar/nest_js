@@ -3,7 +3,6 @@ import { ObjectId } from "mongodb";
 import { BlogClass, BlogDocument } from "../../schema/blogs.schema";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { BlogsDB } from "./blogs.class";
 
 @Injectable()
 export class BlogsRepository {
@@ -15,7 +14,7 @@ export class BlogsRepository {
     return deletedAll.deletedCount === 1;
   }
 
-  async createNewBlogs(newBlog: BlogsDB): Promise<BlogsDB> {
+  async createNewBlogs(newBlog: BlogClass): Promise<BlogClass> {
     const result = await this.blogModel.create(newBlog);
     return newBlog;
   }

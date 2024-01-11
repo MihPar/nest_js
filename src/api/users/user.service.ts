@@ -1,14 +1,15 @@
-import { ObjectId, WithId } from "mongodb";
-import { UserViewType} from "./user.type";
+import { WithId } from "mongodb";
 import bcrypt from "bcrypt";
 import {v4 as uuidv4} from "uuid"
 import { UsersRepository } from "./user.repository";
 import { Injectable } from "@nestjs/common";
 import { add } from "date-fns";
 import { EmailManager } from "../manager/email.manager";
-import { Users } from "./user.class";
 import { UsersQueryRepository } from "./users.queryRepository";
 import { EmailAdapter } from "../../api/adapter/email.adapter";
+import { UserClass } from "schema/user.schema";
+import mongoose from "mongoose";
+import { UserViewType } from "./user.type";
 
 @Injectable()
 export class UsersService {
@@ -22,8 +23,8 @@ export class UsersService {
   async checkCridential(
     loginOrEmail: string,
     password: string
-  ): Promise<Users | null> {
-    const user: Users | null =
+  ): Promise<UserClass | null> {
+    const user: UserClass | null =
       await this.usersQueryRepository.findByLoginOrEmail(loginOrEmail);
     if (!user) return null;
     const resultBcryptCompare: boolean = await bcrypt.compare(
@@ -40,32 +41,46 @@ export class UsersService {
     email: string
   ): Promise<UserViewType | null> {
     const passwordHash = await this._generateHash(password);
-    const newUser: Users = {
-      _id: new ObjectId(),
-      accountData: {
-        userName: login,
-        email,
-        passwordHash,
-        createdAt: new Date().toISOString(),
-      },
-      emailConfirmation: {
-        confirmationCode: uuidv4(),
-        expirationDate: add(new Date(), {
-          hours: 1,
-          minutes: 10,
-        }),
-        isConfirmed: false,
-      },
-      getViewUser(): UserViewType {
-        return {
-          id: this._id.toString(),
-          login: this.accountData.userName,
-          email: this.accountData.email,
-          createdAt: this.accountData.createdAt,
-        };
-      },
-    };
-    const user: Users = await this.usersRepository.createUser(newUser);
+
+	const newUser = new UserClass()
+	newUser._id = new mongoose.Types.ObjectId()
+	newUser.accountData.email = new Date().toISOString()
+	newUser.accountData.email = email
+	newUser.accountData.passwordHash = passwordHash
+	newUser.accountData.userName = login
+	newUser.emailConfirmation.confirmationCode = uuidv4()
+	newUser.emailConfirmation.expirationDate = add(new Date(), {
+		hours: 1,
+		minutes: 10,
+	  })
+	newUser.emailConfirmation.isConfirmed = false
+
+    // const newUser: Users = {
+    //   _id: new ObjectId(),
+    //   accountData: {
+    //     userName: login,
+    //     email,
+    //     passwordHash,
+    //     createdAt: new Date().toISOString(),
+    //   },
+    //   emailConfirmation: {
+    //     confirmationCode: uuidv4(),
+    //     expirationDate: add(new Date(), {
+    //       hours: 1,
+    //       minutes: 10,
+    //     }),
+    //     isConfirmed: false,
+    //   },
+    //   getViewUser(): UserViewType {
+    //     return {
+    //       id: this._id.toString(),
+    //       login: this.accountData.userName,
+    //       email: this.accountData.email,
+    //       createdAt: this.accountData.createdAt,
+    //     };
+    //   },
+    // };
+    const user: UserClass = await this.usersRepository.createUser(newUser);
     try {
       await this.emailManager.sendEamilConfirmationMessage(
         user.accountData.email,
@@ -74,12 +89,24 @@ export class UsersService {
     } catch (error) {
       console.log(error);
     }
-    return {
-      id: user._id.toString(),
-      login: user.accountData.userName,
-      email: user.accountData.email,
-      createdAt: user.accountData.createdAt,
-    };
+
+	return user.getViewUser()
+
+	// user.getViewUser(_id, login, email, createdAt): UserViewType {
+	// 	return {
+	// 		id =  user._id,
+	// 		login =  user.accountData.userName,
+	// 		email =  user.accountData.email,
+	// 		createdAt = user.accountData.createdAt
+	// 	};
+	//   }
+
+    // return {
+    //   id: user._id.toString(),
+    //   login: user.accountData.userName,
+    //   email: user.accountData.email,
+    //   createdAt: user.accountData.createdAt,
+    // };
   }
   async _generateHash(password: string): Promise<string> {
 	console.log(password, ": password")
@@ -99,7 +126,7 @@ export class UsersService {
 
   async recoveryPassword(email: string): Promise<any> {
     const recoveryCode = uuidv4();
-    const findUser: WithId<Users | null> | null =
+    const findUser: WithId<UserClass | null> | null =
       await this.usersQueryRepository.findUserByEmail(email);
     if (!findUser) {
       return false;
@@ -146,7 +173,7 @@ export class UsersService {
   }
 
   async confirmEmailResendCode(email: string): Promise<boolean | null> {
-    const user: Users | null =
+    const user: UserClass | null =
       await this.usersQueryRepository.findByLoginOrEmail(email);
     if (!user) return null;
     if (user.emailConfirmation.isConfirmed) {

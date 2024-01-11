@@ -1,7 +1,5 @@
 import { DeviceQueryRepository } from './deviceQuery.repository';
 import { Injectable } from "@nestjs/common";
-import { Devices } from "./device.class";
-import { ObjectId } from "mongodb";
 import { JwtService } from "@nestjs/jwt";
 import { DeviceRepository } from './device.repository';
 import { DeviceClass } from 'schema/device.schema';
@@ -38,7 +36,7 @@ export class DeviceService {
 		ip: string,
 		title: string,
 		refreshToken: string
-	  ): Promise<Devices | null> {
+	  ): Promise<DeviceClass | null> {
 		let payload
 
 		try {
@@ -55,7 +53,7 @@ export class DeviceService {
 		device.title = title
 		device.userId = payload.userId
 		
-		const createDevice: Devices =
+		const createDevice: DeviceClass =
 		  await this.deviceRepository.createDevice(device);
 		return createDevice;
 	  }

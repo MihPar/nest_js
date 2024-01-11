@@ -1,6 +1,5 @@
 import { Model } from 'mongoose';
 import { Injectable } from "@nestjs/common";
-import { Devices } from "./device.class";
 import { DeviceClass, DeviceDocument } from "../../schema/device.schema";
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -10,7 +9,7 @@ export class DeviceQueryRepository {
 		@InjectModel(DeviceClass.name) private deviceModel: Model<DeviceDocument>
 	) {}
 	async getAllDevicesUser(userId: string) {
-		const getAllDevices: Devices[] = await this.deviceModel
+		const getAllDevices: DeviceClass[] = await this.deviceModel
 		  .find({ userId })
 		  .lean();
 		return getAllDevices.map(function (item) {

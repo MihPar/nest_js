@@ -1,7 +1,6 @@
 import { DeviceService } from '../securityDevices/device.service';
 import { BadRequestException, Body, Controller, Headers, HttpCode, Ip, Post, Req, Res, UnauthorizedException, UseFilters, UseGuards } from "@nestjs/common";
 import { InputDataModelClassAuth, InputDataReqClass, InputDateReqConfirmClass, InputModelNewPasswordClass, emailInputDataClass } from "./auth.class";
-import { Users } from "../../api/users/user.class";
 import { UsersService } from "../../api/users/user.service";
 import { JwtService } from "@nestjs/jwt";
 import { Request, Response } from 'express';
@@ -14,6 +13,7 @@ import { RatelimitsRegistration } from '../../infrastructure/guards/auth/rateLim
 import { CheckRefreshTokenFindMe } from '../../infrastructure/guards/auth/checkFindMe';
 import { ObjectId } from 'mongodb';
 import { randomUUID } from 'crypto';
+import { UserClass } from 'schema/user.schema';
 
 @Controller('auth')
 export class AuthController {
@@ -52,7 +52,7 @@ export class AuthController {
 		@Ip() IP: string, 
 		@Headers() Headers: any,
 	@Res({passthrough: true}) res: Response) {
-		const user: Users | null = await this.usersService.checkCridential(
+		const user: UserClass | null = await this.usersService.checkCridential(
 			inutDataModel.loginOrEmail,
 			inutDataModel.password
 		  );
@@ -78,7 +78,7 @@ export class AuthController {
 	async cretaeRefreshToken(
 		@Req() req: Request,
 		@Res({passthrough: true}) res: Response,
-		@UserDecorator() user: Users,
+		@UserDecorator() user: UserClass,
 		@UserIdDecorator() userId: string | null,
 	) {
 		const refreshToken: string = req.cookies.refreshToken;
@@ -155,7 +155,7 @@ export class AuthController {
 		  const userId: ObjectId = await this.jwtService.verifyAsync(token);
 		  if (!userId) throw new UnauthorizedException('Not authorization 401')
 
-		  const currentUser: Users | null = await this.usersQueryRepository.findUserById(
+		  const currentUser: UserClass | null = await this.usersQueryRepository.findUserById(
 			userId
 		  );
 		  if (!currentUser) throw new UnauthorizedException('Not authorization 401')

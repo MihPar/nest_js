@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Put, UseFilters, UseGuards } from '@nestjs/common';
 import { CommentQueryRepository } from './comment.queryRepository';
 import { CommentViewModel } from './comment.type';
-import { Users } from '../users/user.class';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
 import { CommentsDB, InputModelContent, InputModelLikeStatusClass, inputModelCommentId, inputModelId } from './comment.class';
 import { CheckRefreshTokenForComments } from '../../infrastructure/guards/comments/bearer.authForComments';
@@ -11,6 +10,7 @@ import { commentDBToView } from '../../utils/helpers';
 import { CommentService } from './comment.service';
 import { CommentRepository } from './comment.repository';
 import { CheckRefreshTokenForGetComments } from '../../infrastructure/guards/comments/bearer.authGetComment';
+import { UserClass } from 'schema/user.schema';
 
 @Controller('comments')
 export class CommentsController {
@@ -27,7 +27,7 @@ export class CommentsController {
   async updateByCommentIdLikeStatus(
     @Body() status: InputModelLikeStatusClass,
     @Param() id: inputModelCommentId,
-    @UserDecorator() user: Users,
+    @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: ObjectId,
   ) {
     const findCommentById: CommentsDB | null =
@@ -56,7 +56,7 @@ export class CommentsController {
   async updataCommetById(
 	@Param() id: inputModelCommentId, 
 	@Body() dto: InputModelContent,
-	@UserDecorator() user: Users,
+	@UserDecorator() user: UserClass,
 	@UserIdDecorator() userId: string | null,
 	) {
 	if(!userId) return null
@@ -73,7 +73,7 @@ export class CommentsController {
   @UseGuards(CheckRefreshTokenForComments)
   async deleteCommentById(
 	@Param() id: inputModelCommentId,
-	@UserDecorator() user: Users,
+	@UserDecorator() user: UserClass,
 	@UserIdDecorator() userId: string | null
 	) {
 		if(!userId) return null
@@ -92,7 +92,7 @@ export class CommentsController {
   @UseGuards(CheckRefreshTokenForGetComments)
   async getCommentById(
     @Param() dto: inputModelId,
-    @UserDecorator() user: Users,
+    @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
   ) {
     if (!userId) return null;

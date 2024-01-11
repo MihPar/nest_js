@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Devices } from './device.class';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { DeviceClass, DeviceDocument } from '../../schema/device.schema';
@@ -20,7 +19,7 @@ export class DeviceRepository {
 	return deletedAll.deleteMany()
   }
 
-  async createDevice(device: Devices): Promise<Devices> {
+  async createDevice(device: DeviceClass): Promise<DeviceClass> {
     const resultDevice = await this.deviceModel.insertMany(device);
     return device;
   }

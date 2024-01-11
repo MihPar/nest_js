@@ -1,17 +1,17 @@
 import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, Query, UseFilters, UseGuards } from "@nestjs/common";
 import { BlogsQueryRepository } from "./blogs.queryReposity";
-import { Blogs, bodyBlogsModel } from "./blogs.class";
+import { bodyBlogsModel } from "./blogs.class";
 import { BlogsViewType } from "./blogs.type";
 import { BlogsService } from "./blogs.service";
 import { Posts, bodyPostsModelClass } from "../posts/posts.class";
 import { PostsService } from "../posts/posts.service";
 import { BlogsRepository } from "./blogs.repository";
 import { PostsQueryRepository } from "../posts/postQuery.repository";
-import { Users } from "../users/user.class";
 import { UserDecorator, UserIdDecorator } from "../../infrastructure/decorator/decorator.user";
 import { PaginationType } from "../../types/pagination.types";
 import { AuthBasic } from "../../infrastructure/guards/auth/basic.auth";
 import { HttpExceptionFilter } from "../../exceptionFilters.ts/exceptionFilter";
+import { UserClass } from "schema/user.schema";
 
 @Controller('blogs')
 export class BlogsController {
@@ -35,7 +35,7 @@ export class BlogsController {
       pageSize: string;
     },
   ) {
-    const getAllBlogs: PaginationType<Blogs> =
+    const getAllBlogs: PaginationType<BlogsViewType> =
       await this.blogsQueryRepository.findAllBlogs(
         query.searchNameTerm,
 		(query.sortBy || 'createdAt'),
@@ -51,7 +51,7 @@ export class BlogsController {
   @UseGuards(AuthBasic)
   @UseFilters(new HttpExceptionFilter())
   async createBlog(@Body() inputDateModel: bodyBlogsModel) {
-    const createBlog: Blogs = await this.blogsService.createNewBlog(
+    const createBlog: BlogsViewType = await this.blogsService.createNewBlog(
       inputDateModel,
     );
     return createBlog;
@@ -61,7 +61,7 @@ export class BlogsController {
   @Get(':blogId/posts')
   async getPostsByBlogId(
     @Param('blogId') blogId: string,
-	@UserDecorator() user: Users,
+	@UserDecorator() user: UserClass,
 	@UserIdDecorator() userId: string | null,
     @Query()
     query: {
@@ -95,7 +95,7 @@ export class BlogsController {
     @Param('blogId') blogId: string,
     @Body() inputDataModel: bodyPostsModelClass,
   ) {
-    const findBlog: Blogs | null = await this.blogsQueryRepository.findBlogById(blogId);
+    const findBlog: BlogsViewType | null = await this.blogsQueryRepository.findBlogById(blogId);
     if (!findBlog) throw new NotFoundException('Blogs by id not found 404');
     const isCreatePost = await this.postsService.createPost(
       blogId,

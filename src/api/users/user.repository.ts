@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
-import { Users } from './user.class';
 import { UserClass, UserDocument } from '../../schema/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { add } from 'date-fns';
 
 @Injectable()
@@ -11,7 +10,7 @@ export class UsersRepository {
 	constructor(
 		@InjectModel(UserClass.name) private userModel: Model<UserDocument>
 	) {}
-  async createUser(newUser: Users) {
+  async createUser(newUser: UserClass) {
     const updateUser = await this.userModel.insertMany([newUser]);
     return newUser;
   }
@@ -77,8 +76,8 @@ export class UsersRepository {
   }
 
 
-  async findUserById(userId: ObjectId): Promise<Users | null> {
-    let user: Users | null = await this.userModel.findOne({ _id: new ObjectId(userId) }).lean();
+  async findUserById(userId: ObjectId): Promise<UserClass | null> {
+    let user: UserClass | null = await this.userModel.findOne({ _id: new ObjectId(userId) }).lean();
     return user;
   }
 }
