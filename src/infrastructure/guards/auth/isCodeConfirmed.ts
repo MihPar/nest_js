@@ -2,6 +2,7 @@ import {
 	Injectable,
 	CanActivate,
 	ExecutionContext,
+	BadRequestException,
   } from '@nestjs/common';
   import { UserClass } from '../../../schema/user.schema';
   import { UsersQueryRepository } from '../../../api/users/users.queryRepository';
@@ -17,13 +18,13 @@ import {
 	  const user: UserClass | null = await this.usersQueryRepository.findUserByConfirmation(code)
 	console.log(user)
 	if(!user) {
-		throw new Error('User not found')
+		throw new BadRequestException([{message: 'Incorrect login!', field: 'login'}])
 	} 
     if(user.emailConfirmation.expirationDate <= new Date()) {
-		throw new Error('code was expiration')
+		throw new BadRequestException([{message: 'Incorrect login!', field: 'login'}])
 	} 
 	if(user.emailConfirmation.isConfirmed) {
-		throw new Error('Code is alreade confirmed')
+		throw new BadRequestException([{message: 'Incorrect login!', field: 'login'}])
 	}
 	req.user = user
 	return true
