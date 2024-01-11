@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { DeviceClass, DeviceDocument } from '../../schema/device.schema';
-import { CollectionIP } from 'api/CollectionIP/collection.class';
-import { IPCollectionClass, IPCollectionDocument } from 'schema/IP.Schema';
+import { CollectionIP } from '../../api/CollectionIP/collection.class';
+import { IPCollectionClass, IPCollectionDocument } from '../../schema/IP.Schema';
 
 @Injectable()
 export class DeviceRepository {
