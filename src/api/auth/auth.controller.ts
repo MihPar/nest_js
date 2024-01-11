@@ -125,7 +125,7 @@ export class AuthController {
 	@HttpCode(204)
 	@Post("registration-email-resending")
 	@UseGuards(RatelimitsRegistration, IsExistEmailUser)
-	async createRegistrationEmailResending(@Body() inputDateReqEmailResending: emailInputDataClass) {
+	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
 		const confirmUser = await this.usersService.confirmEmailResendCode(
 			inputDateReqEmailResending.email
 		  );
