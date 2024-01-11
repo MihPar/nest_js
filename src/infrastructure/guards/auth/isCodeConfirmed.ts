@@ -18,13 +18,13 @@ import {
 	  const user: UserClass | null = await this.usersQueryRepository.findUserByConfirmation(code)
 	console.log(user)
 	if(!user) {
-		throw new BadRequestException([{message: 'Incorrect login!', field: 'login'}])
+		throw new BadRequestException([{message: 'Incorrect code!', field: 'code'}])
 	} 
     if(user.emailConfirmation.expirationDate <= new Date()) {
-		throw new BadRequestException([{message: 'Incorrect login!', field: 'login'}])
+		throw new BadRequestException([{message: 'Incorrect code!', field: 'code'}])
 	} 
 	if(user.emailConfirmation.isConfirmed) {
-		throw new BadRequestException([{message: 'Incorrect login!', field: 'login'}])
+		throw new BadRequestException([{message: 'Incorrect code!', field: 'code'}])
 	}
 	req.user = user
 	return true
