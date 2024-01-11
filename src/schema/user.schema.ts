@@ -32,12 +32,19 @@ export const EmailConfirmationSchena = SchemaFactory.createForClass(EmailConfirm
 
 @Schema({ versionKey: false })
 export class UserClass {
+	constructor(
+		userName: string, email: string, passwordHash: string, confirmationCode: string, expirationDate: Date, isConfirmed: boolean
+	) {
+		this._id = new mongoose.Types.ObjectId();
+		this.accountData = {userName, email, passwordHash, createdAt: new Date().toISOString()}
+		this.emailConfirmation = {confirmationCode, expirationDate, isConfirmed}
+	}
 		_id: mongoose.Types.ObjectId
 	@Prop({required: true})
 		accountData: AccountDataClass
 	@Prop({require: true})
 		emailConfirmation: EmailConfirmationClass
-		id: ObjectId;
+		// id: ObjectId;
 	 getViewUser(): UserViewType {
 		// const user = new this()
 		return {

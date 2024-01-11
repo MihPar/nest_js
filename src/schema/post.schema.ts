@@ -44,9 +44,12 @@ export class PostClass extends Posts {
 		content: string,
 		blogId: string,
 		blogName: string,
+		likesCount: number, 
+		dislikesCount: number
 	) {
 		super(title, shortDescription, content, blogId, blogName);
-	//   this._id = new mongoose.Types.ObjectId();
+	  	this._id = new mongoose.Types.ObjectId();
+		this.extendedLikesInfo = {likesCount, dislikesCount}
 	}
   	_id: mongoose.Types.ObjectId;
   @Prop({required: true, type: String})

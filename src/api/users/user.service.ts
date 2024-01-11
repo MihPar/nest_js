@@ -42,18 +42,23 @@ export class UsersService {
   ): Promise<UserViewType | null> {
     const passwordHash = await this._generateHash(password);
 
-	const newUser = new UserClass()
-	newUser._id = new mongoose.Types.ObjectId()
-	newUser.accountData.email = new Date().toISOString()
-	newUser.accountData.email = email
-	newUser.accountData.passwordHash = passwordHash
-	newUser.accountData.userName = login
-	newUser.emailConfirmation.confirmationCode = uuidv4()
-	newUser.emailConfirmation.expirationDate = add(new Date(), {
+	const newUser = new UserClass(login, email, passwordHash, uuidv4(), add(new Date(), {
 		hours: 1,
 		minutes: 10,
-	  })
-	newUser.emailConfirmation.isConfirmed = false
+	  }), false)
+
+	console.log(newUser, "newUser")
+	// newUser._id = new mongoose.Types.ObjectId()
+	// // newUser.accountData.email = new Date().toISOString()
+	// newUser.accountData.email = email
+	// newUser.accountData.passwordHash = passwordHash
+	// newUser.accountData.userName = login
+	// newUser.emailConfirmation.confirmationCode = uuidv4()
+	// newUser.emailConfirmation.expirationDate = add(new Date(), {
+	// 	hours: 1,
+	// 	minutes: 10,
+	//   })
+	// newUser.emailConfirmation.isConfirmed = false
 
     // const newUser: Users = {
     //   _id: new ObjectId(),

@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { BlogsViewType } from "../api/blogs/blogs.type";
 import mongoose, { HydratedDocument } from "mongoose";
+import { ObjectId } from "mongodb";
 
 export class Blogs {
 	public createdAt: string
@@ -23,6 +24,7 @@ export class BlogClass extends Blogs {
 		websiteUrl: string,
 		isMembership: boolean) {
 		super(name, description, websiteUrl,isMembership)
+		this._id = new ObjectId()
 	}
 		_id: mongoose.Types.ObjectId;
 	@Prop({required: true})
