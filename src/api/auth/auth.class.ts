@@ -1,6 +1,6 @@
 import { applyDecorators } from "@nestjs/common"
 import { Transform, TransformFnParams } from "class-transformer"
-import { IsEmail, IsNotEmpty, IsString, IsUUID, Length } from "class-validator"
+import { IsEmail, IsNotEmpty, IsString, IsUUID, Length, Matches } from "class-validator"
 
 const UUID_VERSION = '4' 
 
@@ -20,8 +20,8 @@ function RequiredString() {
 }
 
 export class emailInputDataClass {
-	@IsEmail()
 	@RequiredString()
+	@Matches('^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
 	email: string
 }
 
@@ -39,16 +39,6 @@ export class InputDateReqConfirmClass {
 	@UUID()
 	code: string
 }
-
-// const CheckLoginOrEmail = () => Transform(async ({ value }: TransformFnParams) => 
-// 	{const user: UserClass | null = await this.userModel.findOne({
-// 		$or: [
-// 		  { "accountData.email": loginOrEmail },
-// 		  { "accountData.userName": loginOrEmail },
-// 		],
-// 	  }).lean(); 
-// 	  return user}
-// )
 
 export class InputDataReqClass {
 	@RequiredString()

@@ -15,6 +15,7 @@ import { ObjectId } from 'mongodb';
 import { randomUUID } from 'crypto';
 import { UserClass } from '../../schema/user.schema';
 import { CheckLoginOrEmail } from '../../infrastructure/guards/auth/checkEmailOrLogin';
+import { IsExistEmailUser } from '../../infrastructure/guards/auth/isExixtEmailUser';
 
 @Controller('auth')
 export class AuthController {
@@ -28,7 +29,6 @@ export class AuthController {
 	@HttpCode(204)
 	@Post("password-recovery")
 	@UseGuards(Ratelimits)
-	@UseFilters(new HttpExceptionFilter())
 	async createPasswordRecovery(@Body() emailInputData: emailInputDataClass) {
 		const passwordRecovery = await this.usersService.recoveryPassword(emailInputData.email);
 	}
@@ -36,7 +36,6 @@ export class AuthController {
 	@HttpCode(204)
 	@Post("new-password")
 	@UseGuards(Ratelimits)
-	@UseFilters(new HttpExceptionFilter())
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
 		const resultUpdatePassword = await this.usersService.setNewPassword(
 			inputDataNewPassword.newPassword,
@@ -107,7 +106,6 @@ export class AuthController {
 	@HttpCode(204)
 	@Post("registration-confirmation")
 	@UseGuards(RatelimitsRegistration)
-	@UseFilters(new HttpExceptionFilter())
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
 		await this.usersService.findUserByConfirmationCode(inputDateRegConfirm.code);
 	}
@@ -126,8 +124,7 @@ export class AuthController {
 
 	@HttpCode(204)
 	@Post("registration-email-resending")
-	@UseGuards(RatelimitsRegistration)
-	@UseFilters(new HttpExceptionFilter())
+	@UseGuards(RatelimitsRegistration, IsExistEmailUser)
 	async createRegistrationEmailResending(@Body() inputDateReqEmailResending: emailInputDataClass) {
 		const confirmUser = await this.usersService.confirmEmailResendCode(
 			inputDateReqEmailResending.email
