@@ -113,8 +113,8 @@ export class AuthController {
 		await this.usersService.findUserByConfirmationCode(inputDateRegConfirm.code);
 	}
 
-	@HttpCode(204)
 	@Post("registration")
+	@HttpCode(204)
 	@UseGuards(RatelimitsRegistration)
 	@UseGuards(CheckLoginOrEmail)
 	@UseFilters(new HttpExceptionFilter())
