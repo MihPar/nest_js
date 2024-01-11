@@ -131,6 +131,7 @@ export class AuthController {
 			inputDateReqEmailResending.email
 		  );
 		  if (!confirmUser) throw new BadRequestException("400")
+		  return
 	}
 
 	@HttpCode(204)
