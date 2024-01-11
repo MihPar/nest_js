@@ -3,7 +3,7 @@ import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from
 import { Request } from 'express';
 import { ObjectId } from 'mongodb';
 import { UsersRepository } from '../../../api/users/user.repository';
-import { UserClass } from 'schema/user.schema';
+import { UserClass } from '../../../schema/user.schema';
 
 @Injectable()
 export class CheckRefreshTokenFindMe implements CanActivate {

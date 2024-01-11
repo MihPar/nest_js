@@ -2,14 +2,11 @@ import {
 	Injectable,
 	CanActivate,
 	ExecutionContext,
-	HttpStatus,
-	HttpException,
 	BadRequestException,
   } from '@nestjs/common';
 import { UserClass } from '../../../schema/user.schema';
 import { UsersQueryRepository } from '../../../api/users/users.queryRepository';
-import { ValidationError } from 'class-validator';
-import e from 'express';
+
   
   @Injectable()
   export class CheckLoginOrEmail implements CanActivate {

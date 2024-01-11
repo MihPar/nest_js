@@ -8,7 +8,6 @@ import { EmailManager } from "../manager/email.manager";
 import { UsersQueryRepository } from "./users.queryRepository";
 import { EmailAdapter } from "../../api/adapter/email.adapter";
 import { UserClass } from "../../schema/user.schema";
-import mongoose from "mongoose";
 import { UserViewType } from "./user.type";
 
 @Injectable()
