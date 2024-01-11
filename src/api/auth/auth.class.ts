@@ -20,9 +20,9 @@ function RequiredString() {
 }
 
 export class emailInputDataClass {
-	@IsEmail()
+	// @IsEmail()
 	@RequiredString()
-	// @Matches('^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+	@Matches('^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
 	email: string
 }
 
