@@ -1,6 +1,10 @@
 import { applyDecorators } from "@nestjs/common"
 import { Transform, TransformFnParams } from "class-transformer"
-import { IsEmail, IsNotEmpty, IsString, Length } from "class-validator"
+import { IsEmail, IsNotEmpty, IsString, IsUUID, Length } from "class-validator"
+
+const UUID_VERSION = '4' 
+
+const UUID = () => IsUUID(UUID_VERSION)
 
 export class InputDataModelClassAuth {
 	@IsString()
@@ -11,26 +15,28 @@ export class InputDataModelClassAuth {
 
 const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
 
-function IsOptional() {
-	return applyDecorators(Trim(), IsString(), IsNotEmpty())
+function RequiredString() {
+	return applyDecorators(IsNotEmpty(), IsString(), Trim())
 }
 
 export class emailInputDataClass {
 	@IsEmail()
-	@IsOptional()
+	@RequiredString()
 	email: string
 }
 
 export class InputModelNewPasswordClass {
-	@IsOptional()
+	@RequiredString()
 	@Length(6, 20, {message: "The length of password is incorrect"})
 	newPassword: string
-	@IsOptional()
+	@RequiredString()
 	recoveryCode: string
 }
 
 export class InputDateReqConfirmClass {
-	@IsOptional()
+	@IsString()
+	@Trim()
+	@UUID()
 	code: string
 }
 
@@ -45,13 +51,13 @@ export class InputDateReqConfirmClass {
 // )
 
 export class InputDataReqClass {
-	@IsOptional()
+	@RequiredString()
 	@Length(3, 10, {message: "The length is more than need"})
 	login: string
-	@IsOptional()
+	@RequiredString()
 	@Length(6, 20, {message: "The length is more than need"})
 	password: string
-	@IsOptional()
+	@RequiredString()
 	@IsEmail()
 	email: string
 }
