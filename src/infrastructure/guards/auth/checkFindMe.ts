@@ -12,7 +12,7 @@ export class CheckRefreshTokenFindMe implements CanActivate {
 		protected usersRepository: UsersRepository,
 	) {}
   async canActivate(
-    context: ExecutionContext,
+    context: ExecutionContext
   ): Promise<boolean>  {
 	const req: Request = context.switchToHttp().getRequest();
 	if (!req.headers.authorization) throw new UnauthorizedException("401")

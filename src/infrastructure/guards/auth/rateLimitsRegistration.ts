@@ -16,10 +16,7 @@ import { DeviceRepository } from '../../../api/securityDevices/device.repository
 @Injectable()
 export class RatelimitsRegistration implements CanActivate {
   constructor(
-    protected userService: UsersService,
     protected deviceRepository: DeviceRepository,
-    @InjectModel(IPCollectionClass.name)
-    private ipCollectionModel: Model<IPCollectionDocument>,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req: Request = context.switchToHttp().getRequest();
