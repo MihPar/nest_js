@@ -32,10 +32,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     if (status === 400) {
       const errorResponse = {
-        errors: [] as any[],
+        errorsMessages: [] as any[],
       };
       const responseBody: any = exception.getResponse();
-      responseBody.message.forEach((m: any) => errorResponse.errors.push(m));
+      responseBody.message.forEach((m: any) => errorResponse.errorsMessages.push(m));
       response.status(status).json(errorResponse);
     } else {
 		console.log((exception.getResponse() as any))

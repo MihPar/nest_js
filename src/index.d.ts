@@ -1,9 +1,9 @@
-import { Users } from 'api/users/user.class';
+import { UserClass } from 'schema/user.schema';
 
 declare global {
 	namespace Express {
 		export interface Request {
-			user: Users | null
+			user: UserClass | null
 		}
 	}
 }
