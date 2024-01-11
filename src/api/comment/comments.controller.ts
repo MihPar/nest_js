@@ -10,7 +10,7 @@ import { commentDBToView } from '../../utils/helpers';
 import { CommentService } from './comment.service';
 import { CommentRepository } from './comment.repository';
 import { CheckRefreshTokenForGetComments } from '../../infrastructure/guards/comments/bearer.authGetComment';
-import { UserClass } from 'schema/user.schema';
+import { UserClass } from '../../schema/user.schema';
 
 @Controller('comments')
 export class CommentsController {

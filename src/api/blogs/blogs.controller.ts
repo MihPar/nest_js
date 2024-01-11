@@ -11,7 +11,7 @@ import { UserDecorator, UserIdDecorator } from "../../infrastructure/decorator/d
 import { PaginationType } from "../../types/pagination.types";
 import { AuthBasic } from "../../infrastructure/guards/auth/basic.auth";
 import { HttpExceptionFilter } from "../../exceptionFilters.ts/exceptionFilter";
-import { UserClass } from "schema/user.schema";
+import { UserClass } from "../../schema/user.schema";
 
 @Controller('blogs')
 export class BlogsController {

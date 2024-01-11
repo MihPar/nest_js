@@ -13,7 +13,7 @@ import { RatelimitsRegistration } from '../../infrastructure/guards/auth/rateLim
 import { CheckRefreshTokenFindMe } from '../../infrastructure/guards/auth/checkFindMe';
 import { ObjectId } from 'mongodb';
 import { randomUUID } from 'crypto';
-import { UserClass } from 'schema/user.schema';
+import { UserClass } from '../../schema/user.schema';
 
 @Controller('auth')
 export class AuthController {

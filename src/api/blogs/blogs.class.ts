@@ -1,9 +1,6 @@
-import { ObjectId } from "mongodb"
-import { BlogsViewType } from "./blogs.type"
 import { IsNotEmpty, IsString, IsUrl, Length } from "class-validator";
 import { Transform, TransformFnParams } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
-import mongoose from "mongoose";
 
 // export class Blogs {
 // 	public createdAt: string

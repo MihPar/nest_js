@@ -2,7 +2,7 @@ import { DeviceQueryRepository } from './deviceQuery.repository';
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { DeviceRepository } from './device.repository';
-import { DeviceClass } from 'schema/device.schema';
+import { DeviceClass } from '../../schema/device.schema';
 import mongoose from 'mongoose';
 
 @Injectable()

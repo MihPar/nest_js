@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { LikeStatusEnum } from 'api/likes/likes.emun';
-import { LikesInfoModel, newestLikesType } from 'api/likes/likes.type';
-import { PostsViewModel } from 'api/posts/posts.type';
-import mongoose, { HydratedDocument, Types } from 'mongoose';
+import { LikeStatusEnum } from '../api/likes/likes.emun';
+import { LikesInfoModel, newestLikesType } from '../api/likes/likes.type';
+import { PostsViewModel } from '../api/posts/posts.type';
+import mongoose, { HydratedDocument } from 'mongoose';
 
 
 export class Posts {

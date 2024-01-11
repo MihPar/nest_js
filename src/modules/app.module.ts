@@ -43,7 +43,6 @@ import { CheckRefreshTokenForComments } from '../infrastructure/guards/comments/
 import { CheckRefreshTokenForGetComments } from '../infrastructure/guards/comments/bearer.authGetComment';
 import { CheckRefreshTokenForPost } from '../infrastructure/guards/post/bearer.authForPost';
 import { ForbiddenCalss } from '../infrastructure/guards/securityDevice.ts/forbidden';
-import { AppController } from '../app.controller';
 import { AppService } from '../app.service';
 import { AuthController } from '../api/auth/auth.controller';
 

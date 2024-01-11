@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { AccountDataType, EmailConfirmationType, UserViewType } from "api/users/user.type";
+import { UserViewType } from "../api/users/user.type";
 import { ObjectId } from "mongodb";
-import mongoose, { HydratedDocument, Types } from "mongoose";
+import mongoose, { HydratedDocument } from "mongoose";
 
 
 export type UserDocument = HydratedDocument<UserClass>

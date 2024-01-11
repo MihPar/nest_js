@@ -7,7 +7,7 @@ import { UserDecorator, UserIdDecorator } from "../../infrastructure/decorator/d
 import { Request } from "express";
 import { CheckRefreshToken } from "../../infrastructure/guards/auth/checkRefreshToken";
 import { ForbiddenCalss } from "../../infrastructure/guards/securityDevice.ts/forbidden";
-import { UserClass } from "schema/user.schema";
+import { UserClass } from "../../schema/user.schema";
 
 @Controller('security')
 export class SecurityDeviceController {

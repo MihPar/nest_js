@@ -26,8 +26,8 @@ import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 import { CheckRefreshTokenForPost } from '../../infrastructure/guards/post/bearer.authForPost';
 import { AuthBasic } from '../../infrastructure/guards/auth/basic.auth';
 import { ObjectId } from 'mongodb';
-import { UserClass } from 'schema/user.schema';
-import { BlogClass } from 'schema/blogs.schema';
+import { UserClass } from '../../schema/user.schema';
+import { BlogClass } from '../../schema/blogs.schema';
 
 @Controller('posts')
 export class PostController {

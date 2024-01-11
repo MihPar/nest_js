@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { BlogsViewType } from "api/blogs/blogs.type";
+import { BlogsViewType } from "../api/blogs/blogs.type";
 import mongoose, { HydratedDocument } from "mongoose";
 
 export class Blogs {
