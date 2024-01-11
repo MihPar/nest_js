@@ -16,7 +16,7 @@ import { randomUUID } from 'crypto';
 import { UserClass } from '../../schema/user.schema';
 import { CheckLoginOrEmail } from '../../infrastructure/guards/auth/checkEmailOrLogin';
 import { IsExistEmailUser } from '../../infrastructure/guards/auth/isExixtEmailUser';
-import { IsConfirmed } from 'infrastructure/guards/auth/isCodeConfirmed';
+import { IsConfirmed } from '../../infrastructure/guards/auth/isCodeConfirmed';
 
 @Controller('auth')
 export class AuthController {

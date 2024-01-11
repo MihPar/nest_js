@@ -2,7 +2,6 @@ import {
 	Injectable,
 	CanActivate,
 	ExecutionContext,
-	BadRequestException,
   } from '@nestjs/common';
   import { UserClass } from '../../../schema/user.schema';
   import { UsersQueryRepository } from '../../../api/users/users.queryRepository';
