@@ -46,6 +46,7 @@ import { ForbiddenCalss } from '../infrastructure/guards/securityDevice.ts/forbi
 import { AppService } from '../app.service';
 import { AuthController } from '../api/auth/auth.controller';
 import { CheckLoginOrEmail } from '../infrastructure/guards/auth/checkEmailOrLogin';
+import { PassportModule } from '@nestjs/passport';
 
 const services = [
   BlogsService,
@@ -90,6 +91,7 @@ const manager = [EmailManager];
       isGlobal: true,
       envFilePath: '.env',
     }),
+	PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '600s' },

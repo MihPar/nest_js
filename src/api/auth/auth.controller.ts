@@ -1,5 +1,5 @@
 import { DeviceService } from '../securityDevices/device.service';
-import { BadRequestException, Body, Controller, Headers, HttpCode, Ip, Post, Req, Res, UnauthorizedException, UseFilters, UseGuards } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Headers, HttpCode, Ip, Post, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { InputDataModelClassAuth, InputDataReqClass, InputDateReqConfirmClass, InputModelNewPasswordClass, emailInputDataClass } from "./auth.class";
 import { UsersService } from "../../api/users/user.service";
 import { JwtService } from "@nestjs/jwt";
@@ -8,7 +8,6 @@ import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/d
 import { UsersQueryRepository } from '../../api/users/users.queryRepository';
 import { Ratelimits } from '../../infrastructure/guards/auth/rateLimits';
 import { CheckRefreshToken } from '../../infrastructure/guards/auth/checkRefreshToken';
-import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 import { RatelimitsRegistration } from '../../infrastructure/guards/auth/rateLimitsRegistration';
 import { CheckRefreshTokenFindMe } from '../../infrastructure/guards/auth/checkFindMe';
 import { ObjectId } from 'mongodb';
@@ -17,6 +16,7 @@ import { UserClass } from '../../schema/user.schema';
 import { CheckLoginOrEmail } from '../../infrastructure/guards/auth/checkEmailOrLogin';
 import { IsExistEmailUser } from '../../infrastructure/guards/auth/isExixtEmailUser';
 import { IsConfirmed } from '../../infrastructure/guards/auth/isCodeConfirmed';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
@@ -126,6 +126,8 @@ export class AuthController {
 	@HttpCode(204)
 	@Post("registration-email-resending")
 	@UseGuards(RatelimitsRegistration, IsExistEmailUser)
+	@UseGuards(ThrottlerGuard)
+	//@Throttle({default: {ttl: 10000, limit: 5}})
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
 		console.log("registration-email-resending", inputDateReqEmailResending.email)
 		const confirmUser = await this.usersService.confirmEmailResendCode(
