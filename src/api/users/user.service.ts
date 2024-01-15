@@ -199,7 +199,7 @@ export class UsersService {
         newConfirmationCode
       );
     } catch (error) {
-      return null;
+		console.log("code resending email error", error);
     }
     return true;
   }
