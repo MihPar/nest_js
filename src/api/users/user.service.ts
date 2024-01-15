@@ -179,9 +179,9 @@ export class UsersService {
   async confirmEmailResendCode(email: string): Promise<boolean | null> {
     const user: UserClass | null =
       await this.usersQueryRepository.findByLoginOrEmail(email);
-    if (!user) return null;
+    if (!user) return false
     if (user.emailConfirmation.isConfirmed) {
-      return null;
+      return false
     }
     const newConfirmationCode = uuidv4();
     const newExpirationDate = add(new Date(), {
