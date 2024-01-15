@@ -126,7 +126,7 @@ export class AuthController {
 	@HttpCode(204)
 	@Post("registration-email-resending")
 	@UseGuards(RatelimitsRegistration, IsExistEmailUser)
-	@UseGuards(ThrottlerGuard)
+	// @UseGuards(ThrottlerGuard)
 	//@Throttle({default: {ttl: 10000, limit: 5}})
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
 		console.log("registration-email-resending", inputDateReqEmailResending.email)
