@@ -135,7 +135,7 @@ export class AuthController {
 		  );
 		  console.log(confirmUser, " confirmUser")
 		  if (!confirmUser) throw new BadRequestException("400")
-		  return
+		  return true
 	}
 
 	@HttpCode(204)
