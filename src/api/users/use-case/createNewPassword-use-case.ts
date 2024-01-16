@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { InputModelNewPasswordClass } from "../auth.class";
+import { InputModelNewPasswordClass } from "../../auth/auth.class";
 import { UsersQueryRepository } from "api/users/users.queryRepository";
 import { UsersService } from "api/users/user.service";
 import { UsersRepository } from "api/users/user.repository";

@@ -48,10 +48,16 @@ import { AuthController } from '../api/auth/auth.controller';
 import { CheckLoginOrEmail } from '../infrastructure/guards/auth/checkEmailOrLogin';
 import { PassportModule } from '@nestjs/passport';
 import { CqrsModule } from '@nestjs/cqrs';
-import { RecoveryPasswordUseCase } from '../api/auth/use-case/recoveryPassowrd-use-case';
-import { NewPasswordCase } from '../api/auth/use-case/createNewPassword-use-case';
+import { RecoveryPasswordUseCase } from '../api/users/use-case/recoveryPassowrd-use-case';
+import { NewPasswordCase } from '../api/users/use-case/createNewPassword-use-case';
+import { CreateDeviceCase } from '../api/securityDevices/use-case/createDevice-use-case';
+import { CreateLoginCase } from '../api/users/use-case/createLogin-use-case';
+import { RefreshTokenCase } from 'api/auth/use-case/refreshToken-use-case';
+import { RegistrationConfirmationCase } from 'api/users/use-case/registratinConfirmation-use-case';
+import { RegistrationCase } from 'api/users/use-case/registration-use-case';
 
-const useCase = [RecoveryPasswordUseCase, NewPasswordCase]
+const useCase = [RecoveryPasswordUseCase, NewPasswordCase, CreateLoginCase, CreateDeviceCase, RefreshTokenCase,
+	RegistrationConfirmationCase, RegistrationCase]
 
 const services = [
   BlogsService,

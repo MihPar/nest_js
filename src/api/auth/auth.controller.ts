@@ -11,16 +11,19 @@ import { CheckRefreshToken } from '../../infrastructure/guards/auth/checkRefresh
 import { RatelimitsRegistration } from '../../infrastructure/guards/auth/rateLimitsRegistration';
 import { CheckRefreshTokenFindMe } from '../../infrastructure/guards/auth/checkFindMe';
 import { ObjectId } from 'mongodb';
-import { randomUUID } from 'crypto';
 import { UserClass } from '../../schema/user.schema';
 import { CheckLoginOrEmail } from '../../infrastructure/guards/auth/checkEmailOrLogin';
 import { IsExistEmailUser } from '../../infrastructure/guards/auth/isExixtEmailUser';
 import { IsConfirmed } from '../../infrastructure/guards/auth/isCodeConfirmed';
 import { CommandBus } from '@nestjs/cqrs';
-import { RecoveryPasswordCommand } from './use-case/recoveryPassowrd-use-case';
-import { NewPassword, NewPasswordCase } from './use-case/createNewPassword-use-case';
-import { CreateLogin } from './use-case/createLogin-use-case';
+import { RecoveryPasswordCommand } from '../users/use-case/recoveryPassowrd-use-case';
+import { NewPassword } from '../users/use-case/createNewPassword-use-case';
+import { CreateLogin } from '../users/use-case/createLogin-use-case';
 import { CreateDevice } from 'api/securityDevices/use-case/createDevice-use-case';
+import { RefreshToken } from './use-case/refreshToken-use-case';
+import { UpdateDevice } from 'api/securityDevices/use-case/updateDevice-use-case';
+import { RegistrationConfirmation } from '../users/use-case/registratinConfirmation-use-case';
+import { Registration } from 'api/users/use-case/registration-use-case';
 
 @Controller('auth')
 export class AuthController {
@@ -64,18 +67,18 @@ export class AuthController {
 		  if (!user) {
 			throw new UnauthorizedException("Not authorization 401")
 		  } else {
-			const token: string = await this.jwtService.signAsync({userId: user._id.toString()}, {expiresIn: "60s"});
-			const ip = IP || "unknown";
-			const title = Headers["user-agent"] || "unknown";
-			const refreshToken = await this.jwtService.signAsync({userId: user._id.toString(), deviceId: randomUUID()}, {expiresIn: "600s"});
-			await this.commandBus.execute(new CreateDevice(ip, title, refreshToken))
+			// const token: string = await this.jwtService.signAsync({userId: user._id.toString()}, {expiresIn: "60s"});
+			// const ip = IP || "unknown";
+			// const title = Headers["user-agent"] || "unknown";
+			// const refreshToken = await this.jwtService.signAsync({userId: user._id.toString(), deviceId: randomUUID()}, {expiresIn: "600s"});
+			// await this.commandBus.execute(new CreateDevice(ip, title, refreshToken))
+			const createDevice = await this.commandBus.execute(new CreateDevice(IP, Headers, user))
 			// await this.deviceService.createDevice(ip, title, refreshToken);
-
-			res.cookie('refreshToken', refreshToken, {
+			res.cookie('refreshToken', createDevice.refreshToken, {
                 httpOnly: true,
                 secure: true,
             });
-            return {accessToken: token};
+            return {accessToken: createDevice.token};
 		  }
 	}
 	@HttpCode(200)
@@ -88,45 +91,51 @@ export class AuthController {
 		@UserIdDecorator() userId: string | null,
 	) {
 		const refreshToken: string = req.cookies.refreshToken;
-		// const userId = req.user._id.toString();
-		const payload = await this.jwtService.decode(refreshToken);
-		if (!payload) {
-		  throw new UnauthorizedException("Not authorization 401")
-		}
-		const newToken: string = await this.jwtService.signAsync(user);
-		const newRefreshToken: string = await this.jwtService.signAsync(
-			{payload: user._id.toString()},
-		  	payload.deviceId
-		);
+		const result = await this.commandBus.execute(new RefreshToken(refreshToken, user))
+		// const refreshToken: string = req.cookies.refreshToken;
+		// // const userId = req.user._id.toString();
+		// const payload = await this.jwtService.decode(refreshToken);
+		// if (!result.payload) {
+		//   throw new UnauthorizedException("Not authorization 401")
+		// }
+		// const newToken: string = await this.jwtService.signAsync(user);
+		// const newRefreshToken: string = await this.jwtService.signAsync(
+		// 	{payload: user._id.toString()},
+		//   	payload.deviceId
+		// );
 		if(!userId) return null
-		const updateDeviceUser = await this.deviceService.updateDevice(
-		  userId,
-		  newRefreshToken
-		);
+		await this.commandBus.execute(new UpdateDevice(userId, result.newRefreshToken))
+		// const updateDeviceUser = await this.deviceService.updateDevice(
+		//   userId,
+		//   result.newRefreshToken
+		// );
 		res.cookie('refreshToken', refreshToken, {
 			httpOnly: true,
 			secure: true,
 		});
-		return {accessToken: newToken};
+		return {accessToken: result.newToken};
 		}
 
 	@HttpCode(204)
 	@Post("registration-confirmation")
 	@UseGuards(RatelimitsRegistration, IsConfirmed)
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
-		await this.usersService.findUserByConfirmationCode(inputDateRegConfirm.code);
+		await this.commandBus.execute(new RegistrationConfirmation(inputDateRegConfirm))
+		// await this.usersService.findUserByConfirmationCode(inputDateRegConfirm.code);
 	}
 
 	@Post("registration")
 	@HttpCode(204)
 	@UseGuards(RatelimitsRegistration, CheckLoginOrEmail)
 	async creteRegistration(@Req() req: Request, @Body() inputDataReq: InputDataReqClass) {
-		const user = await this.usersService.createNewUser(
-			inputDataReq.login,
-			inputDataReq.password,
-			inputDataReq.email
-		  );
+		const user = await this.commandBus.execute(new Registration(inputDataReq))
+		// const user = await this.usersService.createNewUser(
+		// 	inputDataReq.login,
+		// 	inputDataReq.password,
+		// 	inputDataReq.email
+		//   );
 		  if (!user) throw new BadRequestException("400")
+		  return
 	}
 
 	@HttpCode(204)

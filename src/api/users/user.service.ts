@@ -34,29 +34,29 @@ export class UsersService {
 //     return user;
 //   }
 
-  async createNewUser(
-    login: string,
-    password: string,
-    email: string
-  ): Promise<UserViewType | null> {
-    const passwordHash = await this._generateHash(password);
+//   async createNewUser(
+//     login: string,
+//     password: string,
+//     email: string
+//   ): Promise<UserViewType | null> {
+//     const passwordHash = await this._generateHash(password);
 
-	const newUser = new UserClass(login, email, passwordHash, uuidv4(), add(new Date(), {
-		hours: 1,
-		minutes: 10,
-	  }), false)
+// 	const newUser = new UserClass(login, email, passwordHash, uuidv4(), add(new Date(), {
+// 		hours: 1,
+// 		minutes: 10,
+// 	  }), false)
 
-    const user: UserClass = await this.usersRepository.createUser(newUser);
-    try {
-      await this.emailManager.sendEamilConfirmationMessage(
-        user.accountData.email,
-        user.emailConfirmation.confirmationCode
-      );
-    } catch (error) {
-      console.log(error, 'error with send mail');
-    }
-	return user.getViewUser()
-  }
+//     const user: UserClass = await this.usersRepository.createUser(newUser);
+//     try {
+//       await this.emailManager.sendEamilConfirmationMessage(
+//         user.accountData.email,
+//         user.emailConfirmation.confirmationCode
+//       );
+//     } catch (error) {
+//       console.log(error, 'error with send mail');
+//     }
+// 	return user.getViewUser()
+//   }
 
   async _generateHash(password: string): Promise<string> {
     const hash: string = await bcrypt.hash(password, 3);
@@ -113,11 +113,11 @@ export class UsersService {
 //     return true;
 //   }
 
-  async findUserByConfirmationCode(code: string): Promise<boolean> {
-    const user = await this.usersQueryRepository.findUserByConfirmation(code);
-    const result = await this.usersRepository.updateConfirmation(user!._id);
-    return result;
-  }
+//   async findUserByConfirmationCode(code: string): Promise<boolean> {
+//     const user = await this.usersQueryRepository.findUserByConfirmation(code);
+//     const result = await this.usersRepository.updateConfirmation(user!._id);
+//     return result;
+//   }
 
   async confirmEmailResendCode(email: string): Promise<boolean | null> {
     const user: UserClass | null =

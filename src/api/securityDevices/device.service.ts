@@ -2,8 +2,6 @@ import { DeviceQueryRepository } from './deviceQuery.repository';
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { DeviceRepository } from './device.repository';
-import { DeviceClass } from '../../schema/device.schema';
-import mongoose from 'mongoose';
 
 @Injectable()
 export class DeviceService {
@@ -67,18 +65,18 @@ export class DeviceService {
 	// 	return createDevice;
 	//   }
 
-	  async updateDevice(userId: string, refreshToken: string) {
-		const payload = await this.jwtService.decode(refreshToken);
-		if (!payload) {
-		  return null;
-		}
-		await this.deviceRepository.updateDeviceUser(
-		  userId,
-		  payload.deviceId,
-		  new Date(payload.iat * 1000).toISOString()
-		);
-		return;
-	  }
+	//   async updateDevice(userId: string, refreshToken: string) {
+	// 	const payload = await this.jwtService.decode(refreshToken);
+	// 	if (!payload) {
+	// 	  return null;
+	// 	}
+	// 	await this.deviceRepository.updateDeviceUser(
+	// 	  userId,
+	// 	  payload.deviceId,
+	// 	  new Date(payload.iat * 1000).toISOString()
+	// 	);
+	// 	return;
+	//   }
 
 	  async logoutDevice(refreshToken: string) {
 		const payload = await this.jwtService.decode(refreshToken);
