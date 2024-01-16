@@ -19,6 +19,7 @@ import { IsConfirmed } from '../../infrastructure/guards/auth/isCodeConfirmed';
 import { CommandBus } from '@nestjs/cqrs';
 import { RecoveryPasswordCommand } from './use-case/recoveryPassowrd-use-case';
 import { NewPassword, NewPasswordCase } from './use-case/createNewPassword-use-case';
+import { CreateLogin } from './use-case/createLogin-use-case';
 
 @Controller('auth')
 export class AuthController {
@@ -57,10 +58,7 @@ export class AuthController {
 		@Ip() IP: string, 
 		@Headers() Headers: any,
 	@Res({passthrough: true}) res: Response) {
-		const user: UserClass | null = await this.usersService.checkCridential(
-			inutDataModel.loginOrEmail,
-			inutDataModel.password
-		  );
+		const user: UserClass | null = await this.commandBus.execute(new CreateLogin(inutDataModel));
 		  if (!user) {
 			throw new UnauthorizedException("Not authorization 401")
 		  } else {

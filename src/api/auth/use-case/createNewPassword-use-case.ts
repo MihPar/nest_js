@@ -7,7 +7,6 @@ import { UsersRepository } from "api/users/user.repository";
 export class NewPassword {
 	constructor(
 	public inputDataNewPassword: InputModelNewPasswordClass,
-	p
 	) {}
 }
 

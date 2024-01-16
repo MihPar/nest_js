@@ -48,9 +48,10 @@ import { AuthController } from '../api/auth/auth.controller';
 import { CheckLoginOrEmail } from '../infrastructure/guards/auth/checkEmailOrLogin';
 import { PassportModule } from '@nestjs/passport';
 import { CqrsModule } from '@nestjs/cqrs';
-import { RecoveryPasswordUseCase } from 'api/auth/use-case/recoveryPassowrd-use-case';
+import { RecoveryPasswordUseCase } from '../api/auth/use-case/recoveryPassowrd-use-case';
+import { NewPasswordCase } from '../api/auth/use-case/createNewPassword-use-case';
 
-const useCase = [RecoveryPasswordUseCase]
+const useCase = [RecoveryPasswordUseCase, NewPasswordCase]
 
 const services = [
   BlogsService,

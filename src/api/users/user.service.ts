@@ -19,20 +19,20 @@ export class UsersService {
 	protected usersQueryRepository: UsersQueryRepository,
   ) {}
 
-  async checkCridential(
-    loginOrEmail: string,
-    password: string
-  ): Promise<UserClass | null> {
-    const user: UserClass | null =
-      await this.usersQueryRepository.findByLoginOrEmail(loginOrEmail);
-    if (!user) return null;
-    const resultBcryptCompare: boolean = await bcrypt.compare(
-      password,
-      user.accountData.passwordHash
-    );
-    if (resultBcryptCompare !== true) return null;
-    return user;
-  }
+//   async checkCridential(
+//     loginOrEmail: string,
+//     password: string
+//   ): Promise<UserClass | null> {
+//     const user: UserClass | null =
+//       await this.usersQueryRepository.findByLoginOrEmail(loginOrEmail);
+//     if (!user) return null;
+//     const resultBcryptCompare: boolean = await bcrypt.compare(
+//       password,
+//       user.accountData.passwordHash
+//     );
+//     if (resultBcryptCompare !== true) return null;
+//     return user;
+//   }
 
   async createNewUser(
     login: string,
