@@ -15,7 +15,7 @@ export class Registration {
 }
 
 @CommandHandler(Registration)
-export class RegistrationCase implements ICommandHandler<RegistrationCase> {
+export class RegistrationCase implements ICommandHandler<Registration> {
 	constructor(
 		protected readonly userService: UsersService,
 		protected readonly usersRepository: UsersRepository,
