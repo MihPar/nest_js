@@ -16,11 +16,14 @@ import { UserClass } from '../../schema/user.schema';
 import { CheckLoginOrEmail } from '../../infrastructure/guards/auth/checkEmailOrLogin';
 import { IsExistEmailUser } from '../../infrastructure/guards/auth/isExixtEmailUser';
 import { IsConfirmed } from '../../infrastructure/guards/auth/isCodeConfirmed';
-import { ThrottlerGuard } from '@nestjs/throttler';
+import { CommandBus } from '@nestjs/cqrs';
+import { RecoveryPasswordCommand } from './use-case/recoveryPassowrd-use-case';
+import { NewPassword, NewPasswordCase } from './use-case/createNewPassword-use-case';
 
 @Controller('auth')
 export class AuthController {
 	constructor(
+		protected commandBus: CommandBus,
 		protected usersService: UsersService,
 		protected jwtService: JwtService,
 		protected deviceService: DeviceService,
@@ -31,17 +34,19 @@ export class AuthController {
 	@Post("password-recovery")
 	@UseGuards(Ratelimits)
 	async createPasswordRecovery(@Body() emailInputData: emailInputDataClass) {
-		const passwordRecovery = await this.usersService.recoveryPassword(emailInputData.email);
+		// const passwordRecovery = await this.usersService.recoveryPassword(emailInputData.email);
+		const passwordRecovery = await this.commandBus.execute(new RecoveryPasswordCommand(emailInputData.email))
 	}
 
 	@HttpCode(204)
 	@Post("new-password")
 	@UseGuards(Ratelimits)
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
-		const resultUpdatePassword = await this.usersService.setNewPassword(
-			inputDataNewPassword.newPassword,
-			inputDataNewPassword.recoveryCode
-		  );
+		const resultUpdatePassword = await this.commandBus.execute(new NewPassword(inputDataNewPassword))
+		// const resultUpdatePassword = await this.usersService.setNewPassword(
+		// 	inputDataNewPassword.newPassword,
+		// 	inputDataNewPassword.recoveryCode
+		//   );
 		  if (!resultUpdatePassword) throw new BadRequestException("recovery code is incorrect, 400")
 	}
 

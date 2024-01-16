@@ -47,6 +47,10 @@ import { AppService } from '../app.service';
 import { AuthController } from '../api/auth/auth.controller';
 import { CheckLoginOrEmail } from '../infrastructure/guards/auth/checkEmailOrLogin';
 import { PassportModule } from '@nestjs/passport';
+import { CqrsModule } from '@nestjs/cqrs';
+import { RecoveryPasswordUseCase } from 'api/auth/use-case/recoveryPassowrd-use-case';
+
+const useCase = [RecoveryPasswordUseCase]
 
 const services = [
   BlogsService,
@@ -87,6 +91,7 @@ const manager = [EmailManager];
 
 @Module({
   imports: [
+	CqrsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -118,7 +123,7 @@ const manager = [EmailManager];
 	AuthController
   ],
   providers: [
-  ...services, ...guards, ...reposponse, ...adapter, ...manager],
+  ...services, ...guards, ...reposponse, ...adapter, ...manager, ...useCase],
 })
 export class AppModule {}
 

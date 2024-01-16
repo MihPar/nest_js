@@ -46,44 +46,6 @@ export class UsersService {
 		minutes: 10,
 	  }), false)
 
-	//console.log(newUser, "newUser")
-	// newUser._id = new mongoose.Types.ObjectId()
-	// // newUser.accountData.email = new Date().toISOString()
-	// newUser.accountData.email = email
-	// newUser.accountData.passwordHash = passwordHash
-	// newUser.accountData.userName = login
-	// newUser.emailConfirmation.confirmationCode = uuidv4()
-	// newUser.emailConfirmation.expirationDate = add(new Date(), {
-	// 	hours: 1,
-	// 	minutes: 10,
-	//   })
-	// newUser.emailConfirmation.isConfirmed = false
-
-    // const newUser: Users = {
-    //   _id: new ObjectId(),
-    //   accountData: {
-    //     userName: login,
-    //     email,
-    //     passwordHash,
-    //     createdAt: new Date().toISOString(),
-    //   },
-    //   emailConfirmation: {
-    //     confirmationCode: uuidv4(),
-    //     expirationDate: add(new Date(), {
-    //       hours: 1,
-    //       minutes: 10,
-    //     }),
-    //     isConfirmed: false,
-    //   },
-    //   getViewUser(): UserViewType {
-    //     return {
-    //       id: this._id.toString(),
-    //       login: this.accountData.userName,
-    //       email: this.accountData.email,
-    //       createdAt: this.accountData.createdAt,
-    //     };
-    //   },
-    // };
     const user: UserClass = await this.usersRepository.createUser(newUser);
     try {
       await this.emailManager.sendEamilConfirmationMessage(
@@ -93,27 +55,10 @@ export class UsersService {
     } catch (error) {
       console.log(error, 'error with send mail');
     }
-
 	return user.getViewUser()
-
-	// user.getViewUser(_id, login, email, createdAt): UserViewType {
-	// 	return {
-	// 		id =  user._id,
-	// 		login =  user.accountData.userName,
-	// 		email =  user.accountData.email,
-	// 		createdAt = user.accountData.createdAt
-	// 	};
-	//   }
-
-    // return {
-    //   id: user._id.toString(),
-    //   login: user.accountData.userName,
-    //   email: user.accountData.email,
-    //   createdAt: user.accountData.createdAt,
-    // };
   }
+
   async _generateHash(password: string): Promise<string> {
-	//console.log(password, ": password")
     const hash: string = await bcrypt.hash(password, 3);
     return hash;
   }
@@ -128,47 +73,45 @@ export class UsersService {
   }
 
 
-  async recoveryPassword(email: string): Promise<any> {
-    const recoveryCode = uuidv4();
-    const findUser: WithId<UserClass | null> | null =
-      await this.usersQueryRepository.findUserByEmail(email);
-    if (!findUser) {
-      return false;
-    }
-    try {
-      await this.emailManager.sendEamilRecoveryCode(email, recoveryCode);
-      await this.usersRepository.passwordRecovery(findUser._id, recoveryCode);
-	  return true
-    //   return recoveryCode;
-    } catch (e) {
-    //   console.log("email: ", e);
-      return false;
-    }
-  }
+//   async recoveryPassword(email: string): Promise<any> {
+//     const recoveryCode = uuidv4();
+//     const findUser: WithId<UserClass | null> | null =
+//       await this.usersQueryRepository.findUserByEmail(email);
+//     if (!findUser) {
+//       return false;
+//     }
+//     try {
+//       await this.emailManager.sendEamilRecoveryCode(email, recoveryCode);
+//       await this.usersRepository.passwordRecovery(findUser._id, recoveryCode);
+// 	  return true
+//     } catch (e) {
+//       return false;
+//     }
+//   }
 
-  async setNewPassword(
-    newPassword: string,
-    recoveryCode: string
-  ): Promise<boolean> {
-    const findUserByCode = await this.usersQueryRepository.findUserByCode(
-      recoveryCode
-    );
-    if (!findUserByCode) {
-      return false;
-    }
-    if (findUserByCode.emailConfirmation.expirationDate < new Date()) {
-      return false;
-    }
-    const newPasswordHash = await this._generateHash(newPassword);
-    const resultUpdatePassword = await this.usersRepository.updatePassword(
-      findUserByCode._id,
-      newPasswordHash
-    );
-    if (!resultUpdatePassword) {
-      return false;
-    }
-    return true;
-  }
+//   async setNewPassword(
+//     newPassword: string,
+//     recoveryCode: string
+//   ): Promise<boolean> {
+//     const findUserByCode = await this.usersQueryRepository.findUserByCode(
+//       recoveryCode
+//     );
+//     if (!findUserByCode) {
+//       return false;
+//     }
+//     if (findUserByCode.emailConfirmation.expirationDate < new Date()) {
+//       return false;
+//     }
+//     const newPasswordHash = await this._generateHash(newPassword);
+//     const resultUpdatePassword = await this.usersRepository.updatePassword(
+//       findUserByCode._id,
+//       newPasswordHash
+//     );
+//     if (!resultUpdatePassword) {
+//       return false;
+//     }
+//     return true;
+//   }
 
   async findUserByConfirmationCode(code: string): Promise<boolean> {
     const user = await this.usersQueryRepository.findUserByConfirmation(code);
