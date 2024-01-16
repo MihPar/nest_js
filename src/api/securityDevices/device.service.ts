@@ -32,31 +32,40 @@ export class DeviceService {
 		return await this.deviceRepository.deleteAllDevices()
 	}
 
-	async createDevice(
-		ip: string,
-		title: string,
-		refreshToken: string
-	  ): Promise<DeviceClass | null> {
+	public async getPayload(token) {
 		let payload
-
 		try {
-			payload = await this.jwtService.decode(refreshToken);
+			payload = await this.jwtService.decode(token);
 		} catch(error) {
 			return null
 		}
-		console.log('payload', payload)
-		const device  = new DeviceClass()
-		device.ip = ip
-		device._id = new mongoose.Types.ObjectId()
-		device.deviceId = payload.deviceId
-		device.lastActiveDate = new Date(payload.iat * 1000).toISOString()
-		device.title = title
-		device.userId = payload.userId
-		
-		const createDevice: DeviceClass =
-		  await this.deviceRepository.createDevice(device);
-		return createDevice;
 	  }
+
+	// async createDevice(
+	// 	ip: string,
+	// 	title: string,
+	// 	refreshToken: string
+	//   ): Promise<DeviceClass | null> {
+	// 	let payload
+
+	// 	try {
+	// 		payload = await this.jwtService.decode(refreshToken);
+	// 	} catch(error) {
+	// 		return null
+	// 	}
+	// 	console.log('payload', payload)
+	// 	const device  = new DeviceClass()
+	// 	device.ip = ip
+	// 	device._id = new mongoose.Types.ObjectId()
+	// 	device.deviceId = payload.deviceId
+	// 	device.lastActiveDate = new Date(payload.iat * 1000).toISOString()
+	// 	device.title = title
+	// 	device.userId = payload.userId
+		
+	// 	const createDevice: DeviceClass =
+	// 	  await this.deviceRepository.createDevice(device);
+	// 	return createDevice;
+	//   }
 
 	  async updateDevice(userId: string, refreshToken: string) {
 		const payload = await this.jwtService.decode(refreshToken);

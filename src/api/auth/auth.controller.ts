@@ -20,6 +20,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { RecoveryPasswordCommand } from './use-case/recoveryPassowrd-use-case';
 import { NewPassword, NewPasswordCase } from './use-case/createNewPassword-use-case';
 import { CreateLogin } from './use-case/createLogin-use-case';
+import { CreateDevice } from 'api/securityDevices/use-case/createDevice-use-case';
 
 @Controller('auth')
 export class AuthController {
@@ -58,6 +59,7 @@ export class AuthController {
 		@Ip() IP: string, 
 		@Headers() Headers: any,
 	@Res({passthrough: true}) res: Response) {
+		// const user: UserClass |null = await this.userService.setNewPassword(inutDataModel)
 		const user: UserClass | null = await this.commandBus.execute(new CreateLogin(inutDataModel));
 		  if (!user) {
 			throw new UnauthorizedException("Not authorization 401")
@@ -66,7 +68,8 @@ export class AuthController {
 			const ip = IP || "unknown";
 			const title = Headers["user-agent"] || "unknown";
 			const refreshToken = await this.jwtService.signAsync({userId: user._id.toString(), deviceId: randomUUID()}, {expiresIn: "600s"});
-			await this.deviceService.createDevice(ip, title, refreshToken);
+			await this.commandBus.execute(new CreateDevice(ip, title, refreshToken))
+			// await this.deviceService.createDevice(ip, title, refreshToken);
 
 			res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
