@@ -35,7 +35,6 @@ import { CreatePost } from './use-case/createPost-use-case';
 import { Posts } from '../../schema/post.schema';
 import { UpdateOldPost } from './use-case/updateOldPost-use-case';
 import { DeletePostById } from './use-case/deletePostById-use-case';
-import { log } from 'console';
 
 @Controller('posts')
 export class PostController {
@@ -48,7 +47,7 @@ export class PostController {
 	protected commandBus: CommandBus
   ) {}
 
-  @Put()
+  @Put(':postId/like-status')
   @HttpCode(204)
   @UseFilters(new HttpExceptionFilter())
   @UseGuards(CheckRefreshTokenForPost)
