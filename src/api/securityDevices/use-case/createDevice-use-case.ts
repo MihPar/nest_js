@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import { DeviceRepository } from '../device.repository';
 import { UserClass } from 'schema/user.schema';
 import { randomUUID } from 'crypto';
+import { PayloadAdapter } from 'api/adapter/payload.adapter';
 
 export class CreateDevice {
 	constructor(
@@ -20,9 +21,9 @@ export class CreateDevice {
 @CommandHandler(CreateDevice)
 export class CreateDeviceCase implements ICommandHandler<CreateDevice> {
 	constructor(
-		protected readonly deviceService: DeviceService,
 		protected readonly deviceRepository: DeviceRepository,
-		protected readonly jwtService: JwtService
+		protected readonly jwtService: JwtService,
+		protected readonly payloadAdapter: PayloadAdapter
 	) {}
 	async execute(
 		command: CreateDevice
@@ -33,12 +34,9 @@ export class CreateDeviceCase implements ICommandHandler<CreateDevice> {
 		const ip = command.IP || "unknown";
 		const title = command.Headers["user-agent"] || "unknown";
 
-		let payload
-		try {
-			payload = await this.deviceService.getPayload(refreshToken);
-		} catch(error) {
-			return null
-		}
+		
+		const payload = await this.payloadAdapter.getPayload(refreshToken);
+			if(!payload) throw new Error ('Can not decode token')
 		const device  = new DeviceClass()
 		// device.ip = command.ip
 		device.ip = ip

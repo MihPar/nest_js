@@ -1,7 +1,7 @@
-import { Req, Res, UnauthorizedException } from "@nestjs/common";
+import { UnauthorizedException } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { JwtService } from "@nestjs/jwt";
-import { DeviceService } from "api/securityDevices/device.service";
+import { PayloadAdapter } from "api/adapter/payload.adapter";
 import { UserClass } from "schema/user.schema";
 
 export class RefreshToken {
@@ -15,25 +15,19 @@ export class RefreshToken {
 export class RefreshTokenCase implements ICommandHandler<RefreshToken> {
 	constructor(
 		protected readonly jwtService: JwtService,
-		protected readonly deviceService: DeviceService
+		protected readonly payloadAdapter: PayloadAdapter
 	) {}
 	async execute(
 		command: RefreshToken,
 		) {
-		let payload
-		try {
-			payload = await this.deviceService.getPayload(command.refreshToken);
-		} catch(error) {
-		  throw new UnauthorizedException("Not authorization 401")
-		}
+		const payload = await this.payloadAdapter.getPayload(command.refreshToken);
+		if(!payload) throw new UnauthorizedException("Not authorization 401")
 		const newToken: string = await this.jwtService.signAsync(command.user);
 		const newRefreshToken: string = await this.jwtService.signAsync(
-			{payload: command.user._id.toString()},
-		  	payload.deviceId
+			{userId: command.user._id.toString(), deviceId:	payload.deviceId},
 		);
 		const result = { newToken, newRefreshToken }
 		return result
-		// return newToken
 	}
 	
 }

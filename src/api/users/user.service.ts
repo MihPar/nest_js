@@ -1,14 +1,10 @@
-import { WithId } from "mongodb";
 import bcrypt from "bcrypt";
-import {v4 as uuidv4} from "uuid"
 import { UsersRepository } from "./user.repository";
 import { Injectable } from "@nestjs/common";
-import { add } from "date-fns";
 import { EmailManager } from "../manager/email.manager";
 import { UsersQueryRepository } from "./users.queryRepository";
 import { EmailAdapter } from "../../api/adapter/email.adapter";
-import { UserClass } from "../../schema/user.schema";
-import { UserViewType } from "./user.type";
+
 
 @Injectable()
 export class UsersService {
@@ -119,31 +115,31 @@ export class UsersService {
 //     return result;
 //   }
 
-  async confirmEmailResendCode(email: string): Promise<boolean | null> {
-    const user: UserClass | null =
-      await this.usersQueryRepository.findByLoginOrEmail(email);
-    if (!user) return false
-    if (user.emailConfirmation.isConfirmed) {
-      return false
-    }
-    const newConfirmationCode = uuidv4();
-    const newExpirationDate = add(new Date(), {
-      hours: 1,
-      minutes: 10,
-    });
-    await this.usersRepository.updateUserConfirmation(
-      user!._id,
-      newConfirmationCode,
-      newExpirationDate
-    );
-    try {
-      await this.emailManager.sendEamilConfirmationMessage(
-        user.accountData.email,
-        newConfirmationCode
-      );
-    } catch (error) {
-		console.log("code resending email error", error);
-    }
-    return true;
-  }
+//   async confirmEmailResendCode(email: string): Promise<boolean | null> {
+//     const user: UserClass | null =
+//       await this.usersQueryRepository.findByLoginOrEmail(email);
+//     if (!user) return false
+//     if (user.emailConfirmation.isConfirmed) {
+//       return false
+//     }
+//     const newConfirmationCode = uuidv4();
+//     const newExpirationDate = add(new Date(), {
+//       hours: 1,
+//       minutes: 10,
+//     });
+//     await this.usersRepository.updateUserConfirmation(
+//       user!._id,
+//       newConfirmationCode,
+//       newExpirationDate
+//     );
+//     try {
+//       await this.emailManager.sendEamilConfirmationMessage(
+//         user.accountData.email,
+//         newConfirmationCode
+//       );
+//     } catch (error) {
+// 		console.log("code resending email error", error);
+//     }
+//     return true;
+//   }
 }
