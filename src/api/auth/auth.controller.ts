@@ -19,13 +19,13 @@ import { CommandBus } from '@nestjs/cqrs';
 import { RecoveryPasswordCommand } from '../users/use-case/recoveryPassowrd-use-case';
 import { NewPassword } from '../users/use-case/createNewPassword-use-case';
 import { CreateLogin } from '../users/use-case/createLogin-use-case';
-import { CreateDevice } from 'api/securityDevices/use-case/createDevice-use-case';
+import { CreateDevice } from '../../api/securityDevices/use-case/createDevice-use-case';
 import { RefreshToken } from './use-case/refreshToken-use-case';
-import { UpdateDevice } from 'api/securityDevices/use-case/updateDevice-use-case';
+import { UpdateDevice } from '../../api/securityDevices/use-case/updateDevice-use-case';
 import { RegistrationConfirmation } from '../users/use-case/registratinConfirmation-use-case';
 import { Registration } from '../../api/users/use-case/registration-use-case';
-import { RegistrationEmailResending } from 'api/users/use-case/registrationEmailResending-use-case';
-import { Logout } from 'api/securityDevices/use-case/logout-use-case';
+import { RegistrationEmailResending } from '../../api/users/use-case/registrationEmailResending-use-case';
+import { Logout } from '../../api/securityDevices/use-case/logout-use-case';
 import { GetUserIdByToken } from './use-case/getUserIdByToken-use-case';
 
 @Controller('auth')

@@ -5,6 +5,9 @@ import { InjectModel } from "@nestjs/mongoose";
 import { LikeClass, LikeDocument } from "../../schema/likes.schema";
 import { PostClass, PostDocument } from "../../schema/post.schema";
 import { LikesRepository } from "../likes/likes.repository";
+import { PostsViewModel } from "./posts.type";
+import { ObjectId } from "mongodb";
+import { LikeStatusEnum } from "../likes/likes.emun";
 
 
 
@@ -25,15 +28,15 @@ export class PostsService {
 //     content: string,
 //     blogName: string,
 //   ): Promise<PostsViewModel | null> {
-//     const newPost: PostsDB = new PostsDB(
+//     const newPost: PostClass = new PostClass(
 //       title,
 //       shortDescription,
 //       content,
 //       blogId,
-//       blogName,
+//       blogName, NaN, NaN
 //     );
 // 	// console.log(newPost)
-//     const createPost: PostsDB = await this.postsRepository.createNewPosts(newPost);
+//     const createPost: PostClass = await this.postsRepository.createNewPosts(newPost);
 // 	// console.log(createPost)
 //     const post = await this.postModel
 //       .findOne({ blogId: new ObjectId(blogId) }, { __v: 0 }) //

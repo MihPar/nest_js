@@ -2,7 +2,6 @@ import { CommentClass, CommentDocument } from "../../schema/comment.schema";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { ObjectId } from "mongodb";
-import { CommentsDB } from "./comment.class-pipe";
 
 export class CommentRepository {
 	constructor(
@@ -48,7 +47,7 @@ export class CommentRepository {
 		}
 	  }
 
-	  async createNewCommentPostId(newComment: CommentsDB): Promise<CommentsDB> {
+	  async createNewCommentPostId(newComment: CommentClass): Promise<CommentClass> {
 		await this.commentModel.create(newComment);
 		return newComment
 	  }

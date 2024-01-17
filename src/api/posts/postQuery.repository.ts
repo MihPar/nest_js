@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
-import { Posts, PostsDB } from './posts.class';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { LikeStatusEnum } from '../likes/likes.emun';
-import { PostClass, PostDocument } from '../../schema/post.schema';
+import { PostClass, PostDocument, Posts } from '../../schema/post.schema';
 import { PaginationType } from '../../types/pagination.types';
 import { LikeClass, LikeDocument } from '../../schema/likes.schema';
 
@@ -17,7 +16,7 @@ export class PostsQueryRepository {
   ) {}
 
   async findPostById(id: string, userId?: string): Promise<Posts | null> {
-    const post: PostsDB | null = await this.postModel
+    const post: PostClass | null = await this.postModel
       .findOne({ _id: new ObjectId(id) }, { __v: 0 })
       .lean();
     const newestLikes = await this.likeModel
@@ -36,7 +35,7 @@ export class PostsQueryRepository {
         ? (reaction.myStatus as unknown as LikeStatusEnum)
         : LikeStatusEnum.None;
     }
-    return post ? PostsDB.getPostsViewModel(post, myStatus, newestLikes) : null;
+    return post ? PostClass.getPostsViewModel(post, myStatus, newestLikes) : null;
   }
 
   async findAllPosts(
@@ -47,7 +46,7 @@ export class PostsQueryRepository {
     userId: string,
   ): Promise<PaginationType<Posts>> {
     const filtered = {};
-    const allPosts: PostsDB[] = await this.postModel
+    const allPosts: PostClass[] = await this.postModel
       .find(filtered, { __v: 0 })
       .sort({ [sortBy]: sortDirection === 'asc' ? 1 : -1 })
       .skip((+pageNumber - 1) * +pageSize)
@@ -88,7 +87,7 @@ export class PostsQueryRepository {
               ? (reaction.myStatus as unknown as LikeStatusEnum)
               : LikeStatusEnum.None;
           }
-          return PostsDB.getPostsViewModel(post, myStatus, newestLikes);
+          return PostClass.getPostsViewModel(post, myStatus, newestLikes);
         }),
       ),
     };
@@ -104,7 +103,7 @@ export class PostsQueryRepository {
     userId: string,
   ): Promise<PaginationType<Posts>> {
     const filter = { blogId: new ObjectId(blogId) };
-    const posts: PostsDB[] = await this.postModel
+    const posts: PostClass[] = await this.postModel
       .find(filter, { __v: 0 })
       .sort({ [sortBy]: sortDirection === 'asc' ? 1 : -1 })
       .skip((+pageNumber - 1) * +pageSize)
@@ -141,7 +140,7 @@ export class PostsQueryRepository {
               ? (reaction.myStatus as unknown as LikeStatusEnum)
               : LikeStatusEnum.None;
           }
-          return PostsDB.getPostsViewModel(post, myStatus, newestLikes);
+          return PostClass.getPostsViewModel(post, myStatus, newestLikes);
         }),
       ),
     };

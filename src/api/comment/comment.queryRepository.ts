@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
-import { CommentsDB } from './comment.class-pipe';
 import { commentDBToView } from '../../utils/helpers';
 import { Model } from 'mongoose';
 import { CommentClass, CommentDocument } from '../../schema/comment.schema';
@@ -24,7 +23,7 @@ export class CommentQueryRepository {
   ): Promise<CommentViewModel | null> {
 	console.log(userId)
     try {
-      const commentById: CommentsDB | null = await this.commentModel.findOne({
+      const commentById: CommentClass | null = await this.commentModel.findOne({
         _id: new ObjectId(commentId),
       });
       if (!commentById) {
@@ -56,7 +55,7 @@ export class CommentQueryRepository {
     userId: string,
   ): Promise<PaginationType<CommentViewModel> | null> {
     const filter = { postId: postId };
-    const commentByPostId: CommentsDB[] = await this.commentModel
+    const commentByPostId: CommentClass[] = await this.commentModel
       .find(filter)
       .sort({ [sortBy]: sortDirection === 'asc' ? 1 : -1 })
       .skip((+pageNumber - 1) * +pageSize)
@@ -73,7 +72,7 @@ export class CommentQueryRepository {
         if (userId) {
           status = await this.likeModel.findOne({
             userId,
-            commentId: item._id.toString(),
+            commentId: item._id!.toString(),
           });
           findLike = status ? status.myStatus : null;
         }
@@ -92,7 +91,7 @@ export class CommentQueryRepository {
   }
 
   async findCommentByCommentId(commentId: string, userId?: ObjectId | null) {
-    const commentById: CommentsDB | null = await this.commentModel.findOne({
+    const commentById: CommentClass | null = await this.commentModel.findOne({
       _id: new ObjectId(commentId),
     });
     if (!commentById) {

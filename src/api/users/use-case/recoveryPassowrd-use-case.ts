@@ -1,9 +1,9 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { EmailManager } from "api/manager/email.manager";
-import { UsersRepository } from "api/users/user.repository";
-import { UsersQueryRepository } from "api/users/users.queryRepository";
+import { EmailManager } from "../../../api/manager/email.manager";
+import { UsersRepository } from "../../../api/users/user.repository";
+import { UsersQueryRepository } from "../../../api/users/users.queryRepository";
 import { WithId } from "mongodb";
-import { UserClass } from "schema/user.schema";
+import { UserClass } from "../../../schema/user.schema";
 import {v4 as uuidv4} from "uuid"
 
 

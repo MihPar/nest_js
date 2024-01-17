@@ -1,6 +1,6 @@
 import { HttpException } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { PayloadAdapter } from "api/adapter/payload.adapter";
+import { PayloadAdapter } from "../../../api/adapter/payload.adapter";
 import { DeviceRepository } from "../device.repository";
 
 	export class Logout {

@@ -1,10 +1,10 @@
-import { CommentsDB } from "../api/comment/comment.class-pipe";
 import { CommentViewModel } from "../api/comment/comment.type";
 import { LikeStatusEnum } from "../api/likes/likes.emun";
+import { CommentClass } from "../schema/comment.schema";
 
-export const commentDBToView = (item: CommentsDB, myStatus: LikeStatusEnum | null): CommentViewModel => {
+export const commentDBToView = (item: CommentClass, myStatus: LikeStatusEnum | null): CommentViewModel => {
 	return {
-	  id: item._id.toString(),
+	  id: item._id!.toString(),
 	  content: item.content,
 	  commentatorInfo: item.commentatorInfo,
 	  createdAt: item.createdAt,

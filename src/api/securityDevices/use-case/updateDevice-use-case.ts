@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { DeviceService } from '../device.service';
 import { DeviceRepository } from '../device.repository';
 import { HttpException } from '@nestjs/common';
-import { PayloadAdapter } from 'api/adapter/payload.adapter';
+import { PayloadAdapter } from '../../../api/adapter/payload.adapter';
 
 export class UpdateDevice {
   constructor(public userId: string | null, public newRefreshToken: string) {}

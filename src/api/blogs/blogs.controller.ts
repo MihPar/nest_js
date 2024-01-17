@@ -4,7 +4,7 @@ import { BlogsQueryRepository } from "./blogs.queryReposity";
 import { bodyBlogsModel } from "./blogs.class";
 import { BlogsViewType } from "./blogs.type";
 import { BlogsService } from "./blogs.service";
-import { Posts, bodyPostsModelClass } from "../posts/posts.class";
+import { bodyPostsModelClass } from "../posts/posts.class";
 import { PostsService } from "../posts/posts.service";
 import { BlogsRepository } from "./blogs.repository";
 import { PostsQueryRepository } from "../posts/postQuery.repository";
@@ -15,6 +15,9 @@ import { HttpExceptionFilter } from "../../exceptionFilters.ts/exceptionFilter";
 import { UserClass } from "../../schema/user.schema";
 import { CreateNewBlog } from './use-case/createNewBlog-use-case';
 import { UpdateBlog } from './use-case/updateBlog-use-case';
+import { Posts } from '../../schema/post.schema';
+import { CreatePost } from '../posts/use-case/createPost-use-case';
+import { CreateNewPostForBlog } from './use-case/createNewPostForBlog-use-case';
 
 @Controller('blogs')
 export class BlogsController {
@@ -102,15 +105,16 @@ export class BlogsController {
   ) {
     const findBlog: BlogsViewType | null = await this.blogsQueryRepository.findBlogById(blogId);
     if (!findBlog) throw new NotFoundException('Blogs by id not found 404');
-    const isCreatePost = await this.postsService.createPost(
-      blogId,
-      inputDataModel.title,
-      inputDataModel.shortDescription,
-      inputDataModel.content,
-      findBlog.name,
-    );
-    if (!isCreatePost) throw new NotFoundException('Blogs by id not found 404');
-    return isCreatePost;
+	const createNewPost: Posts | null = await this.commandBus.execute(new CreateNewPostForBlog( blogId, inputDataModel, findBlog.name))
+    // const isCreatePost = await this.postsService.createPost(
+    //   blogId,
+    //   inputDataModel.title,
+    //   inputDataModel.shortDescription,
+    //   inputDataModel.content,
+    //   findBlog.name,
+    // );
+    if (!createNewPost) throw new NotFoundException('Blogs by id not found 404');
+    return createNewPost;
   }
 
   @Get(':id')

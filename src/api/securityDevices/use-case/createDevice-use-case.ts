@@ -1,12 +1,11 @@
 import { JwtService } from '@nestjs/jwt';
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs"
-import { DeviceClass } from "schema/device.schema";
-import { DeviceService } from '../device.service';
 import mongoose from 'mongoose';
 import { DeviceRepository } from '../device.repository';
-import { UserClass } from 'schema/user.schema';
+import { UserClass } from '../../../schema/user.schema';
 import { randomUUID } from 'crypto';
-import { PayloadAdapter } from 'api/adapter/payload.adapter';
+import { PayloadAdapter } from '../../../api/adapter/payload.adapter';
+import { DeviceClass } from '../../../schema/device.schema';
 
 export class CreateDevice {
 	constructor(

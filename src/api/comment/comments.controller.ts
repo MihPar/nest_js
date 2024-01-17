@@ -2,7 +2,7 @@ import { Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundEx
 import { CommentQueryRepository } from './comment.queryRepository';
 import { CommentViewModel } from './comment.type';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
-import { CommentsDB, InputModelContent, InputModelLikeStatusClass, inputModelCommentId, inputModelId } from './comment.class-pipe';
+import { InputModelContent, InputModelLikeStatusClass, inputModelCommentId, inputModelId } from './comment.class-pipe';
 import { CheckRefreshTokenForComments } from '../../infrastructure/guards/comments/bearer.authForComments';
 import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 import { ObjectId } from 'mongodb';
@@ -14,6 +14,7 @@ import { UserClass } from '../../schema/user.schema';
 import { UpdateLikestatus } from './use-case/updateLikeStatus-use-case';
 import { CommandBus } from '@nestjs/cqrs';
 import { UpdateCommentByCommentId } from './use-case/updateCommentByCommentId-use-case';
+import { CommentClass } from '../../schema/comment.schema';
 
 @Controller('comments')
 export class CommentsController {
@@ -34,7 +35,7 @@ export class CommentsController {
     @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: ObjectId,
   ) {
-    const findCommentById: CommentsDB | null =
+    const findCommentById: CommentClass | null =
       await this.commentQueryRepository.findCommentByCommentId(id.commentId);
     if (!findCommentById) throw new NotFoundException('404');
     const findLike = await this.commentQueryRepository.findLikeCommentByUser(

@@ -57,7 +57,7 @@ export class CommentClass extends Comment {
 
 		getNewComment(myStatus: LikeStatusEnum): CommentViewModel {
 			return {
-			  id: this._id.toString(),
+			  id: this._id!.toString(),
 			  content: this.content,
 			  commentatorInfo: this.commentatorInfo,
 			  createdAt: this.createdAt,
@@ -71,7 +71,7 @@ export class CommentClass extends Comment {
 		
 		static getNewComments(comment: CommentClass, myStatus: LikeStatusEnum): CommentViewModel {
 			return {
-			  id: comment._id.toString(),
+			  id: comment._id!.toString(),
 			  content: comment.content,
 			  commentatorInfo: comment.commentatorInfo,
 			  createdAt: comment.createdAt,
