@@ -11,9 +11,15 @@ export class PostsRepository {
     @InjectModel(PostClass.name) private postModel: Model<PostDocument>,
   ) {}
 
-  async createNewPosts(newPost: PostClass): Promise<PostClass> {
-    const result = await this.postModel.create(newPost);
-    return newPost;
+  async createNewPosts(newPost: PostClass): Promise<PostClass | null> {
+	try {
+		const resultNewPost = await this.postModel.create(newPost);
+		await resultNewPost.save()
+		return newPost;
+	} catch(error) {
+		console.log(error, 'error in create post')
+		return null
+	}
   }
 
   async updatePost(

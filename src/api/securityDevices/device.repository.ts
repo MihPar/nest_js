@@ -27,7 +27,6 @@ export class DeviceRepository {
 	try {
 		const resultDevice = await this.deviceModel.create(device)
 	    await resultDevice.save();
-
 		return resultDevice._id.toString();
 	} catch(error) {
 		console.log(error, 'error in create device')
