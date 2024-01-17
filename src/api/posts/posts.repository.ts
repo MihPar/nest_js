@@ -84,8 +84,11 @@ export class PostsRepository {
   }
 
   async findPostById(blogId: string) {
+	try {
 	const post = await this.postModel.findOne({ blogId: new ObjectId(blogId) }, { __v: 0 }).lean();
-		if(!post) return null
-		return post
+	return post
+	} catch(error) {
+		return null
+	}
   }
 }
