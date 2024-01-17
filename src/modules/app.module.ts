@@ -52,12 +52,23 @@ import { RecoveryPasswordUseCase } from '../api/users/use-case/recoveryPassowrd-
 import { NewPasswordCase } from '../api/users/use-case/createNewPassword-use-case';
 import { CreateDeviceCase } from '../api/securityDevices/use-case/createDevice-use-case';
 import { CreateLoginCase } from '../api/users/use-case/createLogin-use-case';
-import { RefreshTokenCase } from 'api/auth/use-case/refreshToken-use-case';
-import { RegistrationConfirmationCase } from 'api/users/use-case/registratinConfirmation-use-case';
-import { RegistrationCase } from 'api/users/use-case/registration-use-case';
+import { RefreshTokenCase } from '../api/auth/use-case/refreshToken-use-case';
+import { RegistrationConfirmationCase } from '../api/users/use-case/registratinConfirmation-use-case';
+import { RegistrationCase } from '../api/users/use-case/registration-use-case';
+import { UpdateLikestatusCase } from '../api/comment/use-case/updateLikeStatus-use-case';
+import { UpdateBlogCase } from '../api/blogs/use-case/updateBlog-use-case';
+import { CreateNewBlogCase } from '../api/blogs/use-case/createNewBlog-use-case';
+import { GetUserIdByTokenCase } from '../api/auth/use-case/getUserIdByToken-use-case';
+import { PayloadAdapter } from '../api/adapter/payload.adapter';
+import { UpdateCommentByCommentIdCase } from '../api/comment/use-case/updateCommentByCommentId-use-case';
+import { DeleteAllPostsCase } from '../api/posts/use-case/deleteAllPosts-use-case';
+import { DeleteAllBlogsCase } from '../api/blogs/use-case/deletAllBlogs-use-case';
+import { DeleteAllUsersCase } from '../api/users/use-case/deleteAllUsers-use-case';
+import { DeleteAllCommentsCase } from '../api/comment/use-case/deleteAllComments-use-case';
+import { DeleteAllLikesCase } from '../api/likes/use-case/deleteAllLikes-use-case';
 
 const useCase = [RecoveryPasswordUseCase, NewPasswordCase, CreateLoginCase, CreateDeviceCase, RefreshTokenCase,
-	RegistrationConfirmationCase, RegistrationCase]
+	RegistrationConfirmationCase, RegistrationCase, UpdateLikestatusCase, UpdateBlogCase, CreateNewBlogCase, GetUserIdByTokenCase, UpdateCommentByCommentIdCase, DeleteAllPostsCase, DeleteAllBlogsCase, DeleteAllUsersCase, DeleteAllCommentsCase, DeleteAllLikesCase]
 
 const services = [
   BlogsService,
@@ -93,7 +104,7 @@ const reposponse = [
   UsersRepository,
   UsersQueryRepository,
 ];
-const adapter = [EmailAdapter];
+const adapter = [EmailAdapter, PayloadAdapter];
 const manager = [EmailManager];
 
 @Module({

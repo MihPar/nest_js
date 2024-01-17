@@ -1,3 +1,4 @@
+import { CommandBus } from '@nestjs/cqrs';
 import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, Query, UseFilters, UseGuards } from "@nestjs/common";
 import { BlogsQueryRepository } from "./blogs.queryReposity";
 import { bodyBlogsModel } from "./blogs.class";
@@ -12,6 +13,8 @@ import { PaginationType } from "../../types/pagination.types";
 import { AuthBasic } from "../../infrastructure/guards/auth/basic.auth";
 import { HttpExceptionFilter } from "../../exceptionFilters.ts/exceptionFilter";
 import { UserClass } from "../../schema/user.schema";
+import { CreateNewBlog } from './use-case/createNewBlog-use-case';
+import { UpdateBlog } from './use-case/updateBlog-use-case';
 
 @Controller('blogs')
 export class BlogsController {
@@ -21,6 +24,7 @@ export class BlogsController {
     protected postsQueryRepository: PostsQueryRepository,
     protected postsService: PostsService,
     protected blogsRepository: BlogsRepository,
+	protected commandBus: CommandBus
   ) {}
 
   @Get()
@@ -51,9 +55,10 @@ export class BlogsController {
   @UseGuards(AuthBasic)
   @UseFilters(new HttpExceptionFilter())
   async createBlog(@Body() inputDateModel: bodyBlogsModel) {
-    const createBlog: BlogsViewType = await this.blogsService.createNewBlog(
-      inputDateModel,
-    );
+	const createBlog: BlogsViewType = await this.commandBus.execute(new CreateNewBlog(inputDateModel))
+    // const createBlog: BlogsViewType = await this.blogsService.createNewBlog(
+    //   inputDateModel,
+    // );
     return createBlog;
   }
   
@@ -127,12 +132,13 @@ export class BlogsController {
     @Param('id') id: string,
     @Body() inputDateMode: bodyBlogsModel,
   ) {
-    const isUpdateBlog: boolean = await this.blogsService.updateBlog(
-      id,
-      inputDateMode.name,
-      inputDateMode.description,
-      inputDateMode.websiteUrl,
-    );
+	const isUpdateBlog = await this.commandBus.execute(new UpdateBlog(id, inputDateMode))
+    // const isUpdateBlog: boolean = await this.blogsService.updateBlog(
+    //   id,
+    //   inputDateMode.name,
+    //   inputDateMode.description,
+    //   inputDateMode.websiteUrl,
+    // );
     if (!isUpdateBlog) throw new NotFoundException('Blogs by id not found 404');
 	return isUpdateBlog
   }

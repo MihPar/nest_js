@@ -80,9 +80,9 @@ export class PostsService {
 	return await this.postsRepository.deletedPostById(id);
   }
 
-  async deleteAllPosts() {
-  	return await this.postsRepository.deleteRepoPosts();
-  }
+//   async deleteAllPosts() {
+//   	return await this.postsRepository.deleteRepoPosts();
+//   }
 
   async updateLikeStatus(likeStatus: string, postId: string, userId: ObjectId, userLogin: string): Promise<boolean | void> {
 	const findLike = await this.likesRepository.findLikePostByUser(postId, userId)

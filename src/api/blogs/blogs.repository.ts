@@ -31,7 +31,6 @@ export class BlogsRepository {
         $set: { name: name, description: description, websiteUrl: websiteUrl },
       },
     );
-	// console.log("update blog by id str 35: ", result)
     return result.matchedCount === 1
   }
 
