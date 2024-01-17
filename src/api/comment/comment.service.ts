@@ -3,7 +3,7 @@ import { CommentRepository } from "./comment.repository";
 import { Injectable } from "@nestjs/common";
 import { LikesRepository } from "../../api/likes/likes.repository";
 import { CommentViewModel } from "./comment.type";
-import { CommentsDB } from "./comment.class";
+import { CommentsDB } from "./comment.class-pipe";
 import { LikeStatusEnum } from "../../api/likes/likes.emun";
 
 @Injectable()

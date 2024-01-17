@@ -1,6 +1,3 @@
-import { ObjectId } from "mongodb";
-import { CommentViewModel, CommentatorInfo } from "./comment.type";
-import { LikeStatusEnum } from "../../api/likes/likes.emun";
 import { Transform, TransformFnParams } from "class-transformer";
 import { IsNotEmpty, IsString, Length, Matches } from "class-validator";
 import { applyDecorators } from "@nestjs/common";

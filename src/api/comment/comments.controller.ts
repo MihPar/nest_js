@@ -2,7 +2,7 @@ import { Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundEx
 import { CommentQueryRepository } from './comment.queryRepository';
 import { CommentViewModel } from './comment.type';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
-import { CommentsDB, InputModelContent, InputModelLikeStatusClass, inputModelCommentId, inputModelId } from './comment.class';
+import { CommentsDB, InputModelContent, InputModelLikeStatusClass, inputModelCommentId, inputModelId } from './comment.class-pipe';
 import { CheckRefreshTokenForComments } from '../../infrastructure/guards/comments/bearer.authForComments';
 import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 import { ObjectId } from 'mongodb';

@@ -2,7 +2,7 @@ import { CommentClass, CommentDocument } from "../../schema/comment.schema";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { ObjectId } from "mongodb";
-import { CommentsDB } from "./comment.class";
+import { CommentsDB } from "./comment.class-pipe";
 
 export class CommentRepository {
 	constructor(

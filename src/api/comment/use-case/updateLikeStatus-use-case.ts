@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { InputModelLikeStatusClass, inputModelCommentId } from "../comment.class";
+import { InputModelLikeStatusClass, inputModelCommentId } from "../comment.class-pipe";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { CommentRepository } from "../comment.repository";
 import { LikesRepository } from "../../likes/likes.repository";

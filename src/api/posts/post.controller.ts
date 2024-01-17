@@ -21,7 +21,7 @@ import { CommentQueryRepository } from '../comment/comment.queryRepository';
 import { PostsQueryRepository } from './postQuery.repository';
 import { BlogsQueryRepository } from '../blogs/blogs.queryReposity';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
-import { InputModelLikeStatusClass } from '../../api/comment/comment.class';
+import { InputModelLikeStatusClass } from '../comment/comment.class-pipe';
 import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 import { CheckRefreshTokenForPost } from '../../infrastructure/guards/post/bearer.authForPost';
 import { AuthBasic } from '../../infrastructure/guards/auth/basic.auth';
@@ -33,6 +33,8 @@ import { UpdateLikeStatus } from './use-case/updateLikeStatus-use-case';
 import { CreateNewCommentByPostId } from '../comment/use-case/createNewCommentByPotsId-use-case';
 import { CreatePost } from './use-case/createPost-use-case';
 import { Posts } from '../../schema/post.schema';
+import { UpdateOldPost } from './use-case/updateOldPost-use-case';
+import { DeletePostById } from './use-case/deletePostById-use-case';
 
 @Controller('posts')
 export class PostController {
@@ -193,13 +195,14 @@ export class PostController {
     @Param('id') postId: string,
     @Body() inputModelData: inputModelPostClass,
   ) {
-    const updatePost: boolean = await this.postsService.updateOldPost(
-      postId,
-      inputModelData.title,
-      inputModelData.shortDescription,
-      inputModelData.content,
-      inputModelData.blogId,
-    );
+	const updatePost: boolean = await this.commandBus.execute(new UpdateOldPost(postId, inputModelData))
+    // const updatePost: boolean = await this.postsService.updateOldPost(
+    //   postId,
+    //   inputModelData.title,
+    //   inputModelData.shortDescription,
+    //   inputModelData.content,
+    //   inputModelData.blogId,
+    // );
     if (!updatePost) throw new NotFoundException('Blogs by id not found 404');
     return updatePost;
   }
@@ -208,7 +211,8 @@ export class PostController {
   @HttpCode(204)
   @UseGuards(AuthBasic)
   async deletePostById(@Param('id') postId: string): Promise<boolean> {
-    const deletPost: boolean = await this.postsService.deletePostId(postId);
+	const deletPost: boolean = await this.commandBus.execute(new DeletePostById(postId))
+    // const deletPost: boolean = await this.postsService.deletePostId(postId);
     if (!deletPost) throw new NotFoundException('Blogs by id not found 404');
     return true;
   }

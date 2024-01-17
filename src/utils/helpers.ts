@@ -1,4 +1,4 @@
-import { CommentsDB } from "../api/comment/comment.class";
+import { CommentsDB } from "../api/comment/comment.class-pipe";
 import { CommentViewModel } from "../api/comment/comment.type";
 import { LikeStatusEnum } from "../api/likes/likes.emun";
 

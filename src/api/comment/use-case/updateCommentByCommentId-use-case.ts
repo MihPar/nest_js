@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs"
-import { InputModelContent, inputModelCommentId } from "../comment.class"
+import { InputModelContent, inputModelCommentId } from "../comment.class-pipe"
 import { CommentRepository } from "../comment.repository";
 
 export class UpdateCommentByCommentId {

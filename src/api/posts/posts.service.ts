@@ -1,13 +1,9 @@
 import { Injectable } from "@nestjs/common"
-import { PostsDB } from "./posts.class";
 import { PostsRepository } from "./posts.repository";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
-import { PostsViewModel } from "./posts.type";
 import { LikeClass, LikeDocument } from "../../schema/likes.schema";
 import { PostClass, PostDocument } from "../../schema/post.schema";
-import { LikeStatusEnum } from "../likes/likes.emun";
-import { ObjectId } from "mongodb";
 import { LikesRepository } from "../likes/likes.repository";
 
 
@@ -59,26 +55,26 @@ export class PostsService {
 //     return createPost.getPostViewModel(myStatus, newestLikes);
 //   }
 
-  async updateOldPost(
-	id: string,
-	title: string,
-	shortDescription: string,
-	content: string,
-	blogId: string
-  ): Promise<boolean> {
-	const updatPostById: boolean = await this.postsRepository.updatePost(
-	  id,
-	  title,
-	  shortDescription,
-	  content,
-	  blogId
-	);
-	return updatPostById;
-  }
+//   async updateOldPost(
+// 	id: string,
+// 	title: string,
+// 	shortDescription: string,
+// 	content: string,
+// 	blogId: string
+//   ): Promise<boolean> {
+// 	const updatPostById: boolean = await this.postsRepository.updatePost(
+// 	  id,
+// 	  title,
+// 	  shortDescription,
+// 	  content,
+// 	  blogId
+// 	);
+// 	return updatPostById;
+//   }
 
-  async deletePostId(id: string): Promise<boolean> {
-	return await this.postsRepository.deletedPostById(id);
-  }
+//   async deletePostId(id: string): Promise<boolean> {
+// 	return await this.postsRepository.deletedPostById(id);
+//   }
 
 //   async deleteAllPosts() {
 //   	return await this.postsRepository.deleteRepoPosts();

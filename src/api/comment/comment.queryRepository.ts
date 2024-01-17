@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
-import { CommentsDB } from './comment.class';
+import { CommentsDB } from './comment.class-pipe';
 import { commentDBToView } from '../../utils/helpers';
 import { Model } from 'mongoose';
 import { CommentClass, CommentDocument } from '../../schema/comment.schema';
