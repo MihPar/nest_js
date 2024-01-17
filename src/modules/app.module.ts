@@ -75,9 +75,10 @@ import { DeletePostByIdCase } from '../api/posts/use-case/deletePostById-use-cas
 import { TerminateAllCurrentSessionCase } from '../api/securityDevices/use-case/terminateAllCurrentSeccion-use-case';
 import { CreateNewUserCase } from '../api/users/use-case/createNewUser-use-case';
 import { DeleteUserByIdCase } from '../api/users/use-case/deleteUserById-use-case';
+import { CreateNewPostForBlogCase } from '../api/blogs/use-case/createNewPostForBlog-use-case';
 
 const useCase = [RecoveryPasswordUseCase, NewPasswordCase, CreateLoginCase, CreateDeviceCase, RefreshTokenCase,
-	RegistrationConfirmationCase, RegistrationCase, UpdateLikestatusCase, UpdateBlogCase, CreateNewBlogCase, GetUserIdByTokenCase, UpdateCommentByCommentIdCase, DeleteAllPostsCase, DeleteAllBlogsCase, DeleteAllUsersCase, DeleteAllCommentsCase, DeleteAllLikesCase, UpdateLikeStatusCase, CreateNewCommentByPostIdCase, CreatePostCase, UpdateOldPostCase, DeletePostByIdCase, TerminateAllCurrentSessionCase, CreateNewUserCase, DeleteUserByIdCase]
+	RegistrationConfirmationCase, RegistrationCase, UpdateLikestatusCase, UpdateBlogCase, CreateNewBlogCase, GetUserIdByTokenCase, UpdateCommentByCommentIdCase, DeleteAllPostsCase, DeleteAllBlogsCase, DeleteAllUsersCase, DeleteAllCommentsCase, DeleteAllLikesCase, UpdateLikeStatusCase, CreateNewCommentByPostIdCase, CreatePostCase, UpdateOldPostCase, DeletePostByIdCase, TerminateAllCurrentSessionCase, CreateNewUserCase, DeleteUserByIdCase, CreateNewPostForBlogCase]
 
 const services = [
   BlogsService,

@@ -16,7 +16,6 @@ import { UserClass } from "../../schema/user.schema";
 import { CreateNewBlog } from './use-case/createNewBlog-use-case';
 import { UpdateBlog } from './use-case/updateBlog-use-case';
 import { Posts } from '../../schema/post.schema';
-import { CreatePost } from '../posts/use-case/createPost-use-case';
 import { CreateNewPostForBlog } from './use-case/createNewPostForBlog-use-case';
 
 @Controller('blogs')
