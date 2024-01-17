@@ -33,7 +33,7 @@ export class PostsService {
 //       shortDescription,
 //       content,
 //       blogId,
-//       blogName, NaN, NaN
+//       blogName
 //     );
 // 	// console.log(newPost)
 //     const createPost: PostClass = await this.postsRepository.createNewPosts(newPost);

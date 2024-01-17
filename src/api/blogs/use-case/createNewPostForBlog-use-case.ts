@@ -28,8 +28,7 @@ export class CreateNewPostForBlogCase
       command.inputDataModel.content,
       command.blogId,
       command.blogName,
-      NaN,
-      NaN,
+      0, 0
     );
     const createPost: PostClass = await this.postsRepository.createNewPosts(newPost)
 	const post = await this.postsRepository.findPostById(command.blogId)
