@@ -26,27 +26,33 @@ export class CreateDeviceCase implements ICommandHandler<CreateDevice> {
 	) {}
 	async execute(
 		command: CreateDevice
-	  ): Promise<DeviceClass | null> {
+	  ): Promise<{refreshToken: string, token: string} | null> {
+		const deviceId  = randomUUID()
 		const token: string = await this.jwtService.signAsync({userId: command.user._id.toString()}, {expiresIn: "60s"});
-		const refreshToken = await this.jwtService.signAsync({userId: command.user._id.toString(), deviceId: randomUUID()}, {expiresIn: "600s"});
+		const refreshToken = await this.jwtService.signAsync({userId: command.user._id.toString(), deviceId}, {expiresIn: "600s"});
 
 		const ip = command.IP || "unknown";
 		const title = command.Headers["user-agent"] || "unknown";
 
-		
-		const payload = await this.payloadAdapter.getPayload(refreshToken);
-			if(!payload) throw new Error ('Can not decode token')
 		const device  = new DeviceClass()
 		// device.ip = command.ip
 		device.ip = ip
 		device._id = new mongoose.Types.ObjectId()
-		device.deviceId = payload.deviceId
-		device.lastActiveDate = new Date(payload.iat * 1000).toISOString()
+		device.deviceId = deviceId
+		device.lastActiveDate = new Date().toISOString()
 		// device.title = command.title
 		device.title = title
-		device.userId = payload.userId
+		device.userId = command.user._id.toString()
 		
-		const createDevice: DeviceClass = await this.deviceRepository.createDevice(device);
-		return createDevice;
+		const createdDeviceId: string | null = await this.deviceRepository.createDevice(device);
+
+		if(!createdDeviceId){
+			return null
+		}
+
+		return {
+			refreshToken,
+			token
+		};
 	  }
 }

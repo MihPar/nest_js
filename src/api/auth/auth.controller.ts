@@ -64,9 +64,10 @@ export class AuthController {
 		@Body() inutDataModel: InputDataModelClassAuth,
 		@Ip() IP: string, 
 		@Headers() Headers: any,
-	@Res({passthrough: true}) res: Response) {
+		@Res({passthrough: true}) res: Response) {
+			const command = new CreateLogin(inutDataModel)
 		// const user: UserClass |null = await this.userService.setNewPassword(inutDataModel)
-		const user: UserClass | null = await this.commandBus.execute(new CreateLogin(inutDataModel));
+		const user: UserClass | null = await this.commandBus.execute(command);
 		  if (!user) {
 			throw new UnauthorizedException("Not authorization 401")
 		  } else {
@@ -75,13 +76,17 @@ export class AuthController {
 			// const title = Headers["user-agent"] || "unknown";
 			// const refreshToken = await this.jwtService.signAsync({userId: user._id.toString(), deviceId: randomUUID()}, {expiresIn: "600s"});
 			// await this.commandBus.execute(new CreateDevice(ip, title, refreshToken))
-			const createDevice = await this.commandBus.execute(new CreateDevice(IP, Headers, user))
+			const tokens = await this.commandBus.execute(new CreateDevice(IP, Headers, user))
+
+			if(!tokens){
+				throw new UnauthorizedException("Not authorization 401")
+			}
 			// await this.deviceService.createDevice(ip, title, refreshToken);
-			res.cookie('refreshToken', createDevice.refreshToken, {
+			res.cookie('refreshToken', tokens.refreshToken, {
                 httpOnly: true,
                 secure: true,
             });
-            return {accessToken: createDevice.token};
+            return {accessToken: tokens.token};
 		  }
 	}
 	@HttpCode(200)

@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { DeviceClass, DeviceDocument } from '../../schema/device.schema';
 import { CollectionIP } from '../../api/CollectionIP/collection.class';
 import { IPCollectionClass, IPCollectionDocument } from '../../schema/IP.Schema';
+import { log } from 'console';
 
 @Injectable()
 export class DeviceRepository {
@@ -22,9 +23,16 @@ export class DeviceRepository {
 	return deletedAll.deleteMany()
   }
 
-  async createDevice(device: DeviceClass): Promise<DeviceClass> {
-    const resultDevice = await this.deviceModel.insertMany(device);
-    return device;
+  async createDevice(device: DeviceClass): Promise<string | null> {
+	try {
+		const resultDevice = await this.deviceModel.create(device)
+	    await resultDevice.save();
+
+		return resultDevice._id.toString();
+	} catch(error) {
+		console.log(error, 'error in create device')
+		return null
+	}
   }
 
   async updateDeviceUser(
