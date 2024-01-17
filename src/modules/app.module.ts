@@ -66,9 +66,12 @@ import { DeleteAllBlogsCase } from '../api/blogs/use-case/deletAllBlogs-use-case
 import { DeleteAllUsersCase } from '../api/users/use-case/deleteAllUsers-use-case';
 import { DeleteAllCommentsCase } from '../api/comment/use-case/deleteAllComments-use-case';
 import { DeleteAllLikesCase } from '../api/likes/use-case/deleteAllLikes-use-case';
+import { UpdateLikeStatusCase } from '../api/posts/use-case/updateLikeStatus-use-case';
+import { GenerateHashAdapter } from '../api/adapter/generateHashAdapter';
+import { CreateNewCommentByPostIdCase } from '../api/comment/use-case/createNewCommentByPotsId-use-case';
 
 const useCase = [RecoveryPasswordUseCase, NewPasswordCase, CreateLoginCase, CreateDeviceCase, RefreshTokenCase,
-	RegistrationConfirmationCase, RegistrationCase, UpdateLikestatusCase, UpdateBlogCase, CreateNewBlogCase, GetUserIdByTokenCase, UpdateCommentByCommentIdCase, DeleteAllPostsCase, DeleteAllBlogsCase, DeleteAllUsersCase, DeleteAllCommentsCase, DeleteAllLikesCase]
+	RegistrationConfirmationCase, RegistrationCase, UpdateLikestatusCase, UpdateBlogCase, CreateNewBlogCase, GetUserIdByTokenCase, UpdateCommentByCommentIdCase, DeleteAllPostsCase, DeleteAllBlogsCase, DeleteAllUsersCase, DeleteAllCommentsCase, DeleteAllLikesCase, UpdateLikeStatusCase, CreateNewCommentByPostIdCase]
 
 const services = [
   BlogsService,
@@ -104,7 +107,7 @@ const reposponse = [
   UsersRepository,
   UsersQueryRepository,
 ];
-const adapter = [EmailAdapter, PayloadAdapter];
+const adapter = [EmailAdapter, PayloadAdapter, GenerateHashAdapter];
 const manager = [EmailManager];
 
 @Module({

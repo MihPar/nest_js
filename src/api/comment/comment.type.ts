@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb"
 import { likeInfoType } from "../../api/likes/likes.type"
 
 export type CommentViewModel = {

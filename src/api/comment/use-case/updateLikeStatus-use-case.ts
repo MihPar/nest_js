@@ -1,8 +1,8 @@
 import { ObjectId } from "mongodb";
 import { InputModelLikeStatusClass, inputModelCommentId } from "../comment.class";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { LikesRepository } from "api/likes/likes.repository";
 import { CommentRepository } from "../comment.repository";
+import { LikesRepository } from "../../likes/likes.repository";
 
 export class UpdateLikestatus {
 	constructor(
@@ -51,6 +51,6 @@ export class UpdateLikestatusCase implements ICommandHandler<UpdateLikestatus> {
 		const changeDislikeOnLike = await this.commentRepositoriy.increase(command.id.commentId, command.status.likeStatus)
 		return true
 	}
-	return false
+	return true
 	}
 }

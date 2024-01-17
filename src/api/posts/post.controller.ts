@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { PaginationType } from '../../types/pagination.types';
 import { CommentViewModel, CommentViewType } from '../comment/comment.type';
-import { InputModelClassPostId, InputModelContentePostClass, Posts, inputModelPostClass } from './posts.class';
+import { InputModelClassPostId, InputModelContentePostClass, inputModelPostClass } from './posts.class';
 import { CommentService } from '../comment/comment.service';
 import { PostsService } from './posts.service';
 import { CommentQueryRepository } from '../comment/comment.queryRepository';
@@ -28,6 +28,11 @@ import { AuthBasic } from '../../infrastructure/guards/auth/basic.auth';
 import { ObjectId } from 'mongodb';
 import { UserClass } from '../../schema/user.schema';
 import { BlogClass } from '../../schema/blogs.schema';
+import { CommandBus } from '@nestjs/cqrs';
+import { UpdateLikeStatus } from './use-case/updateLikeStatus-use-case';
+import { CreateNewCommentByPostId } from '../comment/use-case/createNewCommentByPotsId-use-case';
+import { CreatePost } from './use-case/createPost-use-case';
+import { Posts } from '../../schema/post.schema';
 
 @Controller('posts')
 export class PostController {
@@ -37,6 +42,7 @@ export class PostController {
     protected commentService: CommentService,
     protected postsService: PostsService,
     protected blogsQueryRepository: BlogsQueryRepository,
+	protected commandBus: CommandBus
   ) {}
 
   @Put()
@@ -49,17 +55,16 @@ export class PostController {
 	@UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
 	) {
-    const userLogin = user.accountData.userName;
 	if(!userId) return null
     const findPost = await this.postsQueryRepository.findPostById(dto.postId);
     if (!findPost) throw new NotFoundException('404')
-
-    const result = await this.postsService.updateLikeStatus(
-      status.likeStatus,
-      dto.postId,
-      new ObjectId(userId),
-      userLogin
-    );
+	const result = await this.commandBus.execute(new UpdateLikeStatus(status, dto, userId, user))
+    // const result = await this.postsService.updateLikeStatus(
+    //   status.likeStatus,
+    //   dto.postId,
+    //   new ObjectId(userId),
+    //   userLogin
+    // );
     if (!result) throw new NotFoundException('404')
   }
 
@@ -108,13 +113,14 @@ export class PostController {
     if (!post) throw new NotFoundException('Blogs by id not found 404')
 
 	if(!userId) return null
-    const createNewCommentByPostId: CommentViewModel | null =
-      await this.commentService.createNewCommentByPostId(
-        dto.postId,
-        inputModelContent.content,
-        userId,
-        user.accountData.userName
-      );
+	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(new CreateNewCommentByPostId(dto, inputModelContent, user, userId))
+    // const createNewCommentByPostId: CommentViewModel | null =
+    //   await this.commentService.createNewCommentByPostId(
+    //     dto.postId,
+    //     inputModelContent.content,
+    //     userId,
+    //     user.accountData.userName
+    //   );
     if (!createNewCommentByPostId) throw new NotFoundException('Blogs by id not found 404')
   }
 
@@ -152,13 +158,14 @@ export class PostController {
       inputModelPost.blogId,
     );
     if (!findBlog) throw new NotFoundException('Blogs by id not found');
-    const createNewPost: Posts | null = await this.postsService.createPost(
-      inputModelPost.blogId,
-      inputModelPost.title,
-      inputModelPost.shortDescription,
-      inputModelPost.content,
-      findBlog.name,
-    );
+	const createNewPost: Posts | null = await this.commandBus.execute(new CreatePost(inputModelPost, findBlog.name))
+    // const createNewPost: Posts | null = await this.postsService.createPost(
+    //   inputModelPost.blogId,
+    //   inputModelPost.title,
+    //   inputModelPost.shortDescription,
+    //   inputModelPost.content,
+    //   findBlog.name,
+    // );
     return createNewPost;
   }
 

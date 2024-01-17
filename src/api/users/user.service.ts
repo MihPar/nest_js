@@ -54,11 +54,6 @@ export class UsersService {
 // 	return user.getViewUser()
 //   }
 
-//   async _generateHash(password: string): Promise<string> {
-//     const hash: string = await bcrypt.hash(password, 3);
-//     return hash;
-//   }
-
   async deleteUserById(userId: string) {
     const deleteId: boolean = await this.usersRepository.deleteById(userId);
     return deleteId;

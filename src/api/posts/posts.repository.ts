@@ -1,4 +1,3 @@
-import { PostsDB } from './posts.class';
 import { ObjectId } from 'mongodb';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -12,7 +11,7 @@ export class PostsRepository {
     @InjectModel(PostClass.name) private postModel: Model<PostDocument>,
   ) {}
 
-  async createNewPosts(newPost: PostsDB): Promise<PostsDB> {
+  async createNewPosts(newPost: PostClass): Promise<PostClass> {
     const result = await this.postModel.create(newPost);
     return newPost;
   }
@@ -76,5 +75,11 @@ export class PostsRepository {
             : { 'extendedLikesInfo.likesCount': -1 },
       },
     );
+  }
+
+  async findPostById(blogId: string) {
+	const post = await this.postModel.findOne({ blogId: new ObjectId(blogId) }, { __v: 0 }).lean();
+		if(!post) return null
+		return post
   }
 }

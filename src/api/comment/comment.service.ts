@@ -62,14 +62,14 @@ export class CommentService {
 //     return updateCommentId;
 //   }
 
-  async createNewCommentByPostId(
-    postId: string,
-    content: string,
-    userId: string,
-    userLogin: string
-  ): Promise<CommentViewModel | null> {
-	const newComment: CommentsDB = new CommentsDB(content, postId, {userId, userLogin}) 
-    const createNewCommentawait: CommentsDB = await this.commentRepositories.createNewCommentPostId(newComment);
-	return createNewCommentawait.getNewComment(LikeStatusEnum.None)
-  }
+//   async createNewCommentByPostId(
+//     postId: string,
+//     content: string,
+//     userId: string,
+//     userLogin: string
+//   ): Promise<CommentViewModel | null> {
+// 	const newComment: CommentsDB = new CommentsDB(content, postId, {userId, userLogin}) 
+//     const createNewCommentawait: CommentsDB = await this.commentRepositories.createNewCommentPostId(newComment);
+// 	return createNewCommentawait.getNewComment(LikeStatusEnum.None)
+//   }
 }
