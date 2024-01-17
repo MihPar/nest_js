@@ -54,10 +54,10 @@ export class UsersService {
 // 	return user.getViewUser()
 //   }
 
-  async deleteUserById(userId: string) {
-    const deleteId: boolean = await this.usersRepository.deleteById(userId);
-    return deleteId;
-  }
+//   async deleteUserById(userId: string) {
+//     const deleteId: boolean = await this.usersRepository.deleteById(userId);
+//     return deleteId;
+//   }
 
 //   async deleteAllUsers() {
 // 	return await this.usersRepository.deleteAll();

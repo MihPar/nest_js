@@ -4,6 +4,9 @@ import { UsersService } from './user.service';
 import { InputModelClassCreateBody } from './user.class';
 import { AuthBasic } from '../../infrastructure/guards/auth/basic.auth';
 import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
+import { CreateNewUser } from './use-case/createNewUser-use-case';
+import { CommandBus } from '@nestjs/cqrs';
+import { DeleteUserById } from './use-case/deleteUserById-use-case';
 
 // @UseGuards(AuthGuard)
 @UseGuards(AuthBasic)
@@ -11,7 +14,8 @@ import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 export class UsersController {
   constructor(
 	protected usersQueryRepository: UsersQueryRepository,
-	protected usersService: UsersService
+	protected usersService: UsersService,
+	protected commandBus: CommandBus
 	) {}
 
   @Get()
@@ -52,7 +56,8 @@ export class UsersController {
   @UseFilters(new HttpExceptionFilter())
   async createUser(@Body() body: InputModelClassCreateBody) {
 	// console.log("1:", 1)
-	const createUser = await this.usersService.createNewUser(body.login, body.password, body.email)
+	const createUser = await this.commandBus.execute(new CreateNewUser(body))
+	// const createUser = await this.usersService.createNewUser(body.login, body.password, body.email)
 	return createUser
   }
 
@@ -60,7 +65,8 @@ export class UsersController {
   @HttpCode(204)
 //   @UseGuards(AuthBasic)
   async deleteUserById(@Param('id') userId: string) {
-	const deleteUserById = await this.usersService.deleteUserById(userId)
+	const deleteUserById = await this.commandBus.execute(new DeleteUserById(userId))
+	// const deleteUserById = await this.usersService.deleteUserById(userId)
 	if (!deleteUserById) throw new NotFoundException("Blogs by id not found 404")
   }
 }

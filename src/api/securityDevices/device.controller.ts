@@ -8,14 +8,17 @@ import { Request } from "express";
 import { CheckRefreshToken } from "../../infrastructure/guards/auth/checkRefreshToken";
 import { ForbiddenCalss } from "../../infrastructure/guards/securityDevice.ts/forbidden";
 import { UserClass } from "../../schema/user.schema";
+import { CommandBus } from "@nestjs/cqrs";
+import { TerminateAllCurrentSession } from "./use-case/terminateAllCurrentSeccion-use-case";
+import { PayloadAdapter } from "../adapter/payload.adapter";
 
 @Controller('security')
 export class SecurityDeviceController {
   constructor(
     protected deviceQueryRepository: DeviceQueryRepository,
-    protected jwtService: JwtService,
-    protected deviceService: DeviceService,
     protected deviceRepository: DeviceRepository,
+	protected commandBus: CommandBus,
+	protected payloadAdapter: PayloadAdapter
   ) {}
   @Get('/devices')
   @HttpCode(200)
@@ -39,15 +42,17 @@ export class SecurityDeviceController {
   ) {
     if (!userId) return null;
     const refreshToken = req.cookies.refreshToken;
-    const payload = await this.jwtService.decode(refreshToken);
+    const payload = await this.payloadAdapter.getPayload(refreshToken);
     if (!payload) throw new UnauthorizedException('401');
     if (!/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(payload.deviceId))
       throw new NotFoundException('404');
-    const findAllCurrentDevices =
-      await this.deviceService.terminateAllCurrentSessions(
-        userId,
-        payload.deviceId,
-      );
+	  const findAllCurrentDevices =
+      await this.commandBus.execute(new TerminateAllCurrentSession(userId, payload.deviceId))
+    // const findAllCurrentDevices =
+    //   await this.deviceService.terminateAllCurrentSessions(
+    //     userId,
+    //     payload.deviceId,
+    //   );
     if (!findAllCurrentDevices) throw new UnauthorizedException('401');
   }
 

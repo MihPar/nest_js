@@ -1,11 +1,11 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { emailInputDataClass } from 'api/auth/auth.class';
-import { UserClass } from 'schema/user.schema';
 import { UsersQueryRepository } from '../users.queryRepository';
 import { v4 as uuidv4 } from 'uuid';
 import { add } from 'date-fns';
 import { UsersRepository } from '../user.repository';
-import { EmailManager } from 'api/manager/email.manager';
+import { emailInputDataClass } from '../../auth/auth.class';
+import { EmailManager } from '../../manager/email.manager';
+import { UserClass } from '../../../schema/user.schema';
 
 export class RegistrationEmailResending {
   constructor(public inputDateReqEmailResending: emailInputDataClass) {}

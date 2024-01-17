@@ -10,20 +10,20 @@ export class DeviceService {
     protected deviceRepository: DeviceRepository,
     protected jwtService: JwtService,
   ) {}
-  async terminateAllCurrentSessions(userId: string, deviceId: string) {
-    const findSession = await this.deviceQueryRepository.getAllDevicesUser(
-      userId,
-    );
-    if (!findSession) {
-      return false;
-    }
-    for (let session of findSession) {
-      if (session.deviceId !== deviceId) {
-        await this.deviceRepository.terminateSession(session.deviceId);
-      }
-    }
-    return true;
-  }
+//   async terminateAllCurrentSessions(userId: string, deviceId: string) {
+//     const findSession = await this.deviceQueryRepository.getAllDevicesUser(
+//       userId,
+//     );
+//     if (!findSession) {
+//       return false;
+//     }
+//     for (let session of findSession) {
+//       if (session.deviceId !== deviceId) {
+//         await this.deviceRepository.terminateSession(session.deviceId);
+//       }
+//     }
+//     return true;
+//   }
 
   async deleteAllDevices() {
     return await this.deviceRepository.deleteAllDevices();

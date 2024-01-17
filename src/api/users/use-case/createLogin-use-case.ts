@@ -1,9 +1,9 @@
 import bcrypt  from 'bcrypt';
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InputDataModelClassAuth } from "../../auth/auth.class";
-import { UserClass } from "schema/user.schema";
-import { UsersService } from "api/users/user.service";
-import { UsersQueryRepository } from "api/users/users.queryRepository";
+import { UserClass } from "../../../schema/user.schema";
+import { UsersService } from "../../../api/users/user.service";
+import { UsersQueryRepository } from "../../../api/users/users.queryRepository";
 
 export class CreateLogin {
 	constructor(
