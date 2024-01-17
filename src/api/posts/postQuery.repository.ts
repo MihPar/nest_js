@@ -6,6 +6,7 @@ import { LikeStatusEnum } from '../likes/likes.emun';
 import { PostClass, PostDocument, Posts } from '../../schema/post.schema';
 import { PaginationType } from '../../types/pagination.types';
 import { LikeClass, LikeDocument } from '../../schema/likes.schema';
+import { PostsViewModel } from './posts.type';
 
 
 @Injectable()
@@ -15,26 +16,30 @@ export class PostsQueryRepository {
     @InjectModel(LikeClass.name) private likeModel: Model<LikeDocument>,
   ) {}
 
-  async findPostById(id: string, userId?: string): Promise<Posts | null> {
+  async findPostById(id: string, userId?: string | null): Promise<PostsViewModel | null> {
     const post: PostClass | null = await this.postModel
       .findOne({ _id: new ObjectId(id) }, { __v: 0 })
       .lean();
+
     const newestLikes = await this.likeModel
       .find({ postId: id, myStatus: LikeStatusEnum.Like })
       .sort({ addedAt: -1 })
       .limit(3)
       .skip(0)
       .lean();
+
     let myStatus: LikeStatusEnum = LikeStatusEnum.None;
+
     if (userId) {
       const reaction = await this.likeModel.findOne({
         postId: id,
-        userId: new ObjectId(userId),
+        userId,
       });
       myStatus = reaction
         ? (reaction.myStatus as unknown as LikeStatusEnum)
         : LikeStatusEnum.None;
     }
+
     return post ? PostClass.getPostsViewModel(post, myStatus, newestLikes) : null;
   }
 
@@ -43,7 +48,7 @@ export class PostsQueryRepository {
     pageSize: string,
     sortBy: string,
     sortDirection: string,
-    userId: string,
+    userId?: string | null,
   ): Promise<PaginationType<Posts>> {
     const filtered = {};
     const allPosts: PostClass[] = await this.postModel
@@ -65,24 +70,27 @@ export class PostsQueryRepository {
         allPosts.map(async (post) => {
           const newestLikes = await this.likeModel
             .find({
-              postId: new ObjectId(post._id),
+              postId: post._id.toString(),
               myStatus: LikeStatusEnum.Like,
             })
             .sort({ addedAt: -1 })
             .limit(3)
             .skip(0)
             .lean();
+
           let myStatus: LikeStatusEnum = LikeStatusEnum.None;
+
           if (userId) {
             const reaction = await this.likeModel
               .findOne(
                 {
-                  postId: new ObjectId(post._id),
-                  userId: new ObjectId(userId),
+                  postId: post._id.toString(),
+                  userId: userId,
                 },
                 { __v: 0 },
               )
               .lean();
+
             myStatus = reaction
               ? (reaction.myStatus as unknown as LikeStatusEnum)
               : LikeStatusEnum.None;

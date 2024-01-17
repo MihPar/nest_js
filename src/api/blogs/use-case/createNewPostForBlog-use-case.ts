@@ -30,7 +30,8 @@ export class CreateNewPostForBlogCase
       command.blogName,
       0, 0
     );
-    const createPost: PostClass = await this.postsRepository.createNewPosts(newPost)
+    const createPost: PostClass | null = await this.postsRepository.createNewPosts(newPost)
+	if(!createPost) return null
 	const post = await this.postsRepository.findPostById(command.blogId)
     // const post = await this.postModel
     //   .findOne({ blogId: new ObjectId(blogId) }, { __v: 0 }) //

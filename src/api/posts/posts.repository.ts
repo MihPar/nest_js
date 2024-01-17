@@ -12,14 +12,14 @@ export class PostsRepository {
   ) {}
 
   async createNewPosts(newPost: PostClass): Promise<PostClass | null> {
-	try {
-		const resultNewPost = await this.postModel.create(newPost);
-		await resultNewPost.save()
-		return newPost;
-	} catch(error) {
-		console.log(error, 'error in create post')
-		return null
-	}
+    try {
+      const resultNewPost = await this.postModel.create(newPost);
+      await resultNewPost.save();
+      return newPost;
+    } catch (error) {
+      console.log(error, 'error in create post');
+      return null;
+    }
   }
 
   async updatePost(
@@ -84,11 +84,13 @@ export class PostsRepository {
   }
 
   async findPostById(blogId: string) {
-	try {
-	const post = await this.postModel.findOne({ blogId: new ObjectId(blogId) }, { __v: 0 }).lean();
-	return post
-	} catch(error) {
-		return null
-	}
+    try {
+      const post = await this.postModel
+        .findOne({ blogId: new ObjectId(blogId) }, { __v: 0 })
+        .lean();
+      return post;
+    } catch (error) {
+      return null;
+    }
   }
 }

@@ -35,6 +35,7 @@ import { CreatePost } from './use-case/createPost-use-case';
 import { Posts } from '../../schema/post.schema';
 import { UpdateOldPost } from './use-case/updateOldPost-use-case';
 import { DeletePostById } from './use-case/deletePostById-use-case';
+import { log } from 'console';
 
 @Controller('posts')
 export class PostController {
@@ -129,7 +130,6 @@ export class PostController {
   @Get()
   @HttpCode(200)
   async getPosts(
-    @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
     @Query()
     query: {
@@ -139,7 +139,6 @@ export class PostController {
       sortDirection: string;
     },
   ) {
-	if(!userId) return null
     const getAllPosts: PaginationType<Posts> =
       await this.postsQueryRepository.findAllPosts(
         (query.pageNumber || '1'),
@@ -159,6 +158,7 @@ export class PostController {
     const findBlog: BlogClass | null = await this.blogsQueryRepository.findRawBlogById(
       inputModelPost.blogId,
     );
+
     if (!findBlog) throw new NotFoundException('Blogs by id not found');
 	const createNewPost: Posts | null = await this.commandBus.execute(new CreatePost(inputModelPost, findBlog.name))
     // const createNewPost: Posts | null = await this.postsService.createPost(
@@ -175,15 +175,14 @@ export class PostController {
   @HttpCode(200)
   async getPostById(
     @Param('id') postId: string,
-    @UserDecorator() user: UserClass,
-    @UserIdDecorator() userId: string | null,
+	@UserIdDecorator() userId: string | null,
   ) {
-	if(!userId) return null
     const getPostById: Posts | null =
       await this.postsQueryRepository.findPostById(postId, userId);
     if (!getPostById) {
-      throw new NotFoundException('Blogs by id not found');
+      throw new NotFoundException('Post by id not found');
     }
+	console.log(getPostById)
     return getPostById;
   }
 

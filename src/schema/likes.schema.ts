@@ -9,7 +9,7 @@ export type LikeDocument = HydratedDocument<LikeClass>;
 export class LikeClass {
 	_id?: mongoose.Types.ObjectId;
   @Prop({required: true})
-  	userId: ObjectId;
+  	userId: string;
   @Prop({required: true})
   	login: string;
   @Prop({required: true})

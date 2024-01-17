@@ -1,8 +1,10 @@
+import { newestLikesType } from './../api/likes/likes.type';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { LikeStatusEnum } from '../api/likes/likes.emun';
-import { LikesInfoModel, newestLikesType } from '../api/likes/likes.type';
+import { LikesInfoModel } from '../api/likes/likes.type';
 import { PostsViewModel } from '../api/posts/posts.type';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { LikeClass } from './likes.schema';
 
 
 export class Posts {
@@ -68,7 +70,7 @@ export class PostClass extends Posts {
   	extendedLikesInfo: LikeInfoClass
 
 	  static getPostsViewModel(post: PostClass, myStatus: LikeStatusEnum,
-		newestLikes: newestLikesType[]): PostsViewModel {
+		newestLikes: LikeClass[]): PostsViewModel {
 		return {
 		  id: post._id.toString(),
 		  title: post.title,
