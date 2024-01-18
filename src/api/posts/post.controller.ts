@@ -1,4 +1,5 @@
 import {
+	BadRequestException,
   Body,
   Controller,
   Delete,
@@ -160,7 +161,7 @@ export class PostController {
       inputModelPost.blogId,
     );
 
-    if (!findBlog) throw new NotFoundException('Blogs by id not found');
+    if (!findBlog) throw new BadRequestException('Blogs by id not found');
 	const createNewPost: Posts | null = await this.commandBus.execute(new CreatePost(inputModelPost, findBlog.name))
     // const createNewPost: Posts | null = await this.postsService.createPost(
     //   inputModelPost.blogId,

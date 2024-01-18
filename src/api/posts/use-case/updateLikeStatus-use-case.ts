@@ -1,4 +1,4 @@
-import { CommandBus, CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { UserClass } from "../../../schema/user.schema";
 import { InputModelLikeStatusClass } from "../../comment/comment.class-pipe";
 import { InputModelClassPostId } from "../posts.class";
