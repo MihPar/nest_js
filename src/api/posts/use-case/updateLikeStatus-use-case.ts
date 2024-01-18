@@ -24,7 +24,7 @@ export class UpdateLikeStatusUseCase implements ICommandHandler<UpdateLikeStatus
 	async execute(command: UpdateLikeStatusCommand): Promise<boolean | void | null> {
 		const userLogin = command.user.accountData.userName;
 		if(!command.userId) return null
-		const userId = command.userId
+		const userId = new ObjectId(command.userId)
 		const findLike = await this.likesRepository.findLikePostByUser(command.dto.postId, userId)
 	if(!findLike) {
 		await this.likesRepository.saveLikeForPost(command.dto.postId, userId, command.status.likeStatus, userLogin)
