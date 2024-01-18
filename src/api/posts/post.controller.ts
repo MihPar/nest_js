@@ -23,7 +23,6 @@ import { PostsQueryRepository } from './postQuery.repository';
 import { BlogsQueryRepository } from '../blogs/blogs.queryReposity';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
 import { InputModelLikeStatusClass } from '../comment/comment.class-pipe';
-import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 import { CheckRefreshTokenForPost } from '../../infrastructure/guards/post/bearer.authForPost';
 import { AuthBasic } from '../../infrastructure/guards/auth/basic.auth';
 import { UserClass } from '../../schema/user.schema';
@@ -49,7 +48,6 @@ export class PostController {
 
   @Put(':postId/like-status')
   @HttpCode(204)
-//   @UseFilters(new HttpExceptaionFilter())
   @UseGuards(CheckRefreshTokenForPost)
   async updateLikeStatus(
 	@Param() dto: InputModelClassPostId, 

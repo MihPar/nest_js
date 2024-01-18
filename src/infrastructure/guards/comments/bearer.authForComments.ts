@@ -17,13 +17,8 @@ import { UsersRepository } from '../../../api/users/user.repository';
 @Injectable()
 export class CheckRefreshTokenForComments implements CanActivate {
   constructor(
-    protected userService: UsersService,
     protected jwtService: JwtService,
-    protected deviceQueryRepository: DeviceQueryRepository,
     protected usersQueryRepository: UsersQueryRepository,
-    protected usersRepository: UsersRepository,
-    @InjectModel(IPCollectionClass.name)
-    private ipCollectionModel: Model<IPCollectionDocument>,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
 	const req: Request = context.switchToHttp().getRequest();

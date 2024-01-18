@@ -75,9 +75,15 @@ import { TerminateAllCurrentSessionCase } from '../api/securityDevices/use-case/
 import { CreateNewUserCase } from '../api/users/use-case/createNewUser-use-case';
 import { DeleteUserByIdCase } from '../api/users/use-case/deleteUserById-use-case';
 import { CreateNewPostForBlogCase } from '../api/blogs/use-case/createNewPostForBlog-use-case';
+import { UpdateDeviceCase } from '../api/securityDevices/use-case/updateDevice-use-case';
+import { RegistrationEmailResendingCase } from '../api/users/use-case/registrationEmailResending-use-case';
+import { LogoutCase } from '../api/securityDevices/use-case/logout-use-case';
+import { UpdateLikestatusCase } from '../api/comment/use-case/updateLikeStatus-use-case';
+import { IsConfirmed } from '../infrastructure/guards/auth/isCodeConfirmed';
+import { IsExistEmailUser } from '../infrastructure/guards/auth/isExixtEmailUser';
 
 const useCase = [RecoveryPasswordUseCase, NewPasswordCase, CreateLoginCase, CreateDeviceCase, RefreshTokenCase,
-	RegistrationConfirmationCase, RegistrationCase, UpdateBlogCase, CreateNewBlogCase, GetUserIdByTokenCase, UpdateCommentByCommentIdCase, DeleteAllPostsCase, DeleteAllBlogsCase, DeleteAllUsersCase, DeleteAllCommentsCase, DeleteAllLikesCase, UpdateLikeStatusUseCase, CreateNewCommentByPostIdCase, CreatePostCase, UpdateOldPostCase, DeletePostByIdCase, TerminateAllCurrentSessionCase, CreateNewUserCase, DeleteUserByIdCase, CreateNewPostForBlogCase]
+	RegistrationConfirmationCase, RegistrationCase, UpdateBlogCase, CreateNewBlogCase, GetUserIdByTokenCase, UpdateCommentByCommentIdCase, DeleteAllPostsCase, DeleteAllBlogsCase, DeleteAllUsersCase, DeleteAllCommentsCase, DeleteAllLikesCase, UpdateLikeStatusUseCase, CreateNewCommentByPostIdCase, CreatePostCase, UpdateOldPostCase, DeletePostByIdCase, TerminateAllCurrentSessionCase, CreateNewUserCase, DeleteUserByIdCase, CreateNewPostForBlogCase, UpdateDeviceCase, RegistrationEmailResendingCase, LogoutCase, UpdateLikestatusCase]
 
 const services = [
   BlogsService,
@@ -99,6 +105,8 @@ const guards = [
   CheckRefreshTokenForGetComments,
   CheckRefreshTokenForPost,
   ForbiddenCalss,
+  IsConfirmed,
+  IsExistEmailUser
 ];
 const reposponse = [
   BlogsQueryRepository,
