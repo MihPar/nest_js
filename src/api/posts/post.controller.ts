@@ -26,7 +26,6 @@ import { InputModelLikeStatusClass } from '../comment/comment.class-pipe';
 import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 import { CheckRefreshTokenForPost } from '../../infrastructure/guards/post/bearer.authForPost';
 import { AuthBasic } from '../../infrastructure/guards/auth/basic.auth';
-import { ObjectId } from 'mongodb';
 import { UserClass } from '../../schema/user.schema';
 import { BlogClass } from '../../schema/blogs.schema';
 import { CommandBus } from '@nestjs/cqrs';
@@ -105,7 +104,7 @@ export class PostController {
 
   @Post(':postId/comments')
   @HttpCode(201)
-  @UseFilters(new HttpExceptionFilter())
+//   @UseFilters(new HttpExceptionFilter())
   @UseGuards(CheckRefreshTokenForPost)
   async createNewCommentByPostId(
 	@Param() dto: InputModelClassPostId, 
