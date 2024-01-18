@@ -68,7 +68,7 @@ export class PostController {
     //   userLogin
     // );
     if (!result) throw new NotFoundException('404')
-	return
+	return result
   }
 
   @Get(':postId/comments')

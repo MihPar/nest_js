@@ -27,7 +27,7 @@ export class CheckRefreshTokenForPost implements CanActivate {
 	let result
 	try {
 		result = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
-	} catch(err) {
+	} catch(error) {
 		return false
 	}
 	
