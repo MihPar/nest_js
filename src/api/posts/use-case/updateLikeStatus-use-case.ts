@@ -6,7 +6,7 @@ import { LikesRepository } from "../../likes/likes.repository";
 import { ObjectId } from "mongodb";
 import { PostsRepository } from "../posts.repository";
 
-export class UpdateLikeStatus {
+export class UpdateLikeStatusCommand {
 	constructor(
 		public status: InputModelLikeStatusClass,
 		public dto: InputModelClassPostId, 
@@ -15,13 +15,13 @@ export class UpdateLikeStatus {
 	) {}
 }
 
-@CommandHandler(UpdateLikeStatus)
-export class UpdateLikeStatusCase implements ICommandHandler<UpdateLikeStatus> {
+@CommandHandler(UpdateLikeStatusCommand)
+export class UpdateLikeStatusUseCase implements ICommandHandler<UpdateLikeStatusCommand> {
 	constructor(
 		protected readonly likesRepository: LikesRepository,
 		protected readonly postsRepository: PostsRepository
 	) {}
-	async execute(command: UpdateLikeStatus): Promise<boolean | void | null> {
+	async execute(command: UpdateLikeStatusCommand): Promise<boolean | void | null> {
 		const userLogin = command.user.accountData.userName;
 		if(!command.userId) return null
 		const userId = new ObjectId(command.userId)

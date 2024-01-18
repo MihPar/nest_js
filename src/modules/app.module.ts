@@ -55,7 +55,6 @@ import { CreateLoginCase } from '../api/users/use-case/createLogin-use-case';
 import { RefreshTokenCase } from '../api/auth/use-case/refreshToken-use-case';
 import { RegistrationConfirmationCase } from '../api/users/use-case/registratinConfirmation-use-case';
 import { RegistrationCase } from '../api/users/use-case/registration-use-case';
-import { UpdateLikestatusCase } from '../api/comment/use-case/updateLikeStatus-use-case';
 import { UpdateBlogCase } from '../api/blogs/use-case/updateBlog-use-case';
 import { CreateNewBlogCase } from '../api/blogs/use-case/createNewBlog-use-case';
 import { GetUserIdByTokenCase } from '../api/auth/use-case/getUserIdByToken-use-case';
@@ -66,7 +65,7 @@ import { DeleteAllBlogsCase } from '../api/blogs/use-case/deletAllBlogs-use-case
 import { DeleteAllUsersCase } from '../api/users/use-case/deleteAllUsers-use-case';
 import { DeleteAllCommentsCase } from '../api/comment/use-case/deleteAllComments-use-case';
 import { DeleteAllLikesCase } from '../api/likes/use-case/deleteAllLikes-use-case';
-import { UpdateLikeStatusCase } from '../api/posts/use-case/updateLikeStatus-use-case';
+import { UpdateLikeStatusUseCase } from '../api/posts/use-case/updateLikeStatus-use-case';
 import { GenerateHashAdapter } from '../api/adapter/generateHashAdapter';
 import { CreateNewCommentByPostIdCase } from '../api/comment/use-case/createNewCommentByPotsId-use-case';
 import { CreatePostCase } from '../api/posts/use-case/createPost-use-case';
@@ -78,7 +77,7 @@ import { DeleteUserByIdCase } from '../api/users/use-case/deleteUserById-use-cas
 import { CreateNewPostForBlogCase } from '../api/blogs/use-case/createNewPostForBlog-use-case';
 
 const useCase = [RecoveryPasswordUseCase, NewPasswordCase, CreateLoginCase, CreateDeviceCase, RefreshTokenCase,
-	RegistrationConfirmationCase, RegistrationCase, UpdateLikestatusCase, UpdateBlogCase, CreateNewBlogCase, GetUserIdByTokenCase, UpdateCommentByCommentIdCase, DeleteAllPostsCase, DeleteAllBlogsCase, DeleteAllUsersCase, DeleteAllCommentsCase, DeleteAllLikesCase, UpdateLikeStatusCase, CreateNewCommentByPostIdCase, CreatePostCase, UpdateOldPostCase, DeletePostByIdCase, TerminateAllCurrentSessionCase, CreateNewUserCase, DeleteUserByIdCase, CreateNewPostForBlogCase]
+	RegistrationConfirmationCase, RegistrationCase, UpdateBlogCase, CreateNewBlogCase, GetUserIdByTokenCase, UpdateCommentByCommentIdCase, DeleteAllPostsCase, DeleteAllBlogsCase, DeleteAllUsersCase, DeleteAllCommentsCase, DeleteAllLikesCase, UpdateLikeStatusUseCase, CreateNewCommentByPostIdCase, CreatePostCase, UpdateOldPostCase, DeletePostByIdCase, TerminateAllCurrentSessionCase, CreateNewUserCase, DeleteUserByIdCase, CreateNewPostForBlogCase]
 
 const services = [
   BlogsService,

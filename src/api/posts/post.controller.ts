@@ -29,12 +29,12 @@ import { ObjectId } from 'mongodb';
 import { UserClass } from '../../schema/user.schema';
 import { BlogClass } from '../../schema/blogs.schema';
 import { CommandBus } from '@nestjs/cqrs';
-import { UpdateLikeStatus } from './use-case/updateLikeStatus-use-case';
 import { CreateNewCommentByPostId } from '../comment/use-case/createNewCommentByPotsId-use-case';
 import { CreatePost } from './use-case/createPost-use-case';
 import { Posts } from '../../schema/post.schema';
 import { UpdateOldPost } from './use-case/updateOldPost-use-case';
 import { DeletePostById } from './use-case/deletePostById-use-case';
+import { UpdateLikeStatusCommand } from './use-case/updateLikeStatus-use-case';
 
 @Controller('posts')
 export class PostController {
@@ -59,8 +59,9 @@ export class PostController {
 	) {
 	if(!userId) return null
     const findPost = await this.postsQueryRepository.findPostById(dto.postId);
+	console.log(findPost, "findPost 62 str")
     if (!findPost) throw new NotFoundException('404')
-	const result = await this.commandBus.execute(new UpdateLikeStatus(status, dto, userId, user))
+	const result = await this.commandBus.execute(new UpdateLikeStatusCommand(status, dto, userId, user))
     // const result = await this.postsService.updateLikeStatus(
     //   status.likeStatus,
     //   dto.postId,
@@ -152,7 +153,7 @@ export class PostController {
   @Post()
   @HttpCode(201)
   @UseGuards(AuthBasic)
-  @UseFilters(new HttpExceptionFilter())
+//   @UseFilters(new HttpExceptionFilter())
   async createPost(@Body() inputModelPost: inputModelPostClass) {
     const findBlog: BlogClass | null = await this.blogsQueryRepository.findRawBlogById(
       inputModelPost.blogId,
@@ -181,14 +182,14 @@ export class PostController {
     if (!getPostById) {
       throw new NotFoundException('Post by id not found');
     }
-	console.log(getPostById)
+	// console.log(getPostById)
     return getPostById;
   }
 
   @Put(':id')
   @HttpCode(204)
   @UseGuards(AuthBasic)
-  @UseFilters(new HttpExceptionFilter())
+//   @UseFilters(new HttpExceptionFilter())
   async updatePostById(
     @Param('id') postId: string,
     @Body() inputModelData: inputModelPostClass,

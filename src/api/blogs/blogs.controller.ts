@@ -55,7 +55,7 @@ export class BlogsController {
   @Post()
   @HttpCode(201)
   @UseGuards(AuthBasic)
-  @UseFilters(new HttpExceptionFilter())
+//   @UseFilters(new HttpExceptionFilter())
   async createBlog(@Body() inputDateModel: bodyBlogsModel) {
 	const createBlog: BlogsViewType = await this.commandBus.execute(new CreateNewBlog(inputDateModel))
     // const createBlog: BlogsViewType = await this.blogsService.createNewBlog(
