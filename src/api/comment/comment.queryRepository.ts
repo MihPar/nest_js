@@ -31,7 +31,7 @@ export class CommentQueryRepository {
       }
       const findLike: Like | null = await this.findLikeCommentByUser(
         commentId,
-        new ObjectId(userId),
+        userId,
       );
       return commentDBToView(commentById, findLike?.myStatus ?? null);
     } catch (e) {
@@ -39,7 +39,7 @@ export class CommentQueryRepository {
     }
   }
 
-  async findLikeCommentByUser(commentId: string, userId: ObjectId) {
+  async findLikeCommentByUser(commentId: string, userId: string) {
     const likeModel: Like | null = await this.likeModel.findOne({
       $and: [{ userId: userId }, { commentId: commentId }],
     });

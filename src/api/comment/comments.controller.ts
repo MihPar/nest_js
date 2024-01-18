@@ -33,7 +33,7 @@ export class CommentsController {
     @Body() status: InputModelLikeStatusClass,
     @Param() id: inputModelCommentId,
     @UserDecorator() user: UserClass,
-    @UserIdDecorator() userId: ObjectId,
+    @UserIdDecorator() userId: string,
   ) {
     const findCommentById: CommentClass | null =
       await this.commentQueryRepository.findCommentByCommentId(id.commentId);

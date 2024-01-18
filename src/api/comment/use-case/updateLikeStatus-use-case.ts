@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { InputModelLikeStatusClass, inputModelCommentId } from "../comment.class-pipe";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { CommentRepository } from "../comment.repository";
