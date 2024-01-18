@@ -59,10 +59,10 @@ export class PostController {
     @UserIdDecorator() userId: string | null,
 	) {
 	if(!userId) return null
-	if(!dto.postId) throw new NotFoundException('400')
+	if(!dto.postId) throw new NotFoundException('404')
     const findPost = await this.postsQueryRepository.findPostById(dto.postId);
 	console.log(findPost, "findPost 62 str")
-    if (!findPost) throw new NotFoundException('400')
+    if (!findPost) throw new NotFoundException('404')
 	const result = await this.commandBus.execute(new UpdateLikeStatusCommand(status, dto, userId, user))
     // const result = await this.postsService.updateLikeStatus(
     //   status.likeStatus,
@@ -70,7 +70,7 @@ export class PostController {
     //   new ObjectId(userId),
     //   userLogin
     // );
-    if (!result) throw new BadRequestException('404')
+    if (!result) throw new NotFoundException('404')
   }
 
   @Get(':postId/comments')

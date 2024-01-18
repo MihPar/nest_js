@@ -28,6 +28,8 @@ export const appSettings = (app: INestApplication): void => {
       },
     }),
   );
-  app.enableCors();
-  app.useGlobalFilters(new HttpExceptionFilter());
+  	app.useGlobalFilters(new HttpExceptionFilter());
+    useContainer(app.select(AppModule), { fallbackOnErrors: true });
+    app.enableCors()
+    app.use(cookieParser())
 }
