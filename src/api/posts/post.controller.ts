@@ -49,16 +49,16 @@ export class PostController {
 
   @Put(':postId/like-status')
   @HttpCode(204)
-  @UseFilters(new HttpExceptionFilter())
+//   @UseFilters(new HttpExceptaionFilter())
   @UseGuards(CheckRefreshTokenForPost)
   async updateLikeStatus(
 	@Param() dto: InputModelClassPostId, 
 	@Body() status: InputModelLikeStatusClass,
-	@UserDecorator() user: UserClass,
+	@UserDecorator() user: UserClass, 
     @UserIdDecorator() userId: string | null,
 	) {
 	if(!userId) return null
-	// if(!dto.postId) throw new NotFoundException('404')
+	console.log(userId, "userId")
     const findPost = await this.postsQueryRepository.findPostById(dto.postId);
 	console.log(findPost, "findPost 62 str")
     if (!findPost) throw new NotFoundException('404')
@@ -70,7 +70,7 @@ export class PostController {
     //   userLogin
     // );
     if (!result) throw new NotFoundException('404')
-	return;
+	return
   }
 
   @Get(':postId/comments')
