@@ -17,12 +17,12 @@ export class CheckRefreshTokenForPost implements CanActivate {
     
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
-	console.log("25", 25)
+	// console.log("25", 25)
 	const req: Request = context.switchToHttp().getRequest();
     if (!req.headers.authorization) throw new UnauthorizedException("401")
 
     const token = req.headers.authorization.split(' ')[1];
-	console.log(token, "token")
+	// console.log(token, "token")
 
 	let result
 	try {
@@ -33,7 +33,7 @@ export class CheckRefreshTokenForPost implements CanActivate {
 	
 	// const result: any = jwt.verify(token, process.env.JWT_SECRET! )
     
-	console.log(result, "userId")
+	// console.log(result, "userId")
 
     if (result) {
       const user = await this.usersQueryRepository.findUserById(result.userId);

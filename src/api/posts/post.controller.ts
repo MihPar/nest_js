@@ -184,7 +184,6 @@ export class PostController {
     if (!getPostById) {
       throw new NotFoundException('Post by id not found');
     }
-	// console.log(getPostById)
     return getPostById;
   }
 
@@ -205,7 +204,7 @@ export class PostController {
     //   inputModelData.blogId,
     // );
     if (!updatePost) throw new NotFoundException('Blogs by id not found 404');
-    return updatePost;
+    return
   }
 
   @Delete(':id')
