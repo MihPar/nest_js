@@ -161,7 +161,7 @@ export class PostController {
       inputModelPost.blogId,
     );
 
-    if (!findBlog) throw new BadRequestException('Blogs by id not found');
+    if (!findBlog) throw new BadRequestException('Blogs by id not found 400');
 	const createNewPost: Posts | null = await this.commandBus.execute(new CreatePost(inputModelPost, findBlog.name))
     // const createNewPost: Posts | null = await this.postsService.createPost(
     //   inputModelPost.blogId,

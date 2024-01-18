@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Put, UseFilters, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Put, UseFilters, UseGuards } from '@nestjs/common';
 import { CommentQueryRepository } from './comment.queryRepository';
 import { CommentViewModel } from './comment.type';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
@@ -68,7 +68,7 @@ export class CommentsController {
 	) {
 	if(!userId) return null
     const isExistComment = await this.commentQueryRepository.findCommentById(id.commentId, userId);
-    if (!isExistComment) throw new NotFoundException("404")
+    if (!isExistComment) throw new BadRequestException("400")
     if (userId.toString() !== isExistComment.commentatorInfo.userId) { throw new ForbiddenException("403")}
 	const updateComment: boolean = await this.commandBus.execute(new UpdateCommentByCommentId(id, dto))
     // const updateComment: boolean =
