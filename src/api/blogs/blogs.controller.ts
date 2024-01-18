@@ -97,7 +97,7 @@ export class BlogsController {
   @HttpCode(201)
   @Post(':blogId/posts')
   @UseGuards(AuthBasic)
-  @UseFilters(new HttpExceptionFilter())
+//   @UseFilters(new HttpExceptionFilter())
   async createPostByBlogId(
     @Param('blogId') blogId: string,
     @Body() inputDataModel: bodyPostsModelClass,

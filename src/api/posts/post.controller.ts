@@ -170,6 +170,7 @@ export class PostController {
     //   inputModelPost.content,
     //   findBlog.name,
     // );
+	if(!createNewPost) throw new BadRequestException('Blogs by id not found 400');
     return createNewPost;
   }
 
