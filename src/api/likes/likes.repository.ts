@@ -15,16 +15,16 @@ export class LikesRepository {
     	return deleteAllLikes.deletedCount === 1;
 	}
 
-	async findLikePostByUser(postId: string, userId: ObjectId): Promise<Like | null> {
+	async findLikePostByUser(postId: string, userId: string): Promise<Like | null> {
 		return this.likeModel.findOne({userId, postId: postId}).lean() //
 	}
 
-	async saveLikeForPost(postId: string, userId: ObjectId, likeStatus: string, userLogin: string): Promise<string> {
+	async saveLikeForPost(postId: string, userId: string, likeStatus: string, userLogin: string): Promise<string> {
 		const saveResult = await this.likeModel.create({postId, userId, myStatus: likeStatus, login: userLogin, addedAt: new Date().toISOString()})
 		return saveResult.id
 	}
 
-	async updateLikeStatusForPost(postId: string, userId: ObjectId, likeStatus: string) {
+	async updateLikeStatusForPost(postId: string, userId: string, likeStatus: string) {
 		const saveResult = await this.likeModel.updateOne({postId, userId}, {myStatus: likeStatus})
 		return saveResult
 	}

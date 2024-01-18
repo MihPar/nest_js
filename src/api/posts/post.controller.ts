@@ -58,7 +58,7 @@ export class PostController {
     @UserIdDecorator() userId: string | null,
 	) {
 	if(!userId) return null
-	if(!dto.postId) throw new NotFoundException('404')
+	// if(!dto.postId) throw new NotFoundException('404')
     const findPost = await this.postsQueryRepository.findPostById(dto.postId);
 	console.log(findPost, "findPost 62 str")
     if (!findPost) throw new NotFoundException('404')
@@ -70,6 +70,7 @@ export class PostController {
     //   userLogin
     // );
     if (!result) throw new NotFoundException('404')
+	return;
   }
 
   @Get(':postId/comments')
