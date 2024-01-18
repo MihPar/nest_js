@@ -26,7 +26,7 @@ export class CheckRefreshTokenForPost implements CanActivate {
 
     // const resultUser = await this.jwtService.verifyAsync(token, {secret: process.env.REFRESH_JWT_SECRET!})
 	
-	const result: any = jwt.verify(token, process.env.REFRESH_JWT_SECRET! )
+	const result: any = jwt.verify(token, process.env.JWT_SECRET! )
     
 	console.log(result, "userId")
 
