@@ -70,7 +70,7 @@ export class PostClass extends Posts {
   	extendedLikesInfo: LikeInfoClass
 
 	  static getPostsViewModel(post: PostClass, myStatus: LikeStatusEnum,
-		newestLikes: LikeClass[]): PostsViewModel {
+		newestLikes: newestLikesType[]): PostsViewModel {
 		return {
 		  id: post._id.toString(),
 		  title: post.title,
