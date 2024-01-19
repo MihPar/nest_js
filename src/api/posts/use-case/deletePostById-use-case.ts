@@ -1,5 +1,6 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { PostsRepository } from "../posts.repository";
+import { ObjectId } from "mongodb";
 
 export class DeletePostById {
 	constructor(
@@ -13,6 +14,7 @@ export class DeletePostByIdCase implements ICommandHandler<DeletePostById> {
 		protected readonly postsRepository: PostsRepository
 	) {}
 	async execute(command: DeletePostById): Promise<boolean> {
+		if(!ObjectId.isValid(command.postId)) return false;
 		return await this.postsRepository.deletedPostById(command.postId);
 	}
 }

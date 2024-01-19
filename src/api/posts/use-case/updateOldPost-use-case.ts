@@ -1,6 +1,7 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { inputModelPostClass } from "../posts.class";
 import { PostsRepository } from "../posts.repository";
+import { ObjectId } from "mongodb";
 
 export class UpdateOldPost {
 	constructor(
@@ -15,6 +16,7 @@ export class UpdateOldPostCase implements ICommandHandler<UpdateOldPost> {
 		protected readonly postsRepository: PostsRepository
 	) {}
 	async execute(command: UpdateOldPost): Promise<boolean> {
+		if(!ObjectId.isValid(command.postId)) return false;
 			const updatPostById: boolean = await this.postsRepository.updatePost(
 				command.postId,
 				command.inputModelData.title,
