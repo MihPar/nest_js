@@ -6,13 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { UsersService } from '../../../api/users/user.service';
-import { Model } from 'mongoose';
-import { IPCollectionClass, IPCollectionDocument } from '../../../schema/IP.Schema';
-import { InjectModel } from '@nestjs/mongoose';
-import { DeviceQueryRepository } from '../../../api/securityDevices/deviceQuery.repository';
 import { UsersQueryRepository } from '../../../api/users/users.queryRepository';
-import { UsersRepository } from '../../../api/users/user.repository';
 
 @Injectable()
 export class CheckRefreshTokenForComments implements CanActivate {
