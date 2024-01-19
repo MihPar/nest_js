@@ -13,10 +13,10 @@ import { PaginationType } from "../../types/pagination.types";
 import { AuthBasic } from "../../infrastructure/guards/auth/basic.auth";
 import { HttpExceptionFilter } from "../../exceptionFilters.ts/exceptionFilter";
 import { UserClass } from "../../schema/user.schema";
-import { CreateNewBlog } from './use-case/createNewBlog-use-case';
+import { CreateNewBlogCommand } from './use-case/createNewBlog-use-case';
 import { UpdateBlog } from './use-case/updateBlog-use-case';
 import { Posts } from '../../schema/post.schema';
-import { CreateNewPostForBlog } from './use-case/createNewPostForBlog-use-case';
+import { CreateNewPostForBlogCommand } from './use-case/createNewPostForBlog-use-case';
 
 @Controller('blogs')
 export class BlogsController {
@@ -57,7 +57,8 @@ export class BlogsController {
   @UseGuards(AuthBasic)
 //   @UseFilters(new HttpExceptionFilter())
   async createBlog(@Body() inputDateModel: bodyBlogsModel) {
-	const createBlog: BlogsViewType = await this.commandBus.execute(new CreateNewBlog(inputDateModel))
+	const command = new CreateNewBlogCommand(inputDateModel)
+	const createBlog: BlogsViewType = await this.commandBus.execute(command)
     // const createBlog: BlogsViewType = await this.blogsService.createNewBlog(
     //   inputDateModel,
     // );
@@ -104,7 +105,8 @@ export class BlogsController {
   ) {
     const findBlog: BlogsViewType | null = await this.blogsQueryRepository.findBlogById(blogId);
     if (!findBlog) throw new NotFoundException('Blogs by id not found 404');
-	const createNewPost: Posts | null = await this.commandBus.execute(new CreateNewPostForBlog( blogId, inputDataModel, findBlog.name))
+	const command = new CreateNewPostForBlogCommand( blogId, inputDataModel, findBlog.name)
+	const createNewPost: Posts | null = await this.commandBus.execute(command)
     // const isCreatePost = await this.postsService.createPost(
     //   blogId,
     //   inputDataModel.title,

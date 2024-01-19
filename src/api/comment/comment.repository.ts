@@ -40,7 +40,7 @@ export class CommentRepository {
 		try {
 		  const deleteComment = await this.commentModel.deleteOne({
 			_id: new ObjectId(commentId),
-		  });
+		  }).exec()
 		  return deleteComment.deletedCount === 1;
 		} catch (err) {
 		  return false; 

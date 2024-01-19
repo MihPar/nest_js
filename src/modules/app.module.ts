@@ -56,7 +56,7 @@ import { RefreshTokenUseCase } from '../api/auth/use-case/refreshToken-use-case'
 import { RegistrationConfirmationUseCase } from '../api/users/use-case/registratinConfirmation-use-case';
 import { RegistrationUseCase } from '../api/users/use-case/registration-use-case';
 import { UpdateBlogCase } from '../api/blogs/use-case/updateBlog-use-case';
-import { CreateNewBlogCase } from '../api/blogs/use-case/createNewBlog-use-case';
+import { CreateNewBlogUseCase } from '../api/blogs/use-case/createNewBlog-use-case';
 import { GetUserIdByTokenUseCase } from '../api/auth/use-case/getUserIdByToken-use-case';
 import { PayloadAdapter } from '../api/adapter/payload.adapter';
 import { UpdateCommentByCommentIdUseCase } from '../api/comment/use-case/updateCommentByCommentId-use-case';
@@ -74,7 +74,7 @@ import { DeletePostByIdCase } from '../api/posts/use-case/deletePostById-use-cas
 import { TerminateAllCurrentSessionCase } from '../api/securityDevices/use-case/terminateAllCurrentSeccion-use-case';
 import { CreateNewUserCase } from '../api/users/use-case/createNewUser-use-case';
 import { DeleteUserByIdCase } from '../api/users/use-case/deleteUserById-use-case';
-import { CreateNewPostForBlogCase } from '../api/blogs/use-case/createNewPostForBlog-use-case';
+import { CreateNewPostForBlogUseCase } from '../api/blogs/use-case/createNewPostForBlog-use-case';
 import { UpdateDeviceUseCase } from '../api/securityDevices/use-case/updateDevice-use-case';
 import { RegistrationEmailResendingUseCase } from '../api/users/use-case/registrationEmailResending-use-case';
 import { LogoutUseCase } from '../api/securityDevices/use-case/logout-use-case';
@@ -91,7 +91,7 @@ const useCase = [
   RegistrationConfirmationUseCase,
   RegistrationUseCase,
   UpdateBlogCase,
-  CreateNewBlogCase,
+  CreateNewBlogUseCase,
   GetUserIdByTokenUseCase,
   UpdateCommentByCommentIdUseCase,
   DeleteAllPostsCase,
@@ -107,7 +107,7 @@ const useCase = [
   TerminateAllCurrentSessionCase,
   CreateNewUserCase,
   DeleteUserByIdCase,
-  CreateNewPostForBlogCase,
+  CreateNewPostForBlogUseCase,
   UpdateDeviceUseCase,
   RegistrationEmailResendingUseCase,
   LogoutUseCase,

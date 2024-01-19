@@ -5,7 +5,7 @@ import { PostsRepository } from '../../posts/posts.repository';
 import { bodyPostsModelClass } from '../../posts/posts.class';
 import { LikesRepository } from '../../likes/likes.repository';
 
-export class CreateNewPostForBlog {
+export class CreateNewPostForBlogCommand {
   constructor(
 	public blogId: string,
     public inputDataModel: bodyPostsModelClass,
@@ -13,15 +13,15 @@ export class CreateNewPostForBlog {
   ) {}
 }
 
-@CommandHandler(CreateNewPostForBlog)
-export class CreateNewPostForBlogCase
-  implements ICommandHandler<CreateNewPostForBlog>
+@CommandHandler(CreateNewPostForBlogCommand)
+export class CreateNewPostForBlogUseCase
+  implements ICommandHandler<CreateNewPostForBlogCommand>
 {
   constructor(
 	protected readonly postsRepository: PostsRepository,
 	protected readonly likesRepository: LikesRepository
   ) {}
-  async execute(command: CreateNewPostForBlog): Promise<PostsViewModel | null> {
+  async execute(command: CreateNewPostForBlogCommand): Promise<PostsViewModel | null> {
     const newPost: PostClass = new PostClass(
       command.inputDataModel.title,
       command.inputDataModel.shortDescription,
