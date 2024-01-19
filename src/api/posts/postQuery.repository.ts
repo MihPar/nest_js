@@ -17,7 +17,8 @@ export class PostsQueryRepository {
   ) {}
 
   async findPostById(id: string, userId?: string | null): Promise<PostsViewModel | null> {
-    const post: PostClass | null = await this.postModel
+    if(!ObjectId.isValid(id)) return null;
+	const post: PostClass | null = await this.postModel
       .findOne({ _id: new ObjectId(id) }, { __v: 0 })
       .lean();
 
