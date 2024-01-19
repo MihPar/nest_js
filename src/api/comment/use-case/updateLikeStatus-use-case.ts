@@ -4,7 +4,7 @@ import { CommentRepository } from "../comment.repository";
 import { LikesRepository } from "../../likes/likes.repository";
 import { ObjectId } from "mongodb";
 
-export class UpdateLikestatus {
+export class UpdateLikestatusCommand {
 	constructor(
 		public status: InputModelLikeStatusClass,
 		public id: inputModelCommentId,
@@ -12,14 +12,14 @@ export class UpdateLikestatus {
 	) {}
 }
 
-@CommandHandler(UpdateLikestatus)
-export class UpdateLikestatusCase implements ICommandHandler<UpdateLikestatus> {
+@CommandHandler(UpdateLikestatusCommand)
+export class UpdateLikestatusUseCase implements ICommandHandler<UpdateLikestatusCommand> {
 	constructor(
 		protected readonly likesRepository: LikesRepository,
 		protected readonly commentRepositoriy: CommentRepository
 
 	) {}
-	async execute(command: UpdateLikestatus): Promise<boolean> {
+	async execute(command: UpdateLikestatusCommand): Promise<boolean> {
 		const findLike = await this.likesRepository.findLikeCommentByUser(command.id.commentId, command.userId)
 	if(!findLike) {
 		await this.likesRepository.saveLikeForComment(command.id.commentId, command.userId, command.status.likeStatus)

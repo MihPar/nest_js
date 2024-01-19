@@ -78,12 +78,12 @@ import { CreateNewPostForBlogCase } from '../api/blogs/use-case/createNewPostFor
 import { UpdateDeviceCase } from '../api/securityDevices/use-case/updateDevice-use-case';
 import { RegistrationEmailResendingCase } from '../api/users/use-case/registrationEmailResending-use-case';
 import { LogoutCase } from '../api/securityDevices/use-case/logout-use-case';
-import { UpdateLikestatusCase } from '../api/comment/use-case/updateLikeStatus-use-case';
+import { UpdateLikestatusUseCase } from '../api/comment/use-case/updateLikeStatus-use-case';
 import { IsConfirmed } from '../infrastructure/guards/auth/isCodeConfirmed';
 import { IsExistEmailUser } from '../infrastructure/guards/auth/isExixtEmailUser';
 
 const useCase = [RecoveryPasswordUseCase, NewPasswordCase, CreateLoginCase, CreateDeviceCase, RefreshTokenCase,
-	RegistrationConfirmationCase, RegistrationCase, UpdateBlogCase, CreateNewBlogCase, GetUserIdByTokenCase, UpdateCommentByCommentIdCase, DeleteAllPostsCase, DeleteAllBlogsCase, DeleteAllUsersCase, DeleteAllCommentsCase, DeleteAllLikesCase, UpdateLikeStatusUseCase, CreateNewCommentByPostIdCase, CreatePostCase, UpdateOldPostCase, DeletePostByIdCase, TerminateAllCurrentSessionCase, CreateNewUserCase, DeleteUserByIdCase, CreateNewPostForBlogCase, UpdateDeviceCase, RegistrationEmailResendingCase, LogoutCase, UpdateLikestatusCase]
+	RegistrationConfirmationCase, RegistrationCase, UpdateBlogCase, CreateNewBlogCase, GetUserIdByTokenCase, UpdateCommentByCommentIdCase, DeleteAllPostsCase, DeleteAllBlogsCase, DeleteAllUsersCase, DeleteAllCommentsCase, DeleteAllLikesCase, UpdateLikeStatusUseCase, CreateNewCommentByPostIdCase, CreatePostCase, UpdateOldPostCase, DeletePostByIdCase, TerminateAllCurrentSessionCase, CreateNewUserCase, DeleteUserByIdCase, CreateNewPostForBlogCase, UpdateDeviceCase, RegistrationEmailResendingCase, LogoutCase, UpdateLikestatusUseCase]
 
 const services = [
   BlogsService,

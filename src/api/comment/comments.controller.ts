@@ -11,7 +11,7 @@ import { CommentService } from './comment.service';
 import { CommentRepository } from './comment.repository';
 import { CheckRefreshTokenForGetComments } from '../../infrastructure/guards/comments/bearer.authGetComment';
 import { UserClass } from '../../schema/user.schema';
-import { UpdateLikestatus } from './use-case/updateLikeStatus-use-case';
+import { UpdateLikestatusCommand } from './use-case/updateLikeStatus-use-case';
 import { CommandBus } from '@nestjs/cqrs';
 import { UpdateCommentByCommentId } from './use-case/updateCommentByCommentId-use-case';
 import { CommentClass } from '../../schema/comment.schema';
@@ -26,7 +26,7 @@ export class CommentsController {
   ) {}
 
   @HttpCode(204)
-  @Put('/:commentId/like-status')
+  @Put(':commentId/like-status')
   @UseGuards(CheckRefreshTokenForComments)
   @UseFilters(new HttpExceptionFilter())
   async updateByCommentIdLikeStatus(
@@ -47,7 +47,8 @@ export class CommentsController {
       findLike?.myStatus ?? null,
     );
 
-	await this.commandBus.execute(new UpdateLikestatus(status, id, userId))
+	const command = new UpdateLikestatusCommand(status, id, userId)
+	await this.commandBus.execute(command)
     // await this.commentService.updateLikeStatus(
     //   status.likeStatus,
     //   id.commentId,
