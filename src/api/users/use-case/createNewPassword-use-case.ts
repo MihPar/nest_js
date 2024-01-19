@@ -5,14 +5,14 @@ import { UsersService } from "../../../api/users/user.service";
 import { UsersRepository } from "../../../api/users/user.repository";
 import { GenerateHashAdapter } from "../../adapter/generateHashAdapter";
 
-export class NewPassword {
+export class NewPasswordCommand {
 	constructor(
 	public inputDataNewPassword: InputModelNewPasswordClass,
 	) {}
 }
 
-@CommandHandler(NewPassword)
-export class NewPasswordCase implements ICommandHandler<NewPassword> {
+@CommandHandler(NewPasswordCommand)
+export class NewPasswordUseCase implements ICommandHandler<NewPasswordCommand> {
 	constructor(
 		protected readonly usersQueryRepository: UsersQueryRepository,
 		protected readonly userSevice: UsersService,
@@ -20,7 +20,7 @@ export class NewPasswordCase implements ICommandHandler<NewPassword> {
 		protected readonly generateHashAdapter: GenerateHashAdapter
 	) {}
 	async execute (
-		command: NewPassword
+		command: NewPasswordCommand
 	  ): Promise<boolean> {
 		const findUserByCode = await this.usersQueryRepository.findUserByCode(
 			command.inputDataNewPassword.recoveryCode

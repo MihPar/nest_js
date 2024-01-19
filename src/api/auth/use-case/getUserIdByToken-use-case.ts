@@ -6,19 +6,19 @@ import { Request } from "express";
 import { ObjectId } from "mongodb";
 import { UserClass } from "../../../schema/user.schema";
 
-export class GetUserIdByToken {
+export class GetUserIdByTokenCommand {
 	constructor(
 		public req: Request
 	) {}
 }
 
-@CommandHandler(GetUserIdByToken)
-export class GetUserIdByTokenCase implements ICommandHandler<GetUserIdByToken> {
+@CommandHandler(GetUserIdByTokenCommand)
+export class GetUserIdByTokenUseCase implements ICommandHandler<GetUserIdByTokenCommand> {
 	constructor(
 		protected readonly jwtService: JwtService,
 		protected readonly usersQueryRepository:  UsersQueryRepository
 	) {}
-	async execute(command: GetUserIdByToken): Promise<UserClass> {
+	async execute(command: GetUserIdByTokenCommand): Promise<UserClass> {
 	const token: string = command.req.headers.authorization!.split(" ")[1];
 	const userId: ObjectId = await this.jwtService.verifyAsync(token);
 	if (!userId) throw new UnauthorizedException('Not authorization 401')

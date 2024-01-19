@@ -3,19 +3,19 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { PayloadAdapter } from "../../../api/adapter/payload.adapter";
 import { DeviceRepository } from "../device.repository";
 
-	export class Logout {
+	export class LogoutCommand {
 		constructor(
 			public refreshToken: string
 		) {}
 	}
 	
-	@CommandHandler(Logout)
-  export class LogoutCase implements ICommandHandler<Logout> {
+	@CommandHandler(LogoutCommand)
+  export class LogoutUseCase implements ICommandHandler<LogoutCommand> {
     constructor(
 		protected readonly payloadAdapter: PayloadAdapter,
 		protected readonly deviceRepository: DeviceRepository
 	) {}
-    async execute(command: Logout): Promise<boolean> {
+    async execute(command: LogoutCommand): Promise<boolean> {
       const payload = await this.payloadAdapter.getPayload(command.refreshToken);
       if (!payload) throw new HttpException( 'Can not be payload', 400)
       const logoutDevice = await this.deviceRepository.logoutDevice(

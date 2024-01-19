@@ -9,19 +9,19 @@ import { EmailManager } from '../../manager/email.manager';
 import { UserClass } from '../../../schema/user.schema';
 import { InputDataReqClass } from '../../auth/auth.class';
 
-export class Registration {
+export class RegistrationCommand {
   constructor(public inputDataReq: InputDataReqClass) {}
 }
 
-@CommandHandler(Registration)
-export class RegistrationCase implements ICommandHandler<Registration> {
+@CommandHandler(RegistrationCommand)
+export class RegistrationUseCase implements ICommandHandler<RegistrationCommand> {
   constructor(
     protected readonly userService: UsersService,
     protected readonly usersRepository: UsersRepository,
     protected readonly emailManager: EmailManager,
 	protected readonly generateHashAdapter: GenerateHashAdapter
   ) {}
-  async execute(command: Registration): Promise<UserViewType | null> {
+  async execute(command: RegistrationCommand): Promise<UserViewType | null> {
     const passwordHash = await this.generateHashAdapter._generateHash(
       command.inputDataReq.password,
     );

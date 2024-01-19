@@ -10,23 +10,22 @@ import { Ratelimits } from '../../infrastructure/guards/auth/rateLimits';
 import { CheckRefreshToken } from '../../infrastructure/guards/auth/checkRefreshToken';
 import { RatelimitsRegistration } from '../../infrastructure/guards/auth/rateLimitsRegistration';
 import { CheckRefreshTokenFindMe } from '../../infrastructure/guards/auth/checkFindMe';
-import { ObjectId } from 'mongodb';
 import { UserClass } from '../../schema/user.schema';
 import { CheckLoginOrEmail } from '../../infrastructure/guards/auth/checkEmailOrLogin';
 import { IsExistEmailUser } from '../../infrastructure/guards/auth/isExixtEmailUser';
 import { IsConfirmed } from '../../infrastructure/guards/auth/isCodeConfirmed';
 import { CommandBus } from '@nestjs/cqrs';
 import { RecoveryPasswordCommand } from '../users/use-case/recoveryPassowrd-use-case';
-import { NewPassword } from '../users/use-case/createNewPassword-use-case';
-import { CreateLogin } from '../users/use-case/createLogin-use-case';
-import { CreateDevice } from '../../api/securityDevices/use-case/createDevice-use-case';
-import { RefreshToken } from './use-case/refreshToken-use-case';
-import { UpdateDevice } from '../../api/securityDevices/use-case/updateDevice-use-case';
-import { RegistrationConfirmation } from '../users/use-case/registratinConfirmation-use-case';
-import { Registration } from '../../api/users/use-case/registration-use-case';
-import { RegistrationEmailResending } from '../../api/users/use-case/registrationEmailResending-use-case';
-import { Logout } from '../../api/securityDevices/use-case/logout-use-case';
-import { GetUserIdByToken } from './use-case/getUserIdByToken-use-case';
+import { NewPasswordCommand } from '../users/use-case/createNewPassword-use-case';
+import { CreateLoginCommand } from '../users/use-case/createLogin-use-case';
+import { CreateDeviceCommand } from '../../api/securityDevices/use-case/createDevice-use-case';
+import { RefreshTokenCommand } from './use-case/refreshToken-use-case';
+import { UpdateDeviceCommand } from '../../api/securityDevices/use-case/updateDevice-use-case';
+import { RegistrationConfirmationCommand } from '../users/use-case/registratinConfirmation-use-case';
+import { RegistrationCommand } from '../../api/users/use-case/registration-use-case';
+import { RegistrationEmailResendingCommand } from '../../api/users/use-case/registrationEmailResending-use-case';
+import { LogoutCommand } from '../../api/securityDevices/use-case/logout-use-case';
+import { GetUserIdByTokenCommand } from './use-case/getUserIdByToken-use-case';
 
 @Controller('auth')
 export class AuthController {
@@ -43,14 +42,16 @@ export class AuthController {
 	@UseGuards(Ratelimits)
 	async createPasswordRecovery(@Body() emailInputData: emailInputDataClass) {
 		// const passwordRecovery = await this.usersService.recoveryPassword(emailInputData.email);
-		const passwordRecovery = await this.commandBus.execute(new RecoveryPasswordCommand(emailInputData.email))
+		const command = new RecoveryPasswordCommand(emailInputData.email)
+		const passwordRecovery = await this.commandBus.execute(command)
 	}
 
 	@HttpCode(204)
 	@Post("new-password")
 	@UseGuards(Ratelimits)
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
-		const resultUpdatePassword = await this.commandBus.execute(new NewPassword(inputDataNewPassword))
+		const command = new NewPasswordCommand(inputDataNewPassword)
+		const resultUpdatePassword = await this.commandBus.execute(command)
 		// const resultUpdatePassword = await this.usersService.setNewPassword(
 		// 	inputDataNewPassword.newPassword,
 		// 	inputDataNewPassword.recoveryCode
@@ -65,7 +66,7 @@ export class AuthController {
 		@Ip() IP: string, 
 		@Headers() Headers: any,
 		@Res({passthrough: true}) res: Response) {
-			const command = new CreateLogin(inutDataModel)
+			const command = new CreateLoginCommand(inutDataModel)
 		// const user: UserClass |null = await this.userService.setNewPassword(inutDataModel)
 		const user: UserClass | null = await this.commandBus.execute(command);
 		  if (!user) {
@@ -76,7 +77,8 @@ export class AuthController {
 			// const title = Headers["user-agent"] || "unknown";
 			// const refreshToken = await this.jwtService.signAsync({userId: user._id.toString(), deviceId: randomUUID()}, {expiresIn: "600s"});
 			// await this.commandBus.execute(new CreateDevice(ip, title, refreshToken))
-			const tokens = await this.commandBus.execute(new CreateDevice(IP, Headers, user))
+			const command = new CreateDeviceCommand(IP, Headers, user)
+			const tokens = await this.commandBus.execute(command)
 
 			if(!tokens){
 				throw new UnauthorizedException("Not authorization 401")
@@ -99,7 +101,8 @@ export class AuthController {
 		@UserIdDecorator() userId: string | null,
 	) {
 		const refreshToken: string = req.cookies.refreshToken;
-		const result: { newToken: string, newRefreshToken: string} = await this.commandBus.execute(new RefreshToken(refreshToken, user))
+		const command = new RefreshTokenCommand(refreshToken, user)
+		const result: { newToken: string, newRefreshToken: string} = await this.commandBus.execute(command)
 		// const refreshToken: string = req.cookies.refreshToken;
 		// // const userId = req.user._id.toString();
 		// const payload = await this.jwtService.decode(refreshToken);
@@ -112,7 +115,8 @@ export class AuthController {
 		//   	payload.deviceId
 		// );
 		if(!userId) return null
-		await this.commandBus.execute(new UpdateDevice(userId, result.newRefreshToken))
+		const command2 = new UpdateDeviceCommand(userId, result.newRefreshToken)
+		await this.commandBus.execute(command2)
 		// const updateDeviceUser = await this.deviceService.updateDevice(
 		//   userId,
 		//   result.newRefreshToken
@@ -128,7 +132,8 @@ export class AuthController {
 	@Post("registration-confirmation")
 	@UseGuards(RatelimitsRegistration, IsConfirmed)
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
-		await this.commandBus.execute(new RegistrationConfirmation(inputDateRegConfirm))
+		const command = new RegistrationConfirmationCommand(inputDateRegConfirm)
+		await this.commandBus.execute(command)
 		// await this.usersService.findUserByConfirmationCode(inputDateRegConfirm.code);
 	}
 
@@ -136,7 +141,8 @@ export class AuthController {
 	@HttpCode(204)
 	@UseGuards(RatelimitsRegistration, CheckLoginOrEmail)
 	async creteRegistration(@Req() req: Request, @Body() inputDataReq: InputDataReqClass) {
-		const user = await this.commandBus.execute(new Registration(inputDataReq))
+		const command = new RegistrationCommand(inputDataReq)
+		const user = await this.commandBus.execute(command)
 		// const user = await this.usersService.createNewUser(
 		// 	inputDataReq.login,
 		// 	inputDataReq.password,
@@ -152,7 +158,8 @@ export class AuthController {
 	// @UseGuards(ThrottlerGuard)
 	//@Throttle({default: {ttl: 10000, limit: 5}})
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
-		const confirmUser = await this.commandBus.execute(new RegistrationEmailResending(inputDateReqEmailResending))
+		const command = new RegistrationEmailResendingCommand(inputDateReqEmailResending)
+		const confirmUser = await this.commandBus.execute(command)
 		// const confirmUser = await this.usersService.confirmEmailResendCode(
 		// 	inputDateReqEmailResending.email
 		//   );
@@ -165,7 +172,8 @@ export class AuthController {
 	@UseGuards(CheckRefreshToken)
 	async cretaeLogout(@Req() req: Request) {
 		const refreshToken: string = req.cookies.refreshToken;
-		const isDeleteDevice = await this.commandBus.execute(new Logout(refreshToken))
+		const command = new LogoutCommand(refreshToken)
+		const isDeleteDevice = await this.commandBus.execute(command)
 		// const isDeleteDevice = await this.deviceService.logoutDevice(refreshToken);
 		if (!isDeleteDevice) throw new UnauthorizedException('Not authorization 401')
 	}
@@ -175,7 +183,8 @@ export class AuthController {
 	@UseGuards(CheckRefreshTokenFindMe)
 	async findMe(@Req() req: Request) {
 		if (!req.headers.authorization) throw new UnauthorizedException('Not authorization 401')
-		const findUserById: UserClass = await this.commandBus.execute(new GetUserIdByToken(req))
+		const command = new GetUserIdByTokenCommand(req)
+		const findUserById: UserClass = await this.commandBus.execute(command)
 		//   const token: string = req.headers.authorization!.split(" ")[1];
 		//   const userId: ObjectId = await this.jwtService.verifyAsync(token);
 		//   if (!userId) throw new UnauthorizedException('Not authorization 401')

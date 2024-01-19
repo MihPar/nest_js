@@ -7,20 +7,20 @@ import { emailInputDataClass } from '../../auth/auth.class';
 import { EmailManager } from '../../manager/email.manager';
 import { UserClass } from '../../../schema/user.schema';
 
-export class RegistrationEmailResending {
+export class RegistrationEmailResendingCommand {
   constructor(public inputDateReqEmailResending: emailInputDataClass) {}
 }
 
-@CommandHandler(RegistrationEmailResending)
-export class RegistrationEmailResendingCase
-  implements ICommandHandler<RegistrationEmailResending>
+@CommandHandler(RegistrationEmailResendingCommand)
+export class RegistrationEmailResendingUseCase
+  implements ICommandHandler<RegistrationEmailResendingCommand>
 {
   constructor(
     protected readonly usersQueryRepository: UsersQueryRepository,
     protected readonly usersRepository: UsersRepository,
     protected readonly emailManager: EmailManager,
   ) {}
-  async execute(command: RegistrationEmailResending): Promise<any> {
+  async execute(command: RegistrationEmailResendingCommand): Promise<any> {
     const user: UserClass | null =
       await this.usersQueryRepository.findByLoginOrEmail(
         command.inputDateReqEmailResending.email,

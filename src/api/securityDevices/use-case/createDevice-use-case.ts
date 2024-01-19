@@ -7,7 +7,7 @@ import { randomUUID } from 'crypto';
 import { PayloadAdapter } from '../../../api/adapter/payload.adapter';
 import { DeviceClass } from '../../../schema/device.schema';
 
-export class CreateDevice {
+export class CreateDeviceCommand {
 	constructor(
 		// public ip: string, 
 		public IP: string, 
@@ -17,15 +17,15 @@ export class CreateDevice {
 	) {}
 }
 
-@CommandHandler(CreateDevice)
-export class CreateDeviceCase implements ICommandHandler<CreateDevice> {
+@CommandHandler(CreateDeviceCommand)
+export class CreateDeviceUseCase implements ICommandHandler<CreateDeviceCommand> {
 	constructor(
 		protected readonly deviceRepository: DeviceRepository,
 		protected readonly jwtService: JwtService,
 		protected readonly payloadAdapter: PayloadAdapter
 	) {}
 	async execute(
-		command: CreateDevice
+		command: CreateDeviceCommand
 	  ): Promise<{refreshToken: string, token: string} | null> {
 		const deviceId  = randomUUID()
 		const token: string = await this.jwtService.signAsync({userId: command.user._id.toString()}, {expiresIn: "60s"});

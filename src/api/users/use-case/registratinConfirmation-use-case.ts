@@ -3,19 +3,19 @@ import { InputDateReqConfirmClass } from '../../auth/auth.class';
 import { UsersQueryRepository } from '../users.queryRepository';
 import { UsersRepository } from '../user.repository';
 
-export class RegistrationConfirmation {
+export class RegistrationConfirmationCommand {
   constructor(public inputDateRegConfirm: InputDateReqConfirmClass) {}
 }
 
-@CommandHandler(RegistrationConfirmation)
-export class RegistrationConfirmationCase
-  implements ICommandHandler<RegistrationConfirmation>
+@CommandHandler(RegistrationConfirmationCommand)
+export class RegistrationConfirmationUseCase
+  implements ICommandHandler<RegistrationConfirmationCommand>
 {
   constructor(
     protected readonly usersQueryRepository: UsersQueryRepository,
     protected readonly usersRepository: UsersRepository,
   ) {}
-  async execute(command: RegistrationConfirmation) {
+  async execute(command: RegistrationConfirmationCommand) {
     const user = await this.usersQueryRepository.findUserByConfirmation(
       command.inputDateRegConfirm.code,
     );

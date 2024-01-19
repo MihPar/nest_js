@@ -49,15 +49,15 @@ import { CheckLoginOrEmail } from '../infrastructure/guards/auth/checkEmailOrLog
 import { PassportModule } from '@nestjs/passport';
 import { CqrsModule } from '@nestjs/cqrs';
 import { RecoveryPasswordUseCase } from '../api/users/use-case/recoveryPassowrd-use-case';
-import { NewPasswordCase } from '../api/users/use-case/createNewPassword-use-case';
-import { CreateDeviceCase } from '../api/securityDevices/use-case/createDevice-use-case';
-import { CreateLoginCase } from '../api/users/use-case/createLogin-use-case';
-import { RefreshTokenCase } from '../api/auth/use-case/refreshToken-use-case';
-import { RegistrationConfirmationCase } from '../api/users/use-case/registratinConfirmation-use-case';
-import { RegistrationCase } from '../api/users/use-case/registration-use-case';
+import { NewPasswordUseCase } from '../api/users/use-case/createNewPassword-use-case';
+import { CreateDeviceUseCase } from '../api/securityDevices/use-case/createDevice-use-case';
+import { CreateLoginUseCase } from '../api/users/use-case/createLogin-use-case';
+import { RefreshTokenUseCase } from '../api/auth/use-case/refreshToken-use-case';
+import { RegistrationConfirmationUseCase } from '../api/users/use-case/registratinConfirmation-use-case';
+import { RegistrationUseCase } from '../api/users/use-case/registration-use-case';
 import { UpdateBlogCase } from '../api/blogs/use-case/updateBlog-use-case';
 import { CreateNewBlogCase } from '../api/blogs/use-case/createNewBlog-use-case';
-import { GetUserIdByTokenCase } from '../api/auth/use-case/getUserIdByToken-use-case';
+import { GetUserIdByTokenUseCase } from '../api/auth/use-case/getUserIdByToken-use-case';
 import { PayloadAdapter } from '../api/adapter/payload.adapter';
 import { UpdateCommentByCommentIdUseCase } from '../api/comment/use-case/updateCommentByCommentId-use-case';
 import { DeleteAllPostsCase } from '../api/posts/use-case/deleteAllPosts-use-case';
@@ -75,15 +75,44 @@ import { TerminateAllCurrentSessionCase } from '../api/securityDevices/use-case/
 import { CreateNewUserCase } from '../api/users/use-case/createNewUser-use-case';
 import { DeleteUserByIdCase } from '../api/users/use-case/deleteUserById-use-case';
 import { CreateNewPostForBlogCase } from '../api/blogs/use-case/createNewPostForBlog-use-case';
-import { UpdateDeviceCase } from '../api/securityDevices/use-case/updateDevice-use-case';
-import { RegistrationEmailResendingCase } from '../api/users/use-case/registrationEmailResending-use-case';
-import { LogoutCase } from '../api/securityDevices/use-case/logout-use-case';
+import { UpdateDeviceUseCase } from '../api/securityDevices/use-case/updateDevice-use-case';
+import { RegistrationEmailResendingUseCase } from '../api/users/use-case/registrationEmailResending-use-case';
+import { LogoutUseCase } from '../api/securityDevices/use-case/logout-use-case';
 import { UpdateLikestatusUseCase } from '../api/comment/use-case/updateLikeStatus-use-case';
 import { IsConfirmed } from '../infrastructure/guards/auth/isCodeConfirmed';
 import { IsExistEmailUser } from '../infrastructure/guards/auth/isExixtEmailUser';
 
-const useCase = [RecoveryPasswordUseCase, NewPasswordCase, CreateLoginCase, CreateDeviceCase, RefreshTokenCase,
-	RegistrationConfirmationCase, RegistrationCase, UpdateBlogCase, CreateNewBlogCase, GetUserIdByTokenCase, UpdateCommentByCommentIdUseCase, DeleteAllPostsCase, DeleteAllBlogsCase, DeleteAllUsersCase, DeleteAllCommentsCase, DeleteAllLikesCase, UpdateLikeStatusUseCase, CreateNewCommentByPostIdCase, CreatePostCase, UpdateOldPostCase, DeletePostByIdCase, TerminateAllCurrentSessionCase, CreateNewUserCase, DeleteUserByIdCase, CreateNewPostForBlogCase, UpdateDeviceCase, RegistrationEmailResendingCase, LogoutCase, UpdateLikestatusUseCase]
+const useCase = [
+  RecoveryPasswordUseCase,
+  NewPasswordUseCase,
+  CreateLoginUseCase,
+  CreateDeviceUseCase,
+  RefreshTokenUseCase,
+  RegistrationConfirmationUseCase,
+  RegistrationUseCase,
+  UpdateBlogCase,
+  CreateNewBlogCase,
+  GetUserIdByTokenUseCase,
+  UpdateCommentByCommentIdUseCase,
+  DeleteAllPostsCase,
+  DeleteAllBlogsCase,
+  DeleteAllUsersCase,
+  DeleteAllCommentsCase,
+  DeleteAllLikesCase,
+  UpdateLikeStatusUseCase,
+  CreateNewCommentByPostIdCase,
+  CreatePostCase,
+  UpdateOldPostCase,
+  DeletePostByIdCase,
+  TerminateAllCurrentSessionCase,
+  CreateNewUserCase,
+  DeleteUserByIdCase,
+  CreateNewPostForBlogCase,
+  UpdateDeviceUseCase,
+  RegistrationEmailResendingUseCase,
+  LogoutUseCase,
+  UpdateLikestatusUseCase,
+];
 
 const services = [
   BlogsService,

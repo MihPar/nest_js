@@ -5,19 +5,19 @@ import { DeviceRepository } from '../device.repository';
 import { HttpException } from '@nestjs/common';
 import { PayloadAdapter } from '../../../api/adapter/payload.adapter';
 
-export class UpdateDevice {
+export class UpdateDeviceCommand {
   constructor(public userId: string | null, public newRefreshToken: string) {}
 }
 
-@CommandHandler(UpdateDevice)
-export class UpdateDeviceCase implements ICommandHandler<UpdateDevice> {
+@CommandHandler(UpdateDeviceCommand)
+export class UpdateDeviceUseCase implements ICommandHandler<UpdateDeviceCommand> {
   constructor(
     protected jwtService: JwtService,
     protected deviceService: DeviceService,
     protected deviceRepository: DeviceRepository,
     protected readonly payloadAdapter: PayloadAdapter,
   ) {}
-  async execute(command: UpdateDevice) {
+  async execute(command: UpdateDeviceCommand) {
     const payload = await this.payloadAdapter.getPayload(
       command.newRefreshToken,
     );
