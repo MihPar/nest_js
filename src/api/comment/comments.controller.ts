@@ -5,7 +5,6 @@ import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/d
 import { InputModelContent, InputModelLikeStatusClass, inputModelCommentId, inputModelId } from './comment.class-pipe';
 import { CheckRefreshTokenForComments } from '../../infrastructure/guards/comments/bearer.authForComments';
 import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
-import { ObjectId } from 'mongodb';
 import { commentDBToView } from '../../utils/helpers';
 import { CommentService } from './comment.service';
 import { CommentRepository } from './comment.repository';
@@ -13,7 +12,7 @@ import { CheckRefreshTokenForGetComments } from '../../infrastructure/guards/com
 import { UserClass } from '../../schema/user.schema';
 import { UpdateLikestatusCommand } from './use-case/updateLikeStatus-use-case';
 import { CommandBus } from '@nestjs/cqrs';
-import { UpdateCommentByCommentId } from './use-case/updateCommentByCommentId-use-case';
+import { UpdateCommentByCommentIdCommand } from './use-case/updateCommentByCommentId-use-case';
 import { CommentClass } from '../../schema/comment.schema';
 
 @Controller('comments')
@@ -60,7 +59,7 @@ export class CommentsController {
   @Put(':commentId')
   @HttpCode(204)
   @UseGuards(CheckRefreshTokenForComments)
-  @UseFilters(new HttpExceptionFilter())
+//   @UseFilters(new HttpExceptionFilter())
   async updataCommetById(
 	@Param() id: inputModelCommentId, 
 	@Body() dto: InputModelContent,
@@ -71,7 +70,8 @@ export class CommentsController {
     const isExistComment = await this.commentQueryRepository.findCommentById(id.commentId, userId);
     if (!isExistComment) throw new BadRequestException("400")
     if (userId.toString() !== isExistComment.commentatorInfo.userId) { throw new ForbiddenException("403")}
-	const updateComment: boolean = await this.commandBus.execute(new UpdateCommentByCommentId(id, dto))
+	const command = new UpdateCommentByCommentIdCommand(id, dto)
+	const updateComment: boolean = await this.commandBus.execute(command)
     // const updateComment: boolean =
     //   await this.commentService.updateCommentByCommentId(id.commentId, dto.content);
     if (!updateComment) throw new NotFoundException('404');

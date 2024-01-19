@@ -2,7 +2,6 @@ import { InputModelLikeStatusClass, inputModelCommentId } from "../comment.class
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { CommentRepository } from "../comment.repository";
 import { LikesRepository } from "../../likes/likes.repository";
-import { ObjectId } from "mongodb";
 
 export class UpdateLikestatusCommand {
 	constructor(

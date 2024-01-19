@@ -2,19 +2,19 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs"
 import { InputModelContent, inputModelCommentId } from "../comment.class-pipe"
 import { CommentRepository } from "../comment.repository";
 
-export class UpdateCommentByCommentId {
+export class UpdateCommentByCommentIdCommand {
 	constructor(
 		public id: inputModelCommentId, 
 		public dto: InputModelContent,
 	) {}
 }
 
-@CommandHandler(UpdateCommentByCommentId)
-export class UpdateCommentByCommentIdCase implements ICommandHandler<UpdateCommentByCommentId> {
+@CommandHandler(UpdateCommentByCommentIdCommand)
+export class UpdateCommentByCommentIdUseCase implements ICommandHandler<UpdateCommentByCommentIdCommand> {
 	constructor(
 		protected readonly commentRepository: CommentRepository
 	) {}
-	async execute(command: UpdateCommentByCommentId): Promise<boolean> {
+	async execute(command: UpdateCommentByCommentIdCommand): Promise<boolean> {
 		const updateCommentId = await this.commentRepository.updateComment(
 			command.id.commentId,
 			command.dto.content

@@ -21,7 +21,8 @@ export class CommentQueryRepository {
     commentId: string,
     userId: string,
   ): Promise<CommentViewModel | null> {
-	console.log(userId)
+	// console.log(userId)
+	if(!ObjectId.isValid(commentId)) return null
     try {
       const commentById: CommentClass | null = await this.commentModel.findOne({
         _id: new ObjectId(commentId),
@@ -91,6 +92,7 @@ export class CommentQueryRepository {
   }
 
   async findCommentByCommentId(commentId: string, userId?: ObjectId | null) {
+	if(!ObjectId.isValid(commentId)) return null
     const commentById: CommentClass | null = await this.commentModel.findOne({
       _id: new ObjectId(commentId),
     });
