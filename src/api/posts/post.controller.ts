@@ -125,6 +125,7 @@ export class PostController {
     //     user.accountData.userName
     //   );
     if (!createNewCommentByPostId) throw new NotFoundException('Blogs by id not found 404')
+	return createNewCommentByPostId
   }
 
   @Get()
