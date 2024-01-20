@@ -71,6 +71,7 @@ const allowedValues = ['Like', 'Dislike', 'None']
   }
 
   export class inputModelCommentId {
+	@IsMongoId()
 	commentId: string
   }
 

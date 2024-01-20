@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { PaginationType } from '../../types/pagination.types';
 import { CommentViewModel, CommentViewType } from '../comment/comment.type';
-import { InputModelContentePostClass, inputModelPostClass } from './posts.class';
+import { InputModelClassPostId, InputModelContentePostClass, inputModelPostClass } from './posts.class';
 import { CommentService } from '../comment/comment.service';
 import { PostsService } from './posts.service';
 import { CommentQueryRepository } from '../comment/comment.queryRepository';
@@ -200,10 +200,10 @@ export class PostController {
   @UseGuards(AuthBasic)
 //   @UseFilters(new HttpExceptionFilter())
   async updatePostById(
-    @Param('id') postId: string, 
+    @Param() dto: InputModelClassPostId, 
     @Body() inputModelData: inputModelPostClass,
   ) {
-	const command = new UpdateOldPostCommand(postId, inputModelData)
+	const command = new UpdateOldPostCommand(dto.postId, inputModelData)
 	const updatePost: boolean = await this.commandBus.execute(command)
     // const updatePost: boolean = await this.postsService.updateOldPost(
     //   postId,

@@ -4,7 +4,7 @@ import { CommentRepository } from "../comment.repository";
 
 export class UpdateCommentByCommentIdCommand {
 	constructor(
-		public id: inputModelCommentId, 
+		public commentId: string, 
 		public dto: InputModelContent,
 	) {}
 }
@@ -16,7 +16,7 @@ export class UpdateCommentByCommentIdUseCase implements ICommandHandler<UpdateCo
 	) {}
 	async execute(command: UpdateCommentByCommentIdCommand): Promise<boolean> {
 		const updateCommentId = await this.commentRepository.updateComment(
-			command.id.commentId,
+			command.commentId,
 			command.dto.content
 		  );
 		  return updateCommentId;

@@ -1,10 +1,9 @@
-import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Put, UseFilters, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Put, UseGuards } from '@nestjs/common';
 import { CommentQueryRepository } from './comment.queryRepository';
 import { CommentViewModel } from './comment.type';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
 import { InputModelContent, InputModelLikeStatusClass, inputModelCommentId, inputModelId } from './comment.class-pipe';
 import { CheckRefreshTokenForComments } from '../../infrastructure/guards/comments/bearer.authForComments';
-import { HttpExceptionFilter } from '../../exceptionFilters.ts/exceptionFilter';
 import { commentDBToView } from '../../utils/helpers';
 import { CommentService } from './comment.service';
 import { CommentRepository } from './comment.repository';
@@ -70,7 +69,7 @@ export class CommentsController {
     const isExistComment = await this.commentQueryRepository.findCommentById(id.commentId, userId);
     if (!isExistComment) throw new BadRequestException("400")
     if (userId.toString() !== isExistComment.commentatorInfo.userId) { throw new ForbiddenException("403")}
-	const command = new UpdateCommentByCommentIdCommand(id, dto)
+	const command = new UpdateCommentByCommentIdCommand(id.commentId, dto)
 	const updateComment: boolean = await this.commandBus.execute(command)
     // const updateComment: boolean =
     //   await this.commentService.updateCommentByCommentId(id.commentId, dto.content);
