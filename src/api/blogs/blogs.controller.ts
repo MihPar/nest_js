@@ -137,7 +137,8 @@ export class BlogsController {
     @Param('id') id: string,
     @Body() inputDateMode: bodyBlogsModel,
   ) {
-	const isUpdateBlog = await this.commandBus.execute(new UpdateBlogCommand(id, inputDateMode))
+	const command = new UpdateBlogCommand(id, inputDateMode)
+	const isUpdateBlog = await this.commandBus.execute(command)
     // const isUpdateBlog: boolean = await this.blogsService.updateBlog(
     //   id,
     //   inputDateMode.name,

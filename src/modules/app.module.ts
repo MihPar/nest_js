@@ -55,7 +55,7 @@ import { CreateLoginUseCase } from '../api/users/use-case/createLogin-use-case';
 import { RefreshTokenUseCase } from '../api/auth/use-case/refreshToken-use-case';
 import { RegistrationConfirmationUseCase } from '../api/users/use-case/registratinConfirmation-use-case';
 import { RegistrationUseCase } from '../api/users/use-case/registration-use-case';
-import { UpdateBlogCommand } from '../api/blogs/use-case/updateBlog-use-case';
+import { UpdateBlogCommand, UpdateBlogUseCase } from '../api/blogs/use-case/updateBlog-use-case';
 import { CreateNewBlogUseCase } from '../api/blogs/use-case/createNewBlog-use-case';
 import { GetUserIdByTokenUseCase } from '../api/auth/use-case/getUserIdByToken-use-case';
 import { PayloadAdapter } from '../api/adapter/payload.adapter';
@@ -83,6 +83,7 @@ import { IsConfirmed } from '../infrastructure/guards/auth/isCodeConfirmed';
 import { IsExistEmailUser } from '../infrastructure/guards/auth/isExixtEmailUser';
 
 const useCase = [
+  UpdateBlogUseCase,
   RecoveryPasswordUseCase,
   NewPasswordUseCase,
   CreateLoginUseCase,
