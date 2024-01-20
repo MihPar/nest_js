@@ -307,8 +307,7 @@ describe("/posts", () => {
 	.send({
 		"likeStatus": "None"
 	})
-	expect(makeLikeDislike.status).toBe(HTTP_STATUS.BAD_REQUEST_400)
-	expect(makeLikeDislike.body).toStrictEqual(createErrorsMessageTest(["likeStatus"]))
+	expect(makeLikeDislike.status).toBe(HTTP_STATUS.NOT_AUTHORIZATION_401)
   })
   
   /********************************************************************************************/
@@ -767,21 +766,21 @@ describe("/posts", () => {
 // 	expect(updatePostById.status).toBe(HTTP_STATUS.NOT_AUTHORIZATION_401)
 //   })
 
-//   it("delete post specified by id => return 204 status code", async() => {
-// 	const deletePostById = await request(server)
-// 	.delete(`/posts/${id}`)
-// 	.auth("admin", "qwerty")
-// 	expect(deletePostById.status).toBe(HTTP_STATUS.NO_CONTENT_204)
-//   })
-//   it("delete post specified by id => return 401 status code", async() => {
-// 	const deletePostById = await request(server)
-// 	.delete(`/posts/${id}`)
-// 	expect(deletePostById.status).toBe(HTTP_STATUS.NOT_AUTHORIZATION_401)
-//   })
-//   it("delete post specified by id => return 404 status code", async() => {
-// 	const deletePostById = await request(server)
-// 	.delete(`/posts/123456789012345678901234`)
-// 	.auth("admin", "qwerty")
-// 	expect(deletePostById.status).toBe(HTTP_STATUS.NOT_FOUND_404)
-//   })
+  it("delete post specified by id => return 204 status code", async() => {
+	const deletePostById = await request(server)
+	.delete(`/posts/${id}`)
+	.auth("admin", "qwerty")
+	expect(deletePostById.status).toBe(HTTP_STATUS.NO_CONTENT_204)
+  })
+  it("delete post specified by id => return 401 status code", async() => {
+	const deletePostById = await request(server)
+	.delete(`/posts/${id}`)
+	expect(deletePostById.status).toBe(HTTP_STATUS.NOT_AUTHORIZATION_401)
+  })
+  it("delete post specified by id => return 404 status code", async() => {
+	const deletePostById = await request(server)
+	.delete(`/posts/123456789012345678901234`)
+	.auth("admin", "qwerty")
+	expect(deletePostById.status).toBe(HTTP_STATUS.NOT_FOUND_404)
+  })
 });

@@ -65,7 +65,7 @@ export class BlogsController {
     return createBlog;
   }
   
-  @HttpCode(201)
+  @HttpCode(200)
   @Get(':blogId/posts')
   async getPostsByBlogId(
     @Param() dto: inputModelClass,
@@ -98,7 +98,6 @@ export class BlogsController {
   @HttpCode(201)
   @Post(':blogId/posts')
   @UseGuards(AuthBasic)
-//   @UseFilters(new HttpExceptionFilter())
   async createPostByBlogId(
     @Param() dto: inputModelClass,
     @Body() inputDataModel: bodyPostsModelClass,
