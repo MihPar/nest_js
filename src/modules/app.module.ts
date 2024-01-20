@@ -67,7 +67,7 @@ import { DeleteAllCommentsUseCase } from '../api/comment/use-case/deleteAllComme
 import { DeleteAllLikesUseCase } from '../api/likes/use-case/deleteAllLikes-use-case';
 import { UpdateLikeStatusUseCase } from '../api/posts/use-case/updateLikeStatus-use-case';
 import { GenerateHashAdapter } from '../api/adapter/generateHashAdapter';
-import { CreateNewCommentByPostIdUseCase } from '../api/comment/use-case/createNewCommentByPotsId-use-case';
+import { CreateNewCommentByPostIdCommnad, CreateNewCommentByPostIdUseCase } from '../api/comment/use-case/createNewCommentByPotsId-use-case';
 import { CreatePostUseCase } from '../api/posts/use-case/createPost-use-case';
 import { UpdateOldPostUseCase } from '../api/posts/use-case/updateOldPost-use-case';
 import { DeletePostByIdUseCase } from '../api/posts/use-case/deletePostById-use-case';
@@ -102,6 +102,7 @@ const useCase = [
   DeleteAllLikesUseCase,
   UpdateLikeStatusUseCase,
   CreateNewCommentByPostIdUseCase,
+  CreateNewCommentByPostIdCommnad,
   CreatePostUseCase,
   UpdateOldPostUseCase,
   DeletePostByIdUseCase,
@@ -184,7 +185,6 @@ const manager = [EmailManager];
     BlogsController,
     DeleteAllDataController,
     SecurityDeviceController,
-    // AppController,
 	AuthController
   ],
   providers: [

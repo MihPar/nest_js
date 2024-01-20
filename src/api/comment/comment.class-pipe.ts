@@ -1,5 +1,5 @@
 import { Transform, TransformFnParams } from "class-transformer";
-import { IsNotEmpty, IsString, Length, Matches } from "class-validator";
+import { IsMongoId, IsNotEmpty, IsString, Length, Matches } from "class-validator";
 import { applyDecorators } from "@nestjs/common";
 
 // export class Comment {
@@ -81,5 +81,6 @@ const allowedValues = ['Like', 'Dislike', 'None']
   }
 
   export class inputModelId {
+	@IsMongoId()
 	id: string
   }

@@ -112,13 +112,17 @@ export class PostController {
   	@UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null
 	) {
+	// console.log("dto: ", dto)
     const post: Posts | null = await this.postsQueryRepository.findPostById(dto.postId)
+	// console.log("post", post)
 
     if (!post) throw new NotFoundException('Blogs by id not found 404')
-
+		// console.log("userId: ", userId)
 	if(!userId) return null
 	const command = new CreateNewCommentByPostIdCommnad(dto, inputModelContent, user, userId)
 	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(command)
+
+	// console.log("createNewCommentByPostId: ", createNewCommentByPostId)
     // const createNewCommentByPostId: CommentViewModel | null =
     //   await this.commentService.createNewCommentByPostId(
     //     dto.postId,
@@ -158,6 +162,7 @@ export class PostController {
   @UseGuards(AuthBasic)
 //   @UseFilters(new HttpExceptionFilter())
   async createPost(@Body() inputModelPost: inputModelPostClass) {
+	// console.log("inputModelPost: ", inputModelPost)
     const findBlog: BlogClass | null = await this.blogsQueryRepository.findRawBlogById(
       inputModelPost.blogId,
     );

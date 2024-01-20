@@ -4,6 +4,7 @@ import { PostClass } from '../../../schema/post.schema';
 import { PostsRepository } from '../../posts/posts.repository';
 import { bodyPostsModelClass } from '../../posts/posts.class';
 import { LikesRepository } from '../../likes/likes.repository';
+import { inputModelClass } from '../blogs.class';
 
 export class CreateNewPostForBlogCommand {
   constructor(

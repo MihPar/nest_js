@@ -1,11 +1,6 @@
-import { ObjectId } from "mongodb";
-import { LikeStatusEnum } from "../likes/likes.emun";
-import { LikesInfoModel, newestLikesType } from "../likes/likes.type";
-import { PostsViewModel } from "./posts.type";
 import { Transform, TransformFnParams } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
-import { IsNotEmpty, IsString, Length } from "class-validator";
-import mongoose from "mongoose";
+import { IsMongoId, IsNotEmpty, IsString, Length } from "class-validator";
 
 // export class Posts {
 // 	public createdAt: string;
@@ -78,44 +73,47 @@ import mongoose from "mongoose";
 // 	}
 //   }
 
-const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
+// const Trim = () => Transform(({value}: TransformFnParams) => {
+// 	// console.log(value, "value trim")
+// 	return value?.trim()
+// })
 
-function IsOptional() {
-	return applyDecorators(Trim(), IsString(), IsNotEmpty())
-}
+export const IsCustomString = () => applyDecorators(IsString(), IsNotEmpty())
+
 
   export class bodyPostsModelClass {
-	@IsOptional()
+	@IsCustomString()
 	@Length(0, 30, {message: "length is incorrect"})
 	title: string
-	@IsOptional()
+	@IsCustomString()
 	@Length(0, 100, {message: "length is incorrect"})
 	shortDescription: string
-	@IsOptional()
+	@IsCustomString()
 	@Length(0, 1000, {message: "length is incorrect"})
 	content: string
 }
 
 export class inputModelPostClass {
-	@IsOptional()
-	@Length(0, 30, {message: "length is incorrect"})
+	@IsCustomString()
+	@Length(1, 30, {message: "length is incorrect"})
 	title: string
-	@IsOptional()
-	@Length(0, 100, {message: "length is incorrect"})
+	@IsCustomString()
+	@Length(1, 100, {message: "length is incorrect"})
 	shortDescription: string
-	@IsOptional()
-	@Length(0, 1000, {message: "length is incorrect"})
+	@IsCustomString()
+	@Length(1, 1000, {message: "length is incorrect"})
 	content: string
-	@IsOptional()
+	@IsCustomString()
 	blogId: string
   }
 
   export class InputModelClassPostId {
+	@IsMongoId()
 	postId: string
   }
 
   export class InputModelContentePostClass {
-	@IsOptional()
+	@IsCustomString()
 	@Length(20, 300, {message: "Content should be lenght from 20 to 300 symbols"})
 	content: string
   }

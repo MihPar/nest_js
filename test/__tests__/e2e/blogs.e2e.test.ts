@@ -9,11 +9,6 @@ import { UserViewType } from '../../../src/api/users/user.type';
 import { PostsViewModel } from '../../../src/api/posts/posts.type';
 dotenv.config();
 
-// const app = initApp();
-
-// const mongoURI = process.env.MONGO_URL || "mongodb://0.0.0.0:27017";
-// let dbName = process.env.mongoDBName || "mongoose-example";
-
 export function createErrorsMessageTest(fields: string[]) {
   const errorsMessages: any = [];
   for (const field of fields) {

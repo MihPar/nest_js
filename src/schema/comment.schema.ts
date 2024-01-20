@@ -31,7 +31,7 @@ export class ComentatorInfoClass {
 
 export const ComentatorInfoSchema = SchemaFactory.createForClass(ComentatorInfoClass)
 
-@Schema({ _id: false, versionKey: false })
+@Schema({ versionKey: false })
 export class CommentClass extends Comment {
 	constructor(
 	  content: string,

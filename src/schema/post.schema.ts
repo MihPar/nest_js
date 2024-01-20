@@ -29,7 +29,6 @@ export type PostDocument = HydratedDocument<PostClass>;
 
 @Schema({ _id: false, versionKey: false })
 export class LikeInfoClass {
-		// _id?: mongoose.Types.ObjectId;
 	@Prop({required: true,})
 		likesCount: number
 	@Prop({required: true,})

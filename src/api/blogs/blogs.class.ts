@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsString, IsUrl, Length } from "class-validator";
+import { IsMongoId, IsNotEmpty, IsString, IsUrl, Length } from "class-validator";
 import { Transform, TransformFnParams } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
 
 const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
 
 function IsOptional() {
-	return applyDecorators(Trim(), IsString(), IsNotEmpty())
+	return applyDecorators(IsString(), Trim(), IsNotEmpty())
 }
 
   export class bodyBlogsModel {
@@ -19,4 +19,9 @@ function IsOptional() {
 	@IsOptional()
 	@IsUrl()
     websiteUrl: string
+}
+
+export class inputModelClass {
+	@IsMongoId()
+	blogId: string
 }
