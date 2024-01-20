@@ -81,6 +81,7 @@ import { LogoutUseCase } from '../api/securityDevices/use-case/logout-use-case';
 import { UpdateLikestatusUseCase } from '../api/comment/use-case/updateLikeStatus-use-case';
 import { IsConfirmed } from '../infrastructure/guards/auth/isCodeConfirmed';
 import { IsExistEmailUser } from '../infrastructure/guards/auth/isExixtEmailUser';
+import { IsBlogExistConstraint } from '../infrastructure/guards/post/pipe/blogIsExistDecorator';
 
 const useCase = [
   UpdateBlogUseCase,
@@ -152,6 +153,7 @@ const reposponse = [
   UsersRepository,
   UsersQueryRepository,
 ];
+const pipe = [IsBlogExistConstraint]
 const adapter = [EmailAdapter, PayloadAdapter, GenerateHashAdapter];
 const manager = [EmailManager];
 
@@ -188,7 +190,7 @@ const manager = [EmailManager];
 	AuthController
   ],
   providers: [
-  ...services, ...guards, ...reposponse, ...adapter, ...manager, ...useCase],
+  ...services, ...guards, ...reposponse, ...adapter, ...manager, ...useCase, ...pipe],
 })
 export class AppModule {}
 

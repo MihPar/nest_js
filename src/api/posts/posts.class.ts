@@ -1,7 +1,7 @@
 import { Transform, TransformFnParams } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
 import { IsMongoId, IsNotEmpty, IsString, Length, MaxLength } from "class-validator";
-import { IsBlogExist } from "../../infrastructure/decorator/blogIsExistDecorator";
+import { IsBlogExist } from "../../infrastructure/guards/post/pipe/blogIsExistDecorator";
 
 // export class Posts {
 // 	public createdAt: string;

@@ -6,7 +6,7 @@ import {
     ValidatorConstraintInterface,
     ValidationArguments,
 } from 'class-validator';
-import { BlogsQueryRepository } from '../../api/blogs/blogs.queryReposity';
+import { BlogsQueryRepository } from '../../../../api/blogs/blogs.queryReposity';
 
 @Injectable()
 @ValidatorConstraint({ async: true })
@@ -18,8 +18,6 @@ export class IsBlogExistConstraint implements ValidatorConstraintInterface {
         const blog = await this.blogsQueryRepository.findRawBlogById(blogId)
        console.log(blog)
        return !!blog;
-
-
     }
 }
 

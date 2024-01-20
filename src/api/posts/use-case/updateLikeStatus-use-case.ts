@@ -3,7 +3,6 @@ import { UserClass } from "../../../schema/user.schema";
 import { InputModelLikeStatusClass } from "../../comment/comment.class-pipe";
 import { InputModelClassPostId } from "../posts.class";
 import { LikesRepository } from "../../likes/likes.repository";
-import { ObjectId } from "mongodb";
 import { PostsRepository } from "../posts.repository";
 
 export class UpdateLikeStatusCommand {
