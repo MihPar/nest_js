@@ -9,7 +9,7 @@ import { NotFoundException } from "@nestjs/common";
 
 export class CreateNewCommentByPostIdCommnad {
   constructor(
-    public dto: InputModelClassPostId,
+    public postId: string,
     public inputModelContent: InputModelContentePostClass,
     public user: UserClass,
     public userId: string | null,
@@ -26,7 +26,7 @@ export class CreateNewCommentByPostIdUseCase implements ICommandHandler<CreateNe
 			const userLogin = command.user.accountData.userName;
 			if(!command.userId) return null
 			const userId = command.userId
-			const newComment: CommentClass = new CommentClass(command.inputModelContent.content, command.dto.postId, {userId, userLogin}) 
+			const newComment: CommentClass = new CommentClass(command.inputModelContent.content, command.postId, {userId, userLogin}) 
 			const createNewCommentawait: CommentClass | null = await this.commentRepository.createNewCommentPostId(newComment);
 			if(!createNewCommentawait) throw new NotFoundException("404")
 			return createNewCommentawait.getNewComment(LikeStatusEnum.None)

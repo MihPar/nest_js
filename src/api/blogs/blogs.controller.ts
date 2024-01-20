@@ -4,7 +4,7 @@ import { BlogsQueryRepository } from "./blogs.queryReposity";
 import { bodyBlogsModel, inputModelClass } from "./blogs.class";
 import { BlogsViewType } from "./blogs.type";
 import { BlogsService } from "./blogs.service";
-import { InputModelClassPostId, bodyPostsModelClass } from "../posts/posts.class";
+import { bodyPostsModelClass } from "../posts/posts.class";
 import { PostsService } from "../posts/posts.service";
 import { BlogsRepository } from "./blogs.repository";
 import { PostsQueryRepository } from "../posts/postQuery.repository";
@@ -68,7 +68,7 @@ export class BlogsController {
   @HttpCode(200)
   @Get(':blogId/posts')
   async getPostsByBlogId(
-    @Param() dto: inputModelClass,
+    @Param('id') blogId: string,
 	@UserDecorator() user: UserClass,
 	@UserIdDecorator() userId: string | null,
     @Query()
@@ -80,7 +80,7 @@ export class BlogsController {
     },
   ) {
 	if(!userId) return null
-    const blog = await this.blogsQueryRepository.findBlogById(dto.blogId);
+    const blog = await this.blogsQueryRepository.findBlogById(blogId);
     if (!blog) throw new NotFoundException('Blogs by id not found');
     const getPosts: PaginationType<Posts> =
       await this.postsQueryRepository.findPostsByBlogsId(
@@ -88,7 +88,7 @@ export class BlogsController {
         query.pageSize || '10',
         query.sortBy || 'createdAt',
         query.sortDirection || 'desc',
-        dto.blogId,
+        blogId,
 		userId
       );
     if (!getPosts) throw new NotFoundException('Blogs by id not found');
@@ -100,12 +100,12 @@ export class BlogsController {
   @UseGuards(AuthBasic)
 //   @UseFilters(new HttpExceptionFilter())
   async createPostByBlogId(
-    @Param() dto: inputModelClass,
+    @Param('id') blogId: string,
     @Body() inputDataModel: bodyPostsModelClass,
   ) {
-    const findBlog: BlogsViewType | null = await this.blogsQueryRepository.findBlogById(dto.blogId);
+    const findBlog: BlogsViewType | null = await this.blogsQueryRepository.findBlogById(blogId);
     if (!findBlog) throw new NotFoundException('Blogs by id not found 404');
-	const command = new CreateNewPostForBlogCommand( dto.blogId, inputDataModel, findBlog.name)
+	const command = new CreateNewPostForBlogCommand( blogId, inputDataModel, findBlog.name)
 	const createNewPost: Posts | null = await this.commandBus.execute(command)
     // const isCreatePost = await this.postsService.createPost(
     //   blogId,
@@ -134,10 +134,10 @@ export class BlogsController {
   @UseGuards(AuthBasic)
   @UseFilters(new HttpExceptionFilter())
   async updateBlogsById(
-    @Param() dto: inputModelClass,
+    @Param('id') blogId: string,
     @Body() inputDateMode: bodyBlogsModel,
   ) {
-	const command = new UpdateBlogCommand(dto.blogId, inputDateMode)
+	const command = new UpdateBlogCommand(blogId, inputDateMode)
 	const isUpdateBlog = await this.commandBus.execute(command)
     // const isUpdateBlog: boolean = await this.blogsService.updateBlog(
     //   id,
