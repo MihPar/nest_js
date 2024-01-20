@@ -82,13 +82,15 @@ export const IsCustomString = () => applyDecorators(IsString(), Trim(), IsNotEmp
 
   export class bodyPostsModelClass {
 	@IsCustomString()
-	@Length(0, 30, {message: "length is incorrect"})
+	@MaxLength(30)
 	title: string
+
 	@IsCustomString()
-	@Length(0, 100, {message: "length is incorrect"})
+	@MaxLength(100)
 	shortDescription: string
+	
 	@IsCustomString()
-	@Length(0, 1000, {message: "length is incorrect"})
+	@MaxLength(1000)
 	content: string
 }
 
