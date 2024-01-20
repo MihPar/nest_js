@@ -16,14 +16,14 @@ export class PostsQueryRepository {
     @InjectModel(LikeClass.name) private likeModel: Model<LikeDocument>,
   ) {}
 
-  async findPostById(id: string, userId?: string | null): Promise<PostsViewModel | null> {
-    if(!ObjectId.isValid(id)) return null;
+  async findPostById(postId: string, userId?: string | null): Promise<PostsViewModel | null> {
+    if(!ObjectId.isValid(postId)) return null;
 	const post: PostClass | null = await this.postModel
-      .findOne({ _id: new ObjectId(id) }, { __v: 0 })
+      .findOne({ _id: new ObjectId(postId) }, { __v: 0 })
       .lean();
 
     const newestLikes = await this.likeModel
-      .find({ postId: id, myStatus: LikeStatusEnum.Like })
+      .find({ postId: postId, myStatus: LikeStatusEnum.Like })
       .sort({ addedAt: -1 })
       .limit(3)
       .skip(0)
@@ -33,7 +33,7 @@ export class PostsQueryRepository {
 
     if (userId) {
       const reaction = await this.likeModel.findOne({
-        postId: id,
+        postId: postId,
         userId,
       });
       myStatus = reaction

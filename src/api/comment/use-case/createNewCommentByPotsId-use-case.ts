@@ -6,6 +6,7 @@ import { ObjectId } from "mongodb";
 import { CommentRepository } from "../comment.repository";
 import { LikeStatusEnum } from "../../likes/likes.emun";
 import { CommentClass } from "../../../schema/comment.schema";
+import { NotFoundException } from "@nestjs/common";
 
 export class CreateNewCommentByPostIdCommnad {
   constructor(
@@ -26,7 +27,8 @@ export class CreateNewCommentByPostIdUseCase implements ICommandHandler<CreateNe
 			if(!command.userId) return null
 			const userId = command.userId
 			const newComment: CommentClass = new CommentClass(command.inputModelContent.content, command.dto.postId, {userId, userLogin}) 
-			const createNewCommentawait: CommentClass = await this.commentRepository.createNewCommentPostId(newComment);
+			const createNewCommentawait: CommentClass | null = await this.commentRepository.createNewCommentPostId(newComment);
+			if(!createNewCommentawait) throw new NotFoundException("404")
 			return createNewCommentawait.getNewComment(LikeStatusEnum.None)
 	}
 }

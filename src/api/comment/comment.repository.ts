@@ -47,8 +47,15 @@ export class CommentRepository {
 		}
 	  }
 
-	  async createNewCommentPostId(newComment: CommentClass): Promise<CommentClass> {
-		await this.commentModel.create(newComment);
-		return newComment
+	  async createNewCommentPostId(newComment: CommentClass): Promise<CommentClass | null> {
+		try {
+			const saveComment = await this.commentModel.create(newComment);
+			await saveComment.save()
+			return newComment
+		} catch (error) {
+			console.log(error, 'error in create post');
+			return null;
+		  }
+		
 	  }
 }
