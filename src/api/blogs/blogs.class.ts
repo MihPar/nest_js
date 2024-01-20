@@ -15,9 +15,9 @@ function IsOptional() {
 	@Length(1, 500)
 	@IsOptional()
     description: string
-	@Length(1, 100)
-	@IsOptional()
 	@IsUrl()
+	@IsOptional()
+	@Length(1, 100)
     websiteUrl: string
 }
 

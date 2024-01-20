@@ -216,6 +216,8 @@ describe("/posts", () => {
           "My profession is a programmer, I work in javascript and I work for back end developer",
       });
 
+	  console.log('postId1: ', postId1)
+
     expect(createCommentPostByPostId.status).toBe(HTTP_STATUS.CREATED_201);
     expect(createCommentPostByPostId.body).toEqual({
       id: expect.any(String),
