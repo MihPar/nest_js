@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { PaginationType } from "../../types/pagination.types";
 import { ObjectId } from "mongodb";
 import { BlogClass, BlogDocument } from "../../schema/blogs.schema";
-import { Model } from "mongoose";
+import mongoose, { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { BlogsViewType } from "./blogs.type";
 
@@ -42,7 +42,7 @@ export class BlogsQueryRepository {
 	  }
 
 	async findBlogById(blogId: string, userId?: string): Promise<BlogsViewType | null> {
-		const blog: BlogClass | null =  await this.blogModel.findOne({ _id: new ObjectId(blogId) }, {__v: 0}).lean();
+		const blog: BlogClass | null =  await this.blogModel.findOne({ _id: new Object(blogId)}, {__v: 0}).lean();
 		return blog ? BlogClass.getBlogsViewModel(blog) : null;
 	  }
 }

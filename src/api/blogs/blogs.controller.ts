@@ -121,10 +121,10 @@ export class BlogsController {
   @Get(':id')
   @HttpCode(200)
   async getBlogsById(
-    @Param() dto: inputModelClass,
+    @Param('id') blogId: string,
   ): Promise<BlogsViewType | null> {
     const blogById: BlogsViewType | null =
-      await this.blogsQueryRepository.findBlogById(dto.blogId);
+      await this.blogsQueryRepository.findBlogById(blogId);
     if (!blogById) throw new NotFoundException('Blogs by id not found 404');
     return blogById;
   }
