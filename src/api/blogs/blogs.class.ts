@@ -4,19 +4,19 @@ import { applyDecorators } from "@nestjs/common";
 
 // const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
 
-function IsOptional() {
+function IsCustomString() {
 	return applyDecorators(IsString(), IsNotEmpty())
 }
 
   export class bodyBlogsModel {
-	@IsOptional()
+	@IsCustomString()
 	@MaxLength(15)
 	name: string
 	@MaxLength(500)
-	@IsOptional()
+	@IsCustomString()
     description: string
 	@IsUrl()
-	@IsOptional()
+	@IsCustomString()
 	@MaxLength(100)
     websiteUrl: string
 }
