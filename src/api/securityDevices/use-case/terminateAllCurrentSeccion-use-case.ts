@@ -3,20 +3,20 @@ import { DeviceQueryRepository } from "../deviceQuery.repository";
 import { HttpException } from "@nestjs/common";
 import { DeviceRepository } from "../device.repository";
 
-export class TerminateAllCurrentSession {
+export class TerminateAllCurrentSessionCommand {
 	constructor(
 		public userId: string | null,
 		public deviceId: string
 	) {}
 }
 
-@CommandHandler(TerminateAllCurrentSession)
-export class TerminateAllCurrentSessionCase implements ICommandHandler<TerminateAllCurrentSession> {
+@CommandHandler(TerminateAllCurrentSessionCommand)
+export class TerminateAllCurrentSessionUseCase implements ICommandHandler<TerminateAllCurrentSessionCommand> {
 	constructor(
 		protected readonly deviceQueryRepository: DeviceQueryRepository,
 		protected readonly deviceRepository: DeviceRepository
 	) {}
-	async execute(command: TerminateAllCurrentSession): Promise<any> {
+	async execute(command: TerminateAllCurrentSessionCommand): Promise<any> {
 		if(!command.userId) throw new HttpException('Bad request', 400)
 			const findSession = await this.deviceQueryRepository.getAllDevicesUser(
 				command.userId,

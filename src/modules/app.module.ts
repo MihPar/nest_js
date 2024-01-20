@@ -55,7 +55,7 @@ import { CreateLoginUseCase } from '../api/users/use-case/createLogin-use-case';
 import { RefreshTokenUseCase } from '../api/auth/use-case/refreshToken-use-case';
 import { RegistrationConfirmationUseCase } from '../api/users/use-case/registratinConfirmation-use-case';
 import { RegistrationUseCase } from '../api/users/use-case/registration-use-case';
-import { UpdateBlogCase } from '../api/blogs/use-case/updateBlog-use-case';
+import { UpdateBlogCommand } from '../api/blogs/use-case/updateBlog-use-case';
 import { CreateNewBlogUseCase } from '../api/blogs/use-case/createNewBlog-use-case';
 import { GetUserIdByTokenUseCase } from '../api/auth/use-case/getUserIdByToken-use-case';
 import { PayloadAdapter } from '../api/adapter/payload.adapter';
@@ -71,7 +71,7 @@ import { CreateNewCommentByPostIdUseCase } from '../api/comment/use-case/createN
 import { CreatePostUseCase } from '../api/posts/use-case/createPost-use-case';
 import { UpdateOldPostUseCase } from '../api/posts/use-case/updateOldPost-use-case';
 import { DeletePostByIdUseCase } from '../api/posts/use-case/deletePostById-use-case';
-import { TerminateAllCurrentSessionCase } from '../api/securityDevices/use-case/terminateAllCurrentSeccion-use-case';
+import { TerminateAllCurrentSessionUseCase } from '../api/securityDevices/use-case/terminateAllCurrentSeccion-use-case';
 import { CreateNewUserUseCase } from '../api/users/use-case/createNewUser-use-case';
 import { DeleteUserByIdUseCase } from '../api/users/use-case/deleteUserById-use-case';
 import { CreateNewPostForBlogUseCase } from '../api/blogs/use-case/createNewPostForBlog-use-case';
@@ -90,7 +90,7 @@ const useCase = [
   RefreshTokenUseCase,
   RegistrationConfirmationUseCase,
   RegistrationUseCase,
-  UpdateBlogCase,
+  UpdateBlogCommand,
   CreateNewBlogUseCase,
   GetUserIdByTokenUseCase,
   UpdateCommentByCommentIdUseCase,
@@ -104,7 +104,7 @@ const useCase = [
   CreatePostUseCase,
   UpdateOldPostUseCase,
   DeletePostByIdUseCase,
-  TerminateAllCurrentSessionCase,
+  TerminateAllCurrentSessionUseCase,
   CreateNewUserUseCase,
   DeleteUserByIdUseCase,
   CreateNewPostForBlogUseCase,

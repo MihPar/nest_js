@@ -14,7 +14,7 @@ import { AuthBasic } from "../../infrastructure/guards/auth/basic.auth";
 import { HttpExceptionFilter } from "../../exceptionFilters.ts/exceptionFilter";
 import { UserClass } from "../../schema/user.schema";
 import { CreateNewBlogCommand } from './use-case/createNewBlog-use-case';
-import { UpdateBlog } from './use-case/updateBlog-use-case';
+import { UpdateBlogCommand } from './use-case/updateBlog-use-case';
 import { Posts } from '../../schema/post.schema';
 import { CreateNewPostForBlogCommand } from './use-case/createNewPostForBlog-use-case';
 
@@ -137,7 +137,7 @@ export class BlogsController {
     @Param('id') id: string,
     @Body() inputDateMode: bodyBlogsModel,
   ) {
-	const isUpdateBlog = await this.commandBus.execute(new UpdateBlog(id, inputDateMode))
+	const isUpdateBlog = await this.commandBus.execute(new UpdateBlogCommand(id, inputDateMode))
     // const isUpdateBlog: boolean = await this.blogsService.updateBlog(
     //   id,
     //   inputDateMode.name,

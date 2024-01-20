@@ -9,7 +9,7 @@ import { CheckRefreshToken } from "../../infrastructure/guards/auth/checkRefresh
 import { ForbiddenCalss } from "../../infrastructure/guards/securityDevice.ts/forbidden";
 import { UserClass } from "../../schema/user.schema";
 import { CommandBus } from "@nestjs/cqrs";
-import { TerminateAllCurrentSession } from "./use-case/terminateAllCurrentSeccion-use-case";
+import { TerminateAllCurrentSessionCommand } from "./use-case/terminateAllCurrentSeccion-use-case";
 import { PayloadAdapter } from "../adapter/payload.adapter";
 
 @Controller('security')
@@ -46,8 +46,9 @@ export class SecurityDeviceController {
     if (!payload) throw new UnauthorizedException('401');
     if (!/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(payload.deviceId))
       throw new NotFoundException('404');
+	const command = new TerminateAllCurrentSessionCommand(userId, payload.deviceId)
 	  const findAllCurrentDevices =
-      await this.commandBus.execute(new TerminateAllCurrentSession(userId, payload.deviceId))
+      await this.commandBus.execute(command)
     // const findAllCurrentDevices =
     //   await this.deviceService.terminateAllCurrentSessions(
     //     userId,
