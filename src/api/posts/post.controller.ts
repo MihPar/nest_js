@@ -50,17 +50,17 @@ export class PostController {
   @HttpCode(204)
   @UseGuards(CheckRefreshTokenForPost)
   async updateLikeStatus(
-	@Param('id') postId: string, 
+	@Param() dto: InputModelClassPostId, 
 	@Body() status: InputModelLikeStatusClass,
 	@UserDecorator() user: UserClass, 
     @UserIdDecorator() userId: string | null,
 	) {
 	if(!userId) return null
-	// console.log(userId, "userId")
-    const findPost = await this.postsQueryRepository.findPostById(postId);
+	console.log(userId, "userId")
+    const findPost = await this.postsQueryRepository.findPostById(dto.postId);
 	// console.log(findPost, "findPost 62 str")
     if (!findPost) throw new NotFoundException('404')
-	const commnad = new UpdateLikeStatusCommand(status, postId, userId, user)
+	const commnad = new UpdateLikeStatusCommand(status, dto.postId, userId, user)
 	const result = await this.commandBus.execute(commnad)
     // const result = await this.postsService.updateLikeStatus(
     //   status.likeStatus,
@@ -75,7 +75,7 @@ export class PostController {
   @Get(':postId/comments')
   @HttpCode(200)
   async getCommentByPostId(
-    @Param('id') postId: string, 
+    @Param() dto: InputModelClassPostId, 
     @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
     @Query()
@@ -87,11 +87,11 @@ export class PostController {
     },
   ) {
 	if(!userId) return null
-    const isExistPots = await this.postsQueryRepository.findPostById(postId);
+    const isExistPots = await this.postsQueryRepository.findPostById(dto.postId);
     if (!isExistPots) throw new NotFoundException('Blogs by id not found');
     const commentByPostsId: PaginationType<CommentViewType> | null =
       await this.commentQueryRepository.findCommentByPostId(
-        postId,
+        dto.postId,
         (query.pageNumber || '1'),
         (query.pageSize || '10'),
         (query.sortBy || 'createdAt'),
@@ -107,19 +107,19 @@ export class PostController {
 //   @UseFilters(new HttpExceptionFilter())
   @UseGuards(CheckRefreshTokenForPost)
   async createNewCommentByPostId(
-	@Param('id') postId: string, 
+	@Param() dto: InputModelClassPostId, 
 	@Body() inputModelContent: InputModelContentePostClass,
   	@UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null
 	) {
 	// console.log("dto: ", dto)
-    const post: Posts | null = await this.postsQueryRepository.findPostById(postId)
+    const post: Posts | null = await this.postsQueryRepository.findPostById(dto.postId)
 	// console.log("post", post)
 
     if (!post) throw new NotFoundException('Blogs by id not found 404')
 		// console.log("userId: ", userId)
 	if(!userId) return null
-	const command = new CreateNewCommentByPostIdCommnad(postId, inputModelContent, user, userId)
+	const command = new CreateNewCommentByPostIdCommnad(dto.postId, inputModelContent, user, userId)
 	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(command)
 
 	// console.log("createNewCommentByPostId: ", createNewCommentByPostId)
@@ -181,15 +181,15 @@ export class PostController {
     return createNewPost;
   }
 
-  @Get(':id')
+  @Get(':postId')
   @HttpCode(200)
   async getPostById(
-    @Param('id') postId: string, 
+    @Param() dto: InputModelClassPostId, 
 	@UserIdDecorator() userId: string | null,
   ) {
-	console.log('postId: ', postId)
+	console.log('postId: ', dto.postId)
     const getPostById: Posts | null =
-      await this.postsQueryRepository.findPostById(postId, userId);
+      await this.postsQueryRepository.findPostById(dto.postId, userId);
     if (!getPostById) {
       throw new NotFoundException('Post by id not found');
     }
@@ -197,7 +197,7 @@ export class PostController {
     return getPostById;
   }
 
-  @Put(':id')
+  @Put(':postId')
   @HttpCode(204)
   @UseGuards(AuthBasic)
 //   @UseFilters(new HttpExceptionFilter())

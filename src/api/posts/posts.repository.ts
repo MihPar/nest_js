@@ -23,14 +23,14 @@ export class PostsRepository {
   }
 
   async updatePost(
-    id: string,
+    postId: string,
     title: string,
     shortDescription: string,
     content: string,
     blogId: string,
   ): Promise<boolean> {
     const result = await this.postModel.updateOne(
-      { _id: new ObjectId(id) },
+      { _id: new ObjectId(postId) },
       {
         $set: {
           title: title,

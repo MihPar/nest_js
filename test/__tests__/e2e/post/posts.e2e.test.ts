@@ -271,7 +271,7 @@ describe("/posts", () => {
 
   it("PUT -> `/posts/:postId/like-status` shoukd return status 204 if created like status", async () => {
 	const makeLikeDislike = await request(server)
-	.put(`posts/${postId1}/like-status`)
+	.put(`/posts/${postId1}/like-status`)
 	.set("Authorization", `Bearer ${createAccessTokenBody.accessToken}`)
 	.send({
 		"likeStatus": "None"
@@ -281,7 +281,7 @@ describe("/posts", () => {
   it("PUT -> `/posts/:postId/like-status`: should return error if :id from uri param not found; status 404;",
   async () => {
 	const makeLikeDislike = await request(server)
-	.put(`posts/123456789012345678901234/like-status`)
+	.put(`/posts/123456789012345678901234/like-status`)
 	.set("Authorization", `Bearer ${createAccessTokenBody.accessToken}`)
 	.send({
 		"likeStatus": "None"
@@ -292,7 +292,7 @@ describe("/posts", () => {
   it("PUT -> `/posts/:postId/like-status`: should return error If the inputModel has incorrect values 400",
   async () => {
 	const makeLikeDislike = await request(server)
-	.put(`posts/${postId1}/like-status`)
+	.put(`/posts/${postId1}/like-status`)
 	.set("Authorization", `Bearer ${createAccessTokenBody.accessToken}`)
 	.send({
 		"likeStatus": true
@@ -303,7 +303,7 @@ describe("/posts", () => {
   it("PUT -> `/posts/:postId/like-status`: should return error If Unauthorized 401",
   async () => {
 	const makeLikeDislike = await request(server)
-	.put(`posts/${postId1}/like-status`)
+	.put(`/posts/${postId1}/like-status`)
 	.send({
 		"likeStatus": "None"
 	})
