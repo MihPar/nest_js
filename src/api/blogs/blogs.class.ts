@@ -1,4 +1,4 @@
-import { IsMongoId, IsNotEmpty, IsString, IsUrl, Length } from "class-validator";
+import { IsMongoId, IsNotEmpty, IsString, IsUrl, Length, MaxLength } from "class-validator";
 import { Transform, TransformFnParams } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
 
@@ -10,14 +10,14 @@ function IsOptional() {
 
   export class bodyBlogsModel {
 	@IsOptional()
-	@Length(1, 15)
+	@MaxLength(15)
 	name: string
-	@Length(1, 500)
+	@MaxLength(500)
 	@IsOptional()
     description: string
 	@IsUrl()
 	@IsOptional()
-	@Length(1, 100)
+	@MaxLength(100)
     websiteUrl: string
 }
 
