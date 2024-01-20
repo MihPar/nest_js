@@ -2,7 +2,6 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { UserClass } from "../../../schema/user.schema";
 import { InputModelClassPostId, InputModelContentePostClass } from "../../posts/posts.class";
 import { CommentViewModel } from "../comment.type";
-import { ObjectId } from "mongodb";
 import { CommentRepository } from "../comment.repository";
 import { LikeStatusEnum } from "../../likes/likes.emun";
 import { CommentClass } from "../../../schema/comment.schema";
