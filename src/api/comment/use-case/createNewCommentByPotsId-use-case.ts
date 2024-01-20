@@ -7,7 +7,7 @@ import { CommentRepository } from "../comment.repository";
 import { LikeStatusEnum } from "../../likes/likes.emun";
 import { CommentClass } from "../../../schema/comment.schema";
 
-export class CreateNewCommentByPostId {
+export class CreateNewCommentByPostIdCommnad {
   constructor(
     public dto: InputModelClassPostId,
     public inputModelContent: InputModelContentePostClass,
@@ -16,12 +16,12 @@ export class CreateNewCommentByPostId {
   ) {}
 }
 
-@CommandHandler(CreateNewCommentByPostId)
-export class CreateNewCommentByPostIdCase implements ICommandHandler<CreateNewCommentByPostId> {
+@CommandHandler(CreateNewCommentByPostIdCommnad)
+export class CreateNewCommentByPostIdUseCase implements ICommandHandler<CreateNewCommentByPostIdCommnad> {
 	constructor(
 		protected readonly commentRepository: CommentRepository
 	) {}
-	async execute(command: CreateNewCommentByPostId): Promise<CommentViewModel | null> {
+	async execute(command: CreateNewCommentByPostIdCommnad): Promise<CommentViewModel | null> {
 			const userLogin = command.user.accountData.userName;
 			if(!command.userId) return null
 			const userId = command.userId

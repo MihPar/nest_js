@@ -1,16 +1,16 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { PostsRepository } from "../posts.repository";
 
-export class DeleteAllPosts {
+export class DeleteAllPostsComand {
 	constructor() {}
 }
 
-@CommandHandler(DeleteAllPosts)
-export class DeleteAllPostsCase implements ICommandHandler<DeleteAllPosts> {
+@CommandHandler(DeleteAllPostsComand)
+export class DeleteAllPostsUseCase implements ICommandHandler<DeleteAllPostsComand> {
 	constructor(
 		protected readonly postsRepository: PostsRepository
 	) {}
- 	async execute(command: DeleteAllPosts): Promise<any> {
+ 	async execute(command: DeleteAllPostsComand): Promise<any> {
 			return await this.postsRepository.deleteRepoPosts();
 	}
 }

@@ -3,19 +3,19 @@ import { inputModelPostClass } from "../posts.class";
 import { PostsRepository } from "../posts.repository";
 import { ObjectId } from "mongodb";
 
-export class UpdateOldPost {
+export class UpdateOldPostCommand {
 	constructor(
 		public postId: string,
     	public inputModelData: inputModelPostClass,
 	) {}
 }
 
-@CommandHandler(UpdateOldPost)
-export class UpdateOldPostCase implements ICommandHandler<UpdateOldPost> {
+@CommandHandler(UpdateOldPostCommand)
+export class UpdateOldPostUseCase implements ICommandHandler<UpdateOldPostCommand> {
 	constructor(
 		protected readonly postsRepository: PostsRepository
 	) {}
-	async execute(command: UpdateOldPost): Promise<boolean> {
+	async execute(command: UpdateOldPostCommand): Promise<boolean> {
 		if(!ObjectId.isValid(command.postId)) return false;
 			const updatPostById: boolean = await this.postsRepository.updatePost(
 				command.postId,

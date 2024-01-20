@@ -5,21 +5,21 @@ import { PostClass } from "../../../schema/post.schema";
 import { PostsRepository } from "../posts.repository";
 import { LikesRepository } from "../../likes/likes.repository";
 
-export class CreatePost {
+export class CreatePostCommand {
 	constructor(
 		public inputModelPost: inputModelPostClass,
 		public blogName: string
 	) {}
 }
 
-@CommandHandler(CreatePost)
-export class CreatePostCase implements ICommandHandler<CreatePost> {
+@CommandHandler(CreatePostCommand)
+export class CreatePostUseCase implements ICommandHandler<CreatePostCommand> {
 	constructor(
 		protected readonly postsRepository: PostsRepository,
 		protected readonly likesRepository: LikesRepository
 		
 	) {}
-	async execute(command: CreatePost): Promise<PostsViewModel | null> {
+	async execute(command: CreatePostCommand): Promise<PostsViewModel | null> {
 			const newPost: PostClass = new PostClass(
 				command.inputModelPost.title,
 				command.inputModelPost.shortDescription,

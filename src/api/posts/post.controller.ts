@@ -28,11 +28,11 @@ import { AuthBasic } from '../../infrastructure/guards/auth/basic.auth';
 import { UserClass } from '../../schema/user.schema';
 import { BlogClass } from '../../schema/blogs.schema';
 import { CommandBus } from '@nestjs/cqrs';
-import { CreateNewCommentByPostId } from '../comment/use-case/createNewCommentByPotsId-use-case';
-import { CreatePost } from './use-case/createPost-use-case';
+import { CreateNewCommentByPostIdCommnad } from '../comment/use-case/createNewCommentByPotsId-use-case';
+import { CreatePostCommand } from './use-case/createPost-use-case';
 import { Posts } from '../../schema/post.schema';
-import { UpdateOldPost } from './use-case/updateOldPost-use-case';
-import { DeletePostById } from './use-case/deletePostById-use-case';
+import { UpdateOldPostCommand } from './use-case/updateOldPost-use-case';
+import { DeletePostByIdCommand } from './use-case/deletePostById-use-case';
 import { UpdateLikeStatusCommand } from './use-case/updateLikeStatus-use-case';
 
 @Controller('posts')
@@ -60,7 +60,8 @@ export class PostController {
     const findPost = await this.postsQueryRepository.findPostById(dto.postId);
 	console.log(findPost, "findPost 62 str")
     if (!findPost) throw new NotFoundException('404')
-	const result = await this.commandBus.execute(new UpdateLikeStatusCommand(status, dto, userId, user))
+	const commnad = new UpdateLikeStatusCommand(status, dto, userId, user)
+	const result = await this.commandBus.execute(commnad)
     // const result = await this.postsService.updateLikeStatus(
     //   status.likeStatus,
     //   dto.postId,
@@ -116,7 +117,8 @@ export class PostController {
     if (!post) throw new NotFoundException('Blogs by id not found 404')
 
 	if(!userId) return null
-	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(new CreateNewCommentByPostId(dto, inputModelContent, user, userId))
+	const command = new CreateNewCommentByPostIdCommnad(dto, inputModelContent, user, userId)
+	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(command)
     // const createNewCommentByPostId: CommentViewModel | null =
     //   await this.commentService.createNewCommentByPostId(
     //     dto.postId,
@@ -161,7 +163,8 @@ export class PostController {
     );
 
     if (!findBlog) throw new BadRequestException('Blogs by id not found 400');
-	const createNewPost: Posts | null = await this.commandBus.execute(new CreatePost(inputModelPost, findBlog.name))
+	const command = new CreatePostCommand(inputModelPost, findBlog.name)
+	const createNewPost: Posts | null = await this.commandBus.execute(command)
     // const createNewPost: Posts | null = await this.postsService.createPost(
     //   inputModelPost.blogId,
     //   inputModelPost.title,
@@ -195,7 +198,8 @@ export class PostController {
     @Param('id') postId: string,
     @Body() inputModelData: inputModelPostClass,
   ) {
-	const updatePost: boolean = await this.commandBus.execute(new UpdateOldPost(postId, inputModelData))
+	const command = new UpdateOldPostCommand(postId, inputModelData)
+	const updatePost: boolean = await this.commandBus.execute(command)
     // const updatePost: boolean = await this.postsService.updateOldPost(
     //   postId,
     //   inputModelData.title,
@@ -211,7 +215,8 @@ export class PostController {
   @HttpCode(204)
   @UseGuards(AuthBasic)
   async deletePostById(@Param('id') postId: string): Promise<boolean> {
-	const deletPost: boolean = await this.commandBus.execute(new DeletePostById(postId))
+	const command = new DeletePostByIdCommand(postId)
+	const deletPost: boolean = await this.commandBus.execute(command)
     // const deletPost: boolean = await this.postsService.deletePostId(postId);
     if (!deletPost) throw new NotFoundException('Blogs by id not found 404');
     return true;

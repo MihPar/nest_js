@@ -8,18 +8,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { UsersRepository } from '../user.repository';
 import { EmailManager } from '../../manager/email.manager';
 
-export class CreateNewUser {
+export class CreateNewUserCommand {
   constructor(public body: InputModelClassCreateBody) {}
 }
 
-@CommandHandler(CreateNewUser)
-export class CreateNewUserCase implements ICommandHandler<CreateNewUser> {
+@CommandHandler(CreateNewUserCommand)
+export class CreateNewUserUseCase implements ICommandHandler<CreateNewUserCommand> {
   constructor(
     protected readonly generateHashAdapter: GenerateHashAdapter,
     protected readonly usersRepository: UsersRepository,
     protected readonly emailManager: EmailManager,
   ) {}
-  async execute(command: CreateNewUser): Promise<UserViewType | null> {
+  async execute(command: CreateNewUserCommand): Promise<UserViewType | null> {
     const passwordHash = await this.generateHashAdapter._generateHash(
       command.body.password,
     );

@@ -60,20 +60,20 @@ import { CreateNewBlogUseCase } from '../api/blogs/use-case/createNewBlog-use-ca
 import { GetUserIdByTokenUseCase } from '../api/auth/use-case/getUserIdByToken-use-case';
 import { PayloadAdapter } from '../api/adapter/payload.adapter';
 import { UpdateCommentByCommentIdUseCase } from '../api/comment/use-case/updateCommentByCommentId-use-case';
-import { DeleteAllPostsCase } from '../api/posts/use-case/deleteAllPosts-use-case';
-import { DeleteAllBlogsCase } from '../api/blogs/use-case/deletAllBlogs-use-case';
-import { DeleteAllUsersCase } from '../api/users/use-case/deleteAllUsers-use-case';
-import { DeleteAllCommentsCase } from '../api/comment/use-case/deleteAllComments-use-case';
-import { DeleteAllLikesCase } from '../api/likes/use-case/deleteAllLikes-use-case';
+import { DeleteAllPostsUseCase } from '../api/posts/use-case/deleteAllPosts-use-case';
+import { DeleteAllBlogsUseCase } from '../api/blogs/use-case/deletAllBlogs-use-case';
+import { DeleteAllUsersUseCase } from '../api/users/use-case/deleteAllUsers-use-case';
+import { DeleteAllCommentsUseCase } from '../api/comment/use-case/deleteAllComments-use-case';
+import { DeleteAllLikesUseCase } from '../api/likes/use-case/deleteAllLikes-use-case';
 import { UpdateLikeStatusUseCase } from '../api/posts/use-case/updateLikeStatus-use-case';
 import { GenerateHashAdapter } from '../api/adapter/generateHashAdapter';
-import { CreateNewCommentByPostIdCase } from '../api/comment/use-case/createNewCommentByPotsId-use-case';
-import { CreatePostCase } from '../api/posts/use-case/createPost-use-case';
-import { UpdateOldPostCase } from '../api/posts/use-case/updateOldPost-use-case';
-import { DeletePostByIdCase } from '../api/posts/use-case/deletePostById-use-case';
+import { CreateNewCommentByPostIdUseCase } from '../api/comment/use-case/createNewCommentByPotsId-use-case';
+import { CreatePostUseCase } from '../api/posts/use-case/createPost-use-case';
+import { UpdateOldPostUseCase } from '../api/posts/use-case/updateOldPost-use-case';
+import { DeletePostByIdUseCase } from '../api/posts/use-case/deletePostById-use-case';
 import { TerminateAllCurrentSessionCase } from '../api/securityDevices/use-case/terminateAllCurrentSeccion-use-case';
-import { CreateNewUserCase } from '../api/users/use-case/createNewUser-use-case';
-import { DeleteUserByIdCase } from '../api/users/use-case/deleteUserById-use-case';
+import { CreateNewUserUseCase } from '../api/users/use-case/createNewUser-use-case';
+import { DeleteUserByIdUseCase } from '../api/users/use-case/deleteUserById-use-case';
 import { CreateNewPostForBlogUseCase } from '../api/blogs/use-case/createNewPostForBlog-use-case';
 import { UpdateDeviceUseCase } from '../api/securityDevices/use-case/updateDevice-use-case';
 import { RegistrationEmailResendingUseCase } from '../api/users/use-case/registrationEmailResending-use-case';
@@ -94,19 +94,19 @@ const useCase = [
   CreateNewBlogUseCase,
   GetUserIdByTokenUseCase,
   UpdateCommentByCommentIdUseCase,
-  DeleteAllPostsCase,
-  DeleteAllBlogsCase,
-  DeleteAllUsersCase,
-  DeleteAllCommentsCase,
-  DeleteAllLikesCase,
+  DeleteAllPostsUseCase,
+  DeleteAllBlogsUseCase,
+  DeleteAllUsersUseCase,
+  DeleteAllCommentsUseCase,
+  DeleteAllLikesUseCase,
   UpdateLikeStatusUseCase,
-  CreateNewCommentByPostIdCase,
-  CreatePostCase,
-  UpdateOldPostCase,
-  DeletePostByIdCase,
+  CreateNewCommentByPostIdUseCase,
+  CreatePostUseCase,
+  UpdateOldPostUseCase,
+  DeletePostByIdUseCase,
   TerminateAllCurrentSessionCase,
-  CreateNewUserCase,
-  DeleteUserByIdCase,
+  CreateNewUserUseCase,
+  DeleteUserByIdUseCase,
   CreateNewPostForBlogUseCase,
   UpdateDeviceUseCase,
   RegistrationEmailResendingUseCase,
