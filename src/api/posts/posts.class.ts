@@ -1,6 +1,6 @@
 import { Transform, TransformFnParams } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
-import { IsMongoId, IsNotEmpty, IsString, Length } from "class-validator";
+import { IsMongoId, IsNotEmpty, IsString, Length, MaxLength } from "class-validator";
 
 // export class Posts {
 // 	public createdAt: string;
@@ -73,12 +73,11 @@ import { IsMongoId, IsNotEmpty, IsString, Length } from "class-validator";
 // 	}
 //   }
 
-// const Trim = () => Transform(({value}: TransformFnParams) => {
-// 	// console.log(value, "value trim")
-// 	return value?.trim()
-// })
+const Trim = () => Transform(({value}: TransformFnParams) => {
+	return value?.trim()
+})
 
-export const IsCustomString = () => applyDecorators(IsString(), IsNotEmpty())
+export const IsCustomString = () => applyDecorators(IsString(), Trim(), IsNotEmpty())
 
 
   export class bodyPostsModelClass {
@@ -95,14 +94,17 @@ export const IsCustomString = () => applyDecorators(IsString(), IsNotEmpty())
 
 export class inputModelPostClass {
 	@IsCustomString()
-	@Length(1, 30, {message: "length is incorrect"})
+	@MaxLength(30)
 	title: string
+
 	@IsCustomString()
-	@Length(1, 100, {message: "length is incorrect"})
+	@MaxLength(100)
 	shortDescription: string
+
 	@IsCustomString()
-	@Length(1, 1000, {message: "length is incorrect"})
+	@MaxLength(1000)
 	content: string
+	
 	@IsCustomString()
 	blogId: string
   }
