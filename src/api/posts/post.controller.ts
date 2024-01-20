@@ -75,7 +75,7 @@ export class PostController {
   @Get(':postId/comments')
   @HttpCode(200)
   async getCommentByPostId(
-    @Param('postId') postId: string,
+    @Param() dto: InputModelClassPostId, 
     @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
     @Query()
@@ -87,11 +87,11 @@ export class PostController {
     },
   ) {
 	if(!userId) return null
-    const isExistPots = await this.postsQueryRepository.findPostById(postId);
+    const isExistPots = await this.postsQueryRepository.findPostById(dto.postId);
     if (!isExistPots) throw new NotFoundException('Blogs by id not found');
     const commentByPostsId: PaginationType<CommentViewType> | null =
       await this.commentQueryRepository.findCommentByPostId(
-        postId,
+        dto.postId,
         (query.pageNumber || '1'),
         (query.pageSize || '10'),
         (query.sortBy || 'createdAt'),
@@ -184,11 +184,11 @@ export class PostController {
   @Get(':id')
   @HttpCode(200)
   async getPostById(
-    @Param('id') postId: string,
+    @Param() dto: InputModelClassPostId, 
 	@UserIdDecorator() userId: string | null,
   ) {
     const getPostById: Posts | null =
-      await this.postsQueryRepository.findPostById(postId, userId);
+      await this.postsQueryRepository.findPostById(dto.postId, userId);
     if (!getPostById) {
       throw new NotFoundException('Post by id not found');
     }
@@ -200,10 +200,10 @@ export class PostController {
   @UseGuards(AuthBasic)
 //   @UseFilters(new HttpExceptionFilter())
   async updatePostById(
-    @Param('id') postId: string,
+    @Param() dto: InputModelClassPostId, 
     @Body() inputModelData: inputModelPostClass,
   ) {
-	const command = new UpdateOldPostCommand(postId, inputModelData)
+	const command = new UpdateOldPostCommand(dto.postId, inputModelData)
 	const updatePost: boolean = await this.commandBus.execute(command)
     // const updatePost: boolean = await this.postsService.updateOldPost(
     //   postId,
@@ -219,8 +219,8 @@ export class PostController {
   @Delete(':id')
   @HttpCode(204)
   @UseGuards(AuthBasic)
-  async deletePostById(@Param('id') postId: string): Promise<boolean> {
-	const command = new DeletePostByIdCommand(postId)
+  async deletePostById(@Param() dto: InputModelClassPostId, ): Promise<boolean> {
+	const command = new DeletePostByIdCommand(dto.postId)
 	const deletPost: boolean = await this.commandBus.execute(command)
     // const deletPost: boolean = await this.postsService.deletePostId(postId);
     if (!deletPost) throw new NotFoundException('Blogs by id not found 404');
