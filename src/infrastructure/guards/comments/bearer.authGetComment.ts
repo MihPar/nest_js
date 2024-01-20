@@ -22,14 +22,15 @@ export class CheckRefreshTokenForGetComments implements CanActivate {
     // const userId = await this.jwtService.verifyAsync(token, {
     //   secret: process.env.JWT_SECRET!,
     // });
-	let userId
+	let payload
 	try {
-		userId = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
+		payload = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
 	} catch(error) {
 		throw new UnauthorizedException("401")
 	}
-    if (userId) {
-      const resultAuth = await this.usersQueryRepository.findUserById(userId);
+	console.log("userId: ", payload)
+    if (payload) {
+      const resultAuth = await this.usersQueryRepository.findUserById(payload.userId);
       if (resultAuth) {
         req['user'] = resultAuth;
         return true;

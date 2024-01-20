@@ -6,12 +6,12 @@ export type LikeDocument = HydratedDocument<LikeClass>;
 
 @Schema({ versionKey: false })
 export class LikeClass {
-	_id?: mongoose.Types.ObjectId;
+	_id: mongoose.Types.ObjectId;
   @Prop({required: true})
   	userId: string;
   @Prop({required: true})
   	login: string;
-  @Prop({required: true})
+  @Prop({required: false})
   	commentId: string;
   @Prop({required: true})
   	postId: string;
