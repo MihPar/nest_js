@@ -81,18 +81,18 @@ export class CommentsController {
   @HttpCode(204)
   @UseGuards(CheckRefreshTokenForComments)
   async deleteCommentById(
-	@Param() id: inputModelCommentId,
+	@Param() dto: inputModelCommentId,
 	@UserDecorator() user: UserClass,
 	@UserIdDecorator() userId: string | null
 	) {
 		if(!userId) return null
-    	const isExistComment = await this.commentQueryRepository.findCommentById(id.commentId, userId);
+    	const isExistComment = await this.commentQueryRepository.findCommentById(dto.commentId, userId);
     if (!isExistComment) throw new NotFoundException("404")
 
     if (userId.toString() !== isExistComment.commentatorInfo.userId) { throw new ForbiddenException("403")}
 
     const deleteCommentById: boolean =
-      await this.commentRepository.deleteComment(id.commentId);
+      await this.commentRepository.deleteComment(dto.commentId);
     if (!deleteCommentById) throw new NotFoundException('404');
   }
 

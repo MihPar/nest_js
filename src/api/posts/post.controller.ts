@@ -221,8 +221,8 @@ export class PostController {
   @Delete(':id')
   @HttpCode(204)
   @UseGuards(AuthBasic)
-  async deletePostById(@Param('id') postId: string, ): Promise<boolean> {
-	const command = new DeletePostByIdCommand(postId)
+  async deletePostById(@Param('id') id: string, ): Promise<boolean> {
+	const command = new DeletePostByIdCommand(id)
 	const deletPost: boolean = await this.commandBus.execute(command)
     // const deletPost: boolean = await this.postsService.deletePostId(postId);
     if (!deletPost) throw new NotFoundException('Blogs by id not found 404');

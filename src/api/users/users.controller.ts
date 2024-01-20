@@ -65,8 +65,8 @@ export class UsersController {
   @Delete(':id')
   @HttpCode(204)
 //   @UseGuards(AuthBasic)
-  async deleteUserById(@Param('id') userId: string) {
-	const command = new DeleteUserByIdCommnad(userId)
+  async deleteUserById(@Param('id') id: string) {
+	const command = new DeleteUserByIdCommnad(id)
 	const deleteUserById = await this.commandBus.execute(command)
 	// const deleteUserById = await this.usersService.deleteUserById(userId)
 	if (!deleteUserById) throw new NotFoundException("Blogs by id not found 404")

@@ -12,7 +12,7 @@ import { CommandBus } from "@nestjs/cqrs";
 import { TerminateAllCurrentSessionCommand } from "./use-case/terminateAllCurrentSeccion-use-case";
 import { PayloadAdapter } from "../adapter/payload.adapter";
 
-@Controller('security')
+@Controller('security/devices')
 export class SecurityDeviceController {
   constructor(
     protected deviceQueryRepository: DeviceQueryRepository,
@@ -20,7 +20,7 @@ export class SecurityDeviceController {
 	protected commandBus: CommandBus,
 	protected payloadAdapter: PayloadAdapter
   ) {}
-  @Get('/devices')
+  @Get('')
   @HttpCode(200)
   @UseGuards(CheckRefreshToken)
   async getDevicesUser(
@@ -31,7 +31,7 @@ export class SecurityDeviceController {
     return await this.deviceQueryRepository.getAllDevicesUser(userId);
   }
 
-  @Delete('/devices')
+  @Delete('')
   @UseGuards(CheckRefreshToken)
   @HttpCode(204)
   async terminateCurrentSession(
@@ -57,7 +57,7 @@ export class SecurityDeviceController {
     if (!findAllCurrentDevices) throw new UnauthorizedException('401');
   }
 
-  @Delete('/devices/:deviceId')
+  @Delete(':deviceId')
   @HttpCode(204)
   @UseGuards(CheckRefreshToken)
   @UseGuards(ForbiddenCalss)

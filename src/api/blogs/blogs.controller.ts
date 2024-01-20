@@ -118,26 +118,26 @@ export class BlogsController {
     return createNewPost;
   }
 
-  @Get(':id')
+  @Get(':blogId')
   @HttpCode(200)
   async getBlogsById(
-    @Param('id') blogId: string,
+    @Param() dto: inputModelClass,
   ): Promise<BlogsViewType | null> {
     const blogById: BlogsViewType | null =
-      await this.blogsQueryRepository.findBlogById(blogId);
+      await this.blogsQueryRepository.findBlogById(dto.blogId);
     if (!blogById) throw new NotFoundException('Blogs by id not found 404');
     return blogById;
   }
 
-  @Put(':id')
+  @Put(':blogId')
   @HttpCode(204)
   @UseGuards(AuthBasic)
   @UseFilters(new HttpExceptionFilter())
   async updateBlogsById(
-    @Param('id') blogId: string,
+    @Param() dto: inputModelClass,
     @Body() inputDateMode: bodyBlogsModel,
   ) {
-	const command = new UpdateBlogCommand(blogId, inputDateMode)
+	const command = new UpdateBlogCommand(dto.blogId, inputDateMode)
 	const isUpdateBlog = await this.commandBus.execute(command)
     // const isUpdateBlog: boolean = await this.blogsService.updateBlog(
     //   id,
