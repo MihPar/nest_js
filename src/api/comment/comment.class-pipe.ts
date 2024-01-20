@@ -56,10 +56,10 @@ import { applyDecorators } from "@nestjs/common";
 // 	}
 //   }
 
-  const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
+//   const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
 
 function IsOptional() {
-	return applyDecorators(Trim(), IsString(), IsNotEmpty())
+	return applyDecorators(IsString(), IsNotEmpty())
 }
 
 const allowedValues = ['Like', 'Dislike', 'None']

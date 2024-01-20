@@ -56,9 +56,9 @@ export class PostController {
     @UserIdDecorator() userId: string | null,
 	) {
 	if(!userId) return null
-	console.log(userId, "userId")
+	// console.log(userId, "userId")
     const findPost = await this.postsQueryRepository.findPostById(postId);
-	console.log(findPost, "findPost 62 str")
+	// console.log(findPost, "findPost 62 str")
     if (!findPost) throw new NotFoundException('404')
 	const commnad = new UpdateLikeStatusCommand(status, postId, userId, user)
 	const result = await this.commandBus.execute(commnad)
@@ -193,6 +193,7 @@ export class PostController {
     if (!getPostById) {
       throw new NotFoundException('Post by id not found');
     }
+	// console.log('getPostById: ', getPostById)
     return getPostById;
   }
 

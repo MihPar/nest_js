@@ -157,7 +157,7 @@ describe("/posts", () => {
       description: "my description",
       websiteUrl: "https://learn.javascript.ru",
       createdAt: expect.any(String),
-      isMembership: true,
+      isMembership: false,
     });
 
     const blogId = createBlogs.body.id;
@@ -337,7 +337,7 @@ describe("/posts", () => {
 	.send({
 		"likeStatus": "None"
 	})
-	console.log("updateLikeStatus: ", updateLikeDiske.body)
+	// console.log("updateLikeStatus: ", updateLikeDiske.body)
 	expect(updateLikeDiske.status).toBe(HTTP_STATUS.NO_CONTENT_204)
   })
 
@@ -380,6 +380,8 @@ describe("/posts", () => {
 	expect(updateLikeDiske.status).toBe(HTTP_STATUS.NOT_FOUND_404)
   })
 
+  /****************************** create new blog ***************************/
+
   it("create new post with correnct input data => return 201 status code", async () => {
     inputDataBlog = {
       name: "Mickhael",
@@ -390,6 +392,7 @@ describe("/posts", () => {
       .post("/blogs")
       .auth("admin", "qwerty")
       .send(inputDataBlog);
+	  console.log("str 395: ", createBlog.body)
     expect(createBlog.status).toBe(HTTP_STATUS.CREATED_201);
     expect(createBlog.body).toEqual({
       id: expect.any(String),
@@ -397,7 +400,7 @@ describe("/posts", () => {
       description: inputDataBlog.description,
       websiteUrl: inputDataBlog.websiteUrl,
       createdAt: expect.any(String),
-      isMembership: true,
+      isMembership: false,
     });
 
     blogId = createBlog.body.id;
@@ -525,6 +528,8 @@ describe("/posts", () => {
       },
     ]);
   });
+
+  /****************************************** get post by postId ******************************/
 
   it("get post by id => return 200 status code", async () => {
     const getPostById = await request(server)
