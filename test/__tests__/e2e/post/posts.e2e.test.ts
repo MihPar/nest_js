@@ -311,248 +311,249 @@ describe("/posts", () => {
   
   /********************************************************************************************/
 
-//   type inputDataBlogType = {
-//     name: string;
-//     description: string;
-//     websiteUrl: string;
-//   };
+  type inputDataBlogType = {
+    name: string;
+    description: string;
+    websiteUrl: string;
+  };
 
-//   type inputDataPostType = {
-//     title: string;
-//     shortDescription: string;
-//     content: string;
-//     blogId: string;
-//   };
-//   let blogId: string;
-//   let inputDataBlog: inputDataBlogType;
-//   let inputDataPost: inputDataPostType;
+  type inputDataPostType = {
+    title: string;
+    shortDescription: string;
+    content: string;
+    blogId: string;
+  };
+  let blogId: string;
+  let inputDataBlog: inputDataBlogType;
+  let inputDataPost: inputDataPostType;
 
-//   let id: string;
+  let id: string;
 
-//   let postId: string;
-//   it("make status like/dislike => return 204 status code", async() => {
-// 	const updateLikeDiske = await request(server)
-// 	.put(`/posts/${postId1}/like-status`)
-// 	.set("Authorization", `Bearer ${createAccessTokenBody.accessToken}`)
-// 	.send({
-// 		"likeStatus": "None"
-// 	})
-// 	console.log("updateLikeStatus: ", updateLikeDiske.body)
-// 	expect(updateLikeDiske.status).toBe(HTTP_STATUS.NO_CONTENT_204)
-//   })
+  let postId: string;
+  it("make status like/dislike => return 204 status code", async() => {
+	const updateLikeDiske = await request(server)
+	.put(`/posts/${postId1}/like-status`)
+	.set("Authorization", `Bearer ${createAccessTokenBody.accessToken}`)
+	.send({
+		"likeStatus": "None"
+	})
+	console.log("updateLikeStatus: ", updateLikeDiske.body)
+	expect(updateLikeDiske.status).toBe(HTTP_STATUS.NO_CONTENT_204)
+  })
 
-//   it("make status like/dislike with incorrect input data => return 400 status code", async() => {
-// 	const updateLikeDiske = await request(server)
-// 	.put(`/posts/${postId1}/like-status`)
-// 	.set("Authorization", `Bearer ${createAccessTokenBody.accessToken}`)
-// 	.send({
-// 		"likeStatus": true
-// 	})
-// 	expect(updateLikeDiske.status).toBe(HTTP_STATUS.BAD_REQUEST_400)
-// 	expect(updateLikeDiske.body).toStrictEqual(createErrorsMessageTest(["likeStatus"]))
-//   })
+  it("make status like/dislike with incorrect input data => return 400 status code", async() => {
+	const updateLikeDiske = await request(server)
+	.put(`/posts/${postId1}/like-status`)
+	.set("Authorization", `Bearer ${createAccessTokenBody.accessToken}`)
+	.send({
+		"likeStatus": true
+	})
+	expect(updateLikeDiske.status).toBe(HTTP_STATUS.BAD_REQUEST_400)
+	expect(updateLikeDiske.body).toStrictEqual(createErrorsMessageTest(["likeStatus"]))
+  })
 
-//   it("make status like/dislike with empty input data of body  => return 400 status code", async() => {
-// 	const updateLikeDiske = await request(server)
-// 	.put(`/posts/${postId1}/like-status`)
-// 	.set("Authorization", `Bearer ${createAccessTokenBody.accessToken}`)
-// 	.send({})
-// 	expect(updateLikeDiske.status).toBe(HTTP_STATUS.BAD_REQUEST_400)
-// 	expect(updateLikeDiske.body).toStrictEqual(createErrorsMessageTest(["likeStatus"]))
-//   })
+  it("make status like/dislike with empty input data of body  => return 400 status code", async() => {
+	const updateLikeDiske = await request(server)
+	.put(`/posts/${postId1}/like-status`)
+	.set("Authorization", `Bearer ${createAccessTokenBody.accessToken}`)
+	.send({})
+	expect(updateLikeDiske.status).toBe(HTTP_STATUS.BAD_REQUEST_400)
+	expect(updateLikeDiske.body).toStrictEqual(createErrorsMessageTest(["likeStatus"]))
+  })
 
-//   it("make status like/dislike without authorization => return 401 status code", async() => {
-// 	const updateLikeDiske = await request(server)
-// 	.put(`/posts/${postId1}/like-status`)
-// 	.send({
-// 		"likeStatus": "None"
-// 	})
-// 	expect(updateLikeDiske.status).toBe(HTTP_STATUS.NOT_AUTHORIZATION_401)
-//   })
+  it("make status like/dislike without authorization => return 401 status code", async() => {
+	const updateLikeDiske = await request(server)
+	.put(`/posts/${postId1}/like-status`)
+	.send({
+		"likeStatus": "None"
+	})
+	expect(updateLikeDiske.status).toBe(HTTP_STATUS.NOT_AUTHORIZATION_401)
+  })
 
-//   it("make status like/dislike without id=> return 404 status code", async() => {
-// 	const updateLikeDiske = await request(server)
-// 	.put(`/posts/123456789012345678901234/like-dislike`)
-// 	.set("Authorization", `Bearer ${createAccessTokenBody.accessToken}`)
-// 	.send({
-// 		"likeStatus": "None"
-// 	})
-// 	expect(updateLikeDiske.status).toBe(HTTP_STATUS.NOT_FOUND_404)
-//   })
+  it("make status like/dislike without id=> return 404 status code", async() => {
+	const updateLikeDiske = await request(server)
+	.put(`/posts/123456789012345678901234/like-dislike`)
+	.set("Authorization", `Bearer ${createAccessTokenBody.accessToken}`)
+	.send({
+		"likeStatus": "None"
+	})
+	expect(updateLikeDiske.status).toBe(HTTP_STATUS.NOT_FOUND_404)
+  })
 
-//   it("create new post with correnct input data => return 201 status code", async () => {
-//     inputDataBlog = {
-//       name: "Mickhael",
-//       description: "new description",
-//       websiteUrl: "https://google.com",
-//     };
-//     const createBlog = await request(server)
-//       .post("/blogs")
-//       .auth("admin", "qwerty")
-//       .send(inputDataBlog);
-//     expect(createBlog.status).toBe(HTTP_STATUS.CREATED_201);
-//     expect(createBlog.body).toEqual({
-//       id: expect.any(String),
-//       name: inputDataBlog.name,
-//       description: inputDataBlog.description,
-//       websiteUrl: inputDataBlog.websiteUrl,
-//       createdAt: expect.any(String),
-//       isMembership: true,
-//     });
+  it("create new post with correnct input data => return 201 status code", async () => {
+    inputDataBlog = {
+      name: "Mickhael",
+      description: "new description",
+      websiteUrl: "https://google.com",
+    };
+    const createBlog = await request(server)
+      .post("/blogs")
+      .auth("admin", "qwerty")
+      .send(inputDataBlog);
+    expect(createBlog.status).toBe(HTTP_STATUS.CREATED_201);
+    expect(createBlog.body).toEqual({
+      id: expect.any(String),
+      name: inputDataBlog.name,
+      description: inputDataBlog.description,
+      websiteUrl: inputDataBlog.websiteUrl,
+      createdAt: expect.any(String),
+      isMembership: true,
+    });
 
-//     blogId = createBlog.body.id;
-//     inputDataPost = {
-//       title: "New title",
-//       shortDescription: "new shortDescription",
-//       content:
-//         "My live is variable, I maked many diferent things and I had diferent profession",
-//       blogId: blogId,
-//     };
+    blogId = createBlog.body.id;
+    inputDataPost = {
+      title: "New title",
+      shortDescription: "new shortDescription",
+      content:
+        "My live is variable, I maked many diferent things and I had diferent profession",
+      blogId: blogId,
+    };
 
-//     const createNewPost = await request(server)
-//       .post("/posts")
-//       .auth("admin", "qwerty")
-//       .send(inputDataPost);
-//     expect(createNewPost.status).toBe(HTTP_STATUS.CREATED_201);
-//     expect(createNewPost.body).toEqual({
-//       id: expect.any(String),
-//       title: inputDataPost.title,
-//       shortDescription: inputDataPost.shortDescription,
-//       content: inputDataPost.content,
-//       blogId: blogId,
-//       blogName: inputDataBlog.name,
-//       createdAt: expect.any(String),
-// 	  extendedLikesInfo: {
-// 		likesCount: expect.any(Number),
-// 		dislikesCount: expect.any(Number),
-// 		myStatus: expect.any(String),
-// 		newestLikes: [
-// 		//   {
-// 		// 	"addedAt": "2023-12-13T11:39:16.432Z",
-// 		// 	"userId": "string",
-// 		// 	"login": "string"
-// 		//   }
-// 		]
-// 	  }
-//     });
+    const createNewPost = await request(server)
+      .post("/posts")
+      .auth("admin", "qwerty")
+      .send(inputDataPost);
+    expect(createNewPost.status).toBe(HTTP_STATUS.CREATED_201);
+    expect(createNewPost.body).toEqual({
+      id: expect.any(String),
+      title: inputDataPost.title,
+      shortDescription: inputDataPost.shortDescription,
+      content: inputDataPost.content,
+      blogId: blogId,
+      blogName: inputDataBlog.name,
+      createdAt: expect.any(String),
+	  extendedLikesInfo: {
+		likesCount: expect.any(Number),
+		dislikesCount: expect.any(Number),
+		myStatus: expect.any(String),
+		newestLikes: [
+		//   {
+		// 	"addedAt": "2023-12-13T11:39:16.432Z",
+		// 	"userId": "string",
+		// 	"login": "string"
+		//   }
+		]
+	  }
+    });
 
-//     id = createNewPost.body.id;
-//   });
-//   it("create new post with incorrect input data => return 400 status code", async () => {
-//     const inputDataPost = {
-//       title: 123,
-//       shortDescription: 456,
-//       content: true,
-//       blogId: null,
-//     };
-//     const createNewPost = await request(server)
-//       .post("/posts")
-//       .auth("admin", "qwerty")
-//       .send(inputDataPost);
-//     expect(createNewPost.status).toBe(HTTP_STATUS.BAD_REQUEST_400);
-//     expect(createNewPost.body).toStrictEqual(postsValidationErrResPost);
-//   });
+    id = createNewPost.body.id;
+  });
+  it("create new post with incorrect input data => return 400 status code", async () => {
+    const inputDataPost = {
+      title: 123,
+      shortDescription: 456,
+      content: true,
+      blogId: null,
+    };
+    const createNewPost = await request(server)
+      .post("/posts")
+      .auth("admin", "qwerty")
+      .send(inputDataPost);
+    expect(createNewPost.status).toBe(HTTP_STATUS.BAD_REQUEST_400);
+    expect(createNewPost.body).toStrictEqual(postsValidationErrResPost);
+  });
 
-//   it("create new post with empty body => return 400 status code", async () => {
-//     const createNewPost = await request(server)
-//       .post("/posts")
-//       .auth("admin", "qwerty")
-//       .send({});
-//     expect(createNewPost.status).toBe(HTTP_STATUS.BAD_REQUEST_400);
-//     expect(createNewPost.body).toEqual(
-//       createErrorsMessageTest([
-//         "title",
-//         "shortDescription",
-//         "content",
-//         "blogId",
-//       ])
-//     );
-//   });
+  it("create new post with empty body => return 400 status code", async () => {
+    const createNewPost = await request(server)
+      .post("/posts")
+      .auth("admin", "qwerty")
+      .send({});
+    expect(createNewPost.status).toBe(HTTP_STATUS.BAD_REQUEST_400);
+    expect(createNewPost.body).toEqual(
+      createErrorsMessageTest([
+        "title",
+        "shortDescription",
+        "content",
+        "blogId",
+      ])
+    );
+  });
 
-//   it("create new post without authorization => return 401 status code", async () => {
-//     const inputDataPost = {
-//       title: "New title",
-//       shortDescription: "new shortDescription",
-//       content:
-//         "My live is variable, I maked many diferent things and I had diferent profession",
-//       blogId: blogId,
-//     };
-//     const createNewPost = await request(server).post("/posts").send(inputDataPost);
-//     expect(createNewPost.status).toBe(HTTP_STATUS.NOT_AUTHORIZATION_401);
-//   });
+  it("create new post without authorization => return 401 status code", async () => {
+    const inputDataPost = {
+      title: "New title",
+      shortDescription: "new shortDescription",
+      content:
+        "My live is variable, I maked many diferent things and I had diferent profession",
+      blogId: blogId,
+    };
+    const createNewPost = await request(server).post("/posts").send(inputDataPost);
+    expect(createNewPost.status).toBe(HTTP_STATUS.NOT_AUTHORIZATION_401);
+  });
 
-//   it("return all posts with correct input data => return 200 status code", async () => {
-//     const pageNumber = "1";
-//     const pageSize = "10";
-//     const sortBy = "createAt";
-//     const sortDirection = "desc";
+  it("return all posts with correct input data => return 200 status code", async () => {
+    const pageNumber = "1";
+    const pageSize = "10";
+    const sortBy = "createAt";
+    const sortDirection = "desc";
 
-//     const getAllPost = await request(server).get(
-//       `/posts?pageNumber=${pageNumber}&pageSize=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
-//     );
-//     // .get('/posts').query({pageNumber: "1", pageSize: "10", sortBy: "createAt", sortDirection: "desc"})
-//     expect(getAllPost.status).toBe(HTTP_STATUS.OK_200);
-//     expect(getAllPost.body.pagesCount).toEqual(1);
-//     expect(getAllPost.body.page).toEqual(1);
-//     expect(getAllPost.body.pageSize).toEqual(10);
-//     expect(getAllPost.body.totalCount).toEqual(2);
-//     expect(getAllPost.body.items).toEqual([
-//       {
-//         ...firstPost,
-//         id: expect.any(String),
-//         createdAt: expect.any(String),
-//       },
-//       {
-//         id: expect.any(String),
-//         title: inputDataPost.title,
-//         shortDescription: inputDataPost.shortDescription,
-//         content: inputDataPost.content,
-//         blogId: inputDataPost.blogId,
-//         blogName: inputDataBlog.name,
-//         createdAt: expect.any(String),
-// 		extendedLikesInfo: {
-// 			likesCount: expect.any(Number),
-// 			dislikesCount: expect.any(Number),
-// 			myStatus: expect.any(String),
-// 			// newestLikes: [
-// 			//   {
-// 			// 	"addedAt": "2023-12-13T11:39:16.432Z",
-// 			// 	"userId": "string",
-// 			// 	"login": "string"
-// 			//   }
-// 			// ]
-// 		  }
-//       },
-//     ]);
-//   });
+    const getAllPost = await request(server).get(
+      `/posts?pageNumber=${pageNumber}&pageSize=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
+    );
+    // .get('/posts').query({pageNumber: "1", pageSize: "10", sortBy: "createAt", sortDirection: "desc"})
+    expect(getAllPost.status).toBe(HTTP_STATUS.OK_200);
+    expect(getAllPost.body.pagesCount).toEqual(1);
+    expect(getAllPost.body.page).toEqual(1);
+    expect(getAllPost.body.pageSize).toEqual(10);
+    expect(getAllPost.body.totalCount).toEqual(2);
+    expect(getAllPost.body.items).toEqual([
+      {
+        ...firstPost,
+        id: expect.any(String),
+        createdAt: expect.any(String),
+      },
+      {
+        id: expect.any(String),
+        title: inputDataPost.title,
+        shortDescription: inputDataPost.shortDescription,
+        content: inputDataPost.content,
+        blogId: inputDataPost.blogId,
+        blogName: inputDataBlog.name,
+        createdAt: expect.any(String),
+		extendedLikesInfo: {
+			likesCount: expect.any(Number),
+			dislikesCount: expect.any(Number),
+			myStatus: expect.any(String),
+			// newestLikes: [
+			//   {
+			// 	"addedAt": "2023-12-13T11:39:16.432Z",
+			// 	"userId": "string",
+			// 	"login": "string"
+			//   }
+			// ]
+		  }
+      },
+    ]);
+  });
 
-//   it("get post by id => return 200 status code", async () => {
-//     const getPostById = await request(server)
-//       .get(`/posts/${id}`)
-//       .set("Authorization", `Bearer ${createAccessTokenBody.accessToken}`);
-//     expect(getPostById.status).toBe(HTTP_STATUS.OK_200);
-//     expect(getPostById.body).toStrictEqual({
-//       id: id,
-//       title: inputDataPost.title,
-//       shortDescription: inputDataPost.shortDescription,
-//       content: inputDataPost.content,
-//       blogId: inputDataPost.blogId,
-//       blogName: inputDataBlog.name,
-//       createdAt: expect.any(String),
-// 	  extendedLikesInfo: {
-// 		likesCount: expect.any(Number),
-// 		dislikesCount: expect.any(Number),
-// 		myStatus: expect.any(String),
-// 		newestLikes: [
-// 		//   {
-// 		// 	"addedAt": "2023-12-13T11:39:16.432Z",
-// 		// 	"userId": "string",
-// 		// 	"login": "string"
-// 		//   }
-// 		]
-// 	  }
-//     });
-//   });
+  it("get post by id => return 200 status code", async () => {
+    const getPostById = await request(server)
+      .get(`/posts/${id}`)
+	  console.log('id: ', id)
+    //   .set("Authorization", `Bearer ${createAccessTokenBody.accessToken}`);
+    expect(getPostById.status).toBe(HTTP_STATUS.OK_200);
+    expect(getPostById.body).toStrictEqual({
+      id: id,
+      title: inputDataPost.title,
+      shortDescription: inputDataPost.shortDescription,
+      content: inputDataPost.content,
+      blogId: inputDataPost.blogId,
+      blogName: inputDataBlog.name,
+      createdAt: expect.any(String),
+	  extendedLikesInfo: {
+		likesCount: expect.any(Number),
+		dislikesCount: expect.any(Number),
+		myStatus: expect.any(String),
+		newestLikes: [
+		//   {
+		// 	"addedAt": "2023-12-13T11:39:16.432Z",
+		// 	"userId": "string",
+		// 	"login": "string"
+		//   }
+		]
+	  }
+    });
+  });
 
 //   let content: string
 //   let createdAt: string

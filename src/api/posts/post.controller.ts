@@ -187,6 +187,7 @@ export class PostController {
     @Param('id') postId: string, 
 	@UserIdDecorator() userId: string | null,
   ) {
+	console.log('postId: ', postId)
     const getPostById: Posts | null =
       await this.postsQueryRepository.findPostById(postId, userId);
     if (!getPostById) {

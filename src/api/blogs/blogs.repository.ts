@@ -14,9 +14,16 @@ export class BlogsRepository {
     return deletedAll.deletedCount === 1;
   }
 
-  async createNewBlogs(newBlog: BlogClass): Promise<BlogClass> {
-    const result = await this.blogModel.create(newBlog);
-    return newBlog;
+  async createNewBlogs(newBlog: BlogClass): Promise<BlogClass | null> {
+	try {
+		const result = await this.blogModel.create(newBlog);
+		await result.save()
+		return newBlog
+	} catch(error) {
+		console.log(error, 'error in create post');
+      return null;
+	}
+    
   }
 
   async updateBlogById(

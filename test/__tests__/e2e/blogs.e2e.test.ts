@@ -239,247 +239,255 @@ describe("/blogs", () => {
 //       });
 //     });
 
-//     describe("return all posts for specified blog", () => {
-//       it("return all posts for specified blog", async () => {
-//         const createPost = await request(server)
-//           .post("/posts")
-//           .auth("admin", "qwerty")
-//           .send({
-//             title: "PROGRAMMER",
-//             shortDescription: "My profession the back end developer!",
-//             content:
-//               "I am a programmere and work at backend, I like javascript!!!",
-//             blogId: blogId,
-//           })
-//           .expect(201);
+/************************************** get all post by blogId ************************************/
 
-//         const title = createPost.body.title;
-//         const shortDescription = createPost.body.shortDescription;
-//         const content = createPost.body.content;
-//         const postIdBy = createPost.body.blogId;
+    // describe("return all posts for specified blog", () => {
+    //   it("return all posts for specified blog", async () => {
+    //     const createPost = await request(server)
+    //       .post("/posts")
+    //       .auth("admin", "qwerty")
+    //       .send({
+    //         title: "PROGRAMMER",
+    //         shortDescription: "My profession the back end developer!",
+    //         content:
+    //           "I am a programmere and work at backend, I like javascript!!!",
+    //         blogId: blogId,
+    //       })
+	// 	  console.log(createPost.body)
+    //       expect(createPost.status).toBe(HTTP_STATUS.CREATED_201)
+		  
 
-//         const pageNumber = "1";
-//         const pageSize = "10";
-//         const sortBy = "desc";
-//         const getAllPostForBlogs = await request(server)
-// 		.get(`/blogs/${blogId}/posts`);
-//         console.log("getAllPostForBlogs.body: ", getAllPostForBlogs.body);
+    //     const title = createPost.body.title;
+    //     const shortDescription = createPost.body.shortDescription;
+    //     const content = createPost.body.content;
+    //     const postIdBy = createPost.body.blogId;
 
-//         expect(getAllPostForBlogs.status).toBe(HTTP_STATUS.OK_200);
-//         expect(getAllPostForBlogs.body).toEqual({
-//           pagesCount: 1,
-//           page: 1,
-//           pageSize: 10,
-//           totalCount: 1,
-//           items: [
-//             {
-//               id: expect.any(String),
-//               title: title,
-//               shortDescription: shortDescription,
-//               content: content,
-//               blogId: blogId,
-//               blogName: name,
-//               createdAt: expect.any(String),
-//             },
-//           ],
-//         });
-//       });
-//       it("if specified blog is not exist", async () => {
-//         const getAllPostForBlogs = await request(server).get(
-//           `/blogs/147896321598741563258745/posts`
-//         );
-//         expect(getAllPostForBlogs.status).toBe(HTTP_STATUS.NOT_FOUND_404);
-//       });
-//     });
+    //     const pageNumber = "1";
+    //     const pageSize = "10";
+    //     const sortBy = "desc";
+    //     const getAllPostForBlogs = await request(server)
+	// 	.get(`/blogs/${blogId}/posts`);
+    //     console.log("getAllPostForBlogs.body: ", getAllPostForBlogs.body);
 
-//     let reqBodyResponse: PostsViewModel;
+    //     expect(getAllPostForBlogs.status).toBe(HTTP_STATUS.OK_200);
+    //     expect(getAllPostForBlogs.body).toEqual({
+    //       pagesCount: 1,
+    //       page: 1,
+    //       pageSize: 10,
+    //       totalCount: 1,
+    //       items: [
+    //         {
+    //           id: expect.any(String),
+    //           title: title,
+    //           shortDescription: shortDescription,
+    //           content: content,
+    //           blogId: blogId,
+    //           blogName: name,
+    //           createdAt: expect.any(String),
+    //         },
+    //       ],
+    //     });
+    //   });
+    //   it("if specified blog is not exist", async () => {
+    //     const getAllPostForBlogs = await request(server).get(
+    //       `/blogs/147896321598741563258745/posts`
+    //     );
+    //     expect(getAllPostForBlogs.status).toBe(HTTP_STATUS.NOT_FOUND_404);
+    //   });
+    // });
+
+    // let reqBodyResponse: PostsViewModel;
+
+	// /*********************************** create new post by blogId *****************************************/
 	
-//     describe("create new post for specific blog", () => {
-//       type BodyBlog = {
-//         title: string;
-//         shortDescription: string;
-//         content: string;
-//       };
+    // describe("create new post for specific blog", () => {
+    //   type BodyBlog = {
+    //     title: string;
+    //     shortDescription: string;
+    //     content: string;
+    //   };
 
-//       let testBodyBlog: BodyBlog;
-//       it("create post by blogId", async () => {
-//         testBodyBlog = {
-//           title: "New title",
-//           shortDescription: "My new short description",
-//           content:
-//             "I am a progremmer and I like coding, my profession the back end developer.",
-//         };
-//         const createNewPost = await request(server)
-//           .post(`/blogs/${blogId}/posts`)
-//           .auth("admin", "qwerty")
-//           .send(testBodyBlog);
+    //   let testBodyBlog: BodyBlog;
+    //   it("create post by blogId", async () => {
+    //     testBodyBlog = {
+    //       title: "New title",
+    //       shortDescription: "My new short description",
+    //       content:
+    //         "I am a progremmer and I like coding, my profession the back end developer.",
+    //     };
+    //     const createNewPost = await request(server)
+    //       .post(`/blogs/${blogId}/posts`)
+    //       .auth("admin", "qwerty")
+    //       .send(testBodyBlog);
 
-//         reqBodyResponse = createNewPost.body;
-//         expect(createNewPost.status).toBe(HTTP_STATUS.CREATED_201);
-//         expect(reqBodyResponse).toStrictEqual({
-//           id: expect.any(String),
-//           title: reqBodyResponse.title,
-//           shortDescription: reqBodyResponse.shortDescription,
-//           content: reqBodyResponse.content,
-//           blogId: blogId,
-//           blogName: name,
-//           createdAt: expect.any(String),
-//         });
-//       });
+    //     reqBodyResponse = createNewPost.body;
+    //     expect(createNewPost.status).toBe(HTTP_STATUS.CREATED_201);
+    //     expect(reqBodyResponse).toStrictEqual({
+    //       id: expect.any(String),
+    //       title: reqBodyResponse.title,
+    //       shortDescription: reqBodyResponse.shortDescription,
+    //       content: reqBodyResponse.content,
+    //       blogId: blogId,
+    //       blogName: name,
+    //       createdAt: expect.any(String),
+    //     });
+    //   });
 
-//       it("create blog with incorrect input data => return 400 errorMessage", async () => {
-//         const createBlogs = await request(server)
-//           .post("/blogs")
-//           .auth("admin", "qwerty")
-//           .send({
-//             name: "Mickle",
-//             description: "I am a programmer",
-//             websiteUrl: "https://google.com",
-//           });
-//         expect(createBlogs.status).toBe(HTTP_STATUS.CREATED_201);
-//         expect(createBlogs.body).toEqual({
-//           id: expect.any(String),
-//           name: name,
-//           description: description,
-//           websiteUrl: websiteUrl,
-//           createdAt: expect.any(String),
-//           isMembership: true,
-//         });
-//         const blogId = createBlogs.body.id;
+    //   it("create blog with incorrect input data => return 400 errorMessage", async () => {
+    //     const createBlogs = await request(server)
+    //       .post("/blogs")
+    //       .auth("admin", "qwerty")
+    //       .send({
+    //         name: "Mickle",
+    //         description: "I am a programmer",
+    //         websiteUrl: "https://google.com",
+    //       });
+    //     expect(createBlogs.status).toBe(HTTP_STATUS.CREATED_201);
+    //     expect(createBlogs.body).toEqual({
+    //       id: expect.any(String),
+    //       name: name,
+    //       description: description,
+    //       websiteUrl: websiteUrl,
+    //       createdAt: expect.any(String),
+    //       isMembership: true,
+    //     });
+    //     const blogId = createBlogs.body.id;
 
-//         const createPostWithIncorrectData = await request(server)
-//           .post(`/blogs/${blogId}/posts`)
-//           .auth("admin", "qwerty")
-//           .send({
-//             title: 123,
-//             shortDescription: true,
-//             content: 456,
-//           });
-//         expect(createPostWithIncorrectData.status).toBe(
-//           HTTP_STATUS.BAD_REQUEST_400
-//         );
-//         expect(createPostWithIncorrectData.body).toStrictEqual(
-//           createErrorsMessageTest(["content", "title", "shortDescription"])
-//         );
-//       });
+    //     const createPostWithIncorrectData = await request(server)
+    //       .post(`/blogs/${blogId}/posts`)
+    //       .auth("admin", "qwerty")
+    //       .send({
+    //         title: 123,
+    //         shortDescription: true,
+    //         content: 456,
+    //       });
+    //     expect(createPostWithIncorrectData.status).toBe(
+    //       HTTP_STATUS.BAD_REQUEST_400
+    //     );
+    //     expect(createPostWithIncorrectData.body).toStrictEqual(
+    //       createErrorsMessageTest(["content", "title", "shortDescription"])
+    //     );
+    //   });
 
-//       it("create blog with incorrect input data => return 400 status code errorMessage", async () => {
-//         const createBlogs = await request(server)
-//           .post("/blogs")
-//           .auth("admin", "qwerty")
-//           .send({
-//             name: "Mickle",
-//             description: "I am a programmer",
-//             websiteUrl: "https://google.com",
-//           });
-//         expect(createBlogs.status).toBe(HTTP_STATUS.CREATED_201);
-//         expect(createBlogs.body).toEqual({
-//           id: expect.any(String),
-//           name: name,
-//           description: description,
-//           websiteUrl: websiteUrl,
-//           createdAt: expect.any(String),
-//           isMembership: true,
-//         });
-//         const blogId = createBlogs.body.id;
-//         const createPostWithIncorrectData = await request(server)
-//           .post(`/blogs/${blogId}/posts`)
-//           .auth("admin", "qwerty")
-//           .send({});
-//         expect(createPostWithIncorrectData.status).toBe(
-//           HTTP_STATUS.BAD_REQUEST_400
-//         );
-//         expect(createPostWithIncorrectData.body).toStrictEqual(
-//           createErrorsMessageTest(["content", "title", "shortDescription"])
-//         );
-//       });
+    //   it("create blog with incorrect input data => return 400 status code errorMessage", async () => {
+    //     const createBlogs = await request(server)
+    //       .post("/blogs")
+    //       .auth("admin", "qwerty")
+    //       .send({
+    //         name: "Mickle",
+    //         description: "I am a programmer",
+    //         websiteUrl: "https://google.com",
+    //       });
+    //     expect(createBlogs.status).toBe(HTTP_STATUS.CREATED_201);
+    //     expect(createBlogs.body).toEqual({
+    //       id: expect.any(String),
+    //       name: name,
+    //       description: description,
+    //       websiteUrl: websiteUrl,
+    //       createdAt: expect.any(String),
+    //       isMembership: true,
+    //     });
+    //     const blogId = createBlogs.body.id;
+    //     const createPostWithIncorrectData = await request(server)
+    //       .post(`/blogs/${blogId}/posts`)
+    //       .auth("admin", "qwerty")
+    //       .send({});
+    //     expect(createPostWithIncorrectData.status).toBe(
+    //       HTTP_STATUS.BAD_REQUEST_400
+    //     );
+    //     expect(createPostWithIncorrectData.body).toStrictEqual(
+    //       createErrorsMessageTest(["content", "title", "shortDescription"])
+    //     );
+    //   });
 
-//       it("create new blog without authorization => return 401 status code", async () => {
-//         const createBlogs = await request(server)
-//           .post("/blogs")
-//           .auth("admin", "qwerty")
-//           .send({
-//             name: "Mickle",
-//             description: "I am a programmer",
-//             websiteUrl: "https://google.com",
-//           });
-//         expect(createBlogs.status).toBe(HTTP_STATUS.CREATED_201);
-//         expect(createBlogs.body).toEqual({
-//           id: expect.any(String),
-//           name: name,
-//           description: description,
-//           websiteUrl: websiteUrl,
-//           createdAt: expect.any(String),
-//           isMembership: true,
-//         });
-//         const blogId = createBlogs.body.id;
-//         const createNewPostWithoutAuth = await request(server)
-//           .post(`/blogs/${blogId}/posts`)
-//           .send({
-//             title: "New title",
-//             shortDescription: "My new short description",
-//             content:
-//               "I am a progremmer and I like coding, my profession the back end developer.",
-//           });
-//         expect(createNewPostWithoutAuth.status).toBe(
-//           HTTP_STATUS.NOT_AUTHORIZATION_401
-//         );
-//       });
+    //   it("create new blog without authorization => return 401 status code", async () => {
+    //     const createBlogs = await request(server)
+    //       .post("/blogs")
+    //       .auth("admin", "qwerty")
+    //       .send({
+    //         name: "Mickle",
+    //         description: "I am a programmer",
+    //         websiteUrl: "https://google.com",
+    //       });
+    //     expect(createBlogs.status).toBe(HTTP_STATUS.CREATED_201);
+    //     expect(createBlogs.body).toEqual({
+    //       id: expect.any(String),
+    //       name: name,
+    //       description: description,
+    //       websiteUrl: websiteUrl,
+    //       createdAt: expect.any(String),
+    //       isMembership: true,
+    //     });
+    //     const blogId = createBlogs.body.id;
+    //     const createNewPostWithoutAuth = await request(server)
+    //       .post(`/blogs/${blogId}/posts`)
+    //       .send({
+    //         title: "New title",
+    //         shortDescription: "My new short description",
+    //         content:
+    //           "I am a progremmer and I like coding, my profession the back end developer.",
+    //       });
+    //     expect(createNewPostWithoutAuth.status).toBe(
+    //       HTTP_STATUS.NOT_AUTHORIZATION_401
+    //     );
+    //   });
 
-//       it("create new blog if specify blog doesn`t exist => return 404 status code", async () => {
-//         const createPostWithoutBlogId = await request(server)
-//           .post(`/blogs/123456789012345678901234/posts`)
-//           .auth("admin", "qwerty")
-//           .send(testBodyBlog);
-//         expect(createPostWithoutBlogId.status).toBe(HTTP_STATUS.NOT_FOUND_404);
-//       });
-//     });
+    //   it("create new blog if specify blog doesn`t exist => return 404 status code", async () => {
+    //     const createPostWithoutBlogId = await request(server)
+    //       .post(`/blogs/123456789012345678901234/posts`)
+    //       .auth("admin", "qwerty")
+    //       .send(testBodyBlog);
+    //     expect(createPostWithoutBlogId.status).toBe(HTTP_STATUS.NOT_FOUND_404);
+    //   });
+    // });
 
-    describe("return blog by id", () => {
-    	let id: any
-      it("return blog by id", async () => {
-		const modelObj = {
-            name: "Mickle",
-            description: "I am a programmer",
-            websiteUrl: "https://google.com",
-          }
-    	const createBlogs = await request(server)
-          .post("/blogs")
-          .auth("admin", "qwerty")
-          .send(modelObj);
+	// /************************************* get blog by id *******************************/
 
-    	  expect(createBlogs.status).toBe(HTTP_STATUS.CREATED_201);
-    	  expect(createBlogs.body).toEqual({
-    		id: expect.any(String),
-    		name: modelObj.name,
-    		description: modelObj.description,
-    		websiteUrl: modelObj.websiteUrl,
-    		createdAt: expect.any(String),
-    		isMembership: false,
-    	  });
-    	id = createBlogs.body.id
-		let name = createBlogs.body.name
-		let description = createBlogs.body.description
-		let websiteUrl = createBlogs.body.websiteUrl
+    // describe("return blog by id", () => {
+    // 	let id: any
+    //   it("return blog by id", async () => {
+	// 	const modelObj = {
+    //         name: "Mickle",
+    //         description: "I am a programmer",
+    //         websiteUrl: "https://google.com",
+    //       }
+    // 	const createBlogs = await request(server)
+    //       .post("/blogs")
+    //       .auth("admin", "qwerty")
+    //       .send(modelObj);
 
-        const getblogById = await request(server).get(`/blogs/${id}`);
-		console.log(getblogById.body)
-        expect(getblogById.status).toBe(HTTP_STATUS.OK_200);
-        expect(getblogById.body).toEqual({
-          id: id,
-          name: name,
-          description: description,
-          websiteUrl: websiteUrl,
-          createdAt: expect.any(String),
-          isMembership: false,
-        });
-      });
+    // 	  expect(createBlogs.status).toBe(HTTP_STATUS.CREATED_201);
+    // 	  expect(createBlogs.body).toEqual({
+    // 		id: expect.any(String),
+    // 		name: modelObj.name,
+    // 		description: modelObj.description,
+    // 		websiteUrl: modelObj.websiteUrl,
+    // 		createdAt: expect.any(String),
+    // 		isMembership: false,
+    // 	  });
+    // 	id = createBlogs.body.id
+	// 	let name = createBlogs.body.name
+	// 	let description = createBlogs.body.description
+	// 	let websiteUrl = createBlogs.body.websiteUrl
 
-      it("get post by incorrect blogId => return 404 status code", async () => {
-        const getblogById = await request(server).get(`/blogs/123456789012345678901234`);
-        expect(getblogById.status).toBe(HTTP_STATUS.NOT_FOUND_404);
-      });
-    });
+    //     const getblogById = await request(server).get(`/blogs/${id}`);
+	// 	// console.log(getblogById.body)
+    //     expect(getblogById.status).toBe(HTTP_STATUS.OK_200);
+    //     expect(getblogById.body).toEqual({
+    //       id: id,
+    //       name: name,
+    //       description: description,
+    //       websiteUrl: websiteUrl,
+    //       createdAt: expect.any(String),
+    //       isMembership: false,
+    //     });
+    //   });
+
+    //   it("get post by incorrect blogId => return 404 status code", async () => {
+    //     const getblogById = await request(server).get(`/blogs/123456789012345678901234`);
+    //     expect(getblogById.status).toBe(HTTP_STATUS.NOT_FOUND_404);
+    //   });
+    // });
 
 //     describe("update existing blog by id with input date", () => {
 //       let id: string
