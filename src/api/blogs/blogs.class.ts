@@ -16,7 +16,6 @@ function IsCustomString() {
 	@IsCustomString()
     description: string
 	@IsUrl()
-	@IsCustomString()
 	@MaxLength(100)
     websiteUrl: string
 }

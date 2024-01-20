@@ -305,7 +305,7 @@ describe("/posts", () => {
 	const makeLikeDislike = await request(server)
 	.put(`posts/${postId1}/like-status`)
 	.send({
-		"likeStatus": true
+		"likeStatus": "None"
 	})
 	expect(makeLikeDislike.status).toBe(HTTP_STATUS.BAD_REQUEST_400)
 	expect(makeLikeDislike.body).toStrictEqual(createErrorsMessageTest(["likeStatus"]))
