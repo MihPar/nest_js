@@ -1,6 +1,7 @@
 import { Transform, TransformFnParams } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
 import { IsMongoId, IsNotEmpty, IsString, Length, MaxLength } from "class-validator";
+import { IsBlogExist } from "../../infrastructure/decorator/blogIsExistDecorator";
 
 // export class Posts {
 // 	public createdAt: string;
@@ -88,7 +89,7 @@ export const IsCustomString = () => applyDecorators(IsString(), Trim(), IsNotEmp
 	@IsCustomString()
 	@MaxLength(100)
 	shortDescription: string
-	
+
 	@IsCustomString()
 	@MaxLength(1000)
 	content: string
@@ -107,6 +108,7 @@ export class inputModelPostClass {
 	@MaxLength(1000)
 	content: string
 	
+	@IsBlogExist({message:'blog not found'})
 	@IsCustomString()
 	blogId: string
   }
