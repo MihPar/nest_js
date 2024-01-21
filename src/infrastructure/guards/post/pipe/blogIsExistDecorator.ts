@@ -16,7 +16,7 @@ export class IsBlogExistConstraint implements ValidatorConstraintInterface {
    async validate(blogId: any, args: ValidationArguments) {
 
         const blog = await this.blogsQueryRepository.findRawBlogById(blogId)
-       console.log(blog)
+    //    console.log(blog)
        return !!blog;
     }
 }

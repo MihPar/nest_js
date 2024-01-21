@@ -17,11 +17,13 @@ export class CheckRefreshTokenForGet implements CanActivate {
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req: Request = context.switchToHttp().getRequest();
+	// console.log("req.headers.authorization: ", req.headers.authorization)
     if (!req.headers.authorization) throw new UnauthorizedException('401');
     const token = req.headers.authorization.split(' ')[1];
     // const userId = await this.jwtService.verifyAsync(token, {
     //   secret: process.env.JWT_SECRET!,
     // });
+
 	// let payload
 	// try {
 	// 	payload = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
@@ -29,7 +31,8 @@ export class CheckRefreshTokenForGet implements CanActivate {
 	// 	return false
 	// }
 	const payload = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
-	console.log("userId: ", payload)
+	// console.log("payload: ", payload)
+	// console.log("userId: ", payload)
     if (payload) {
       const resultAuth = await this.usersQueryRepository.findUserById(payload.userId);
       if (resultAuth) {

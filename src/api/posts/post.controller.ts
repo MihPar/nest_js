@@ -57,7 +57,7 @@ export class PostController {
     @UserIdDecorator() userId: string | null,
 	) {
 	if(!userId) return null
-	console.log(userId, "userId")
+	// console.log(userId, "userId")
     const findPost = await this.postsQueryRepository.findPostById(dto.postId);
 	// console.log(findPost, "findPost 62 str")
     if (!findPost) throw new NotFoundException('404')
@@ -189,7 +189,7 @@ export class PostController {
     @Param() dto: InputModelClassPostId, 
 	@UserIdDecorator() userId: string | null,
   ) {
-	console.log('postId: ', dto.postId)
+	// console.log('postId: ', dto.postId)
     const getPostById: Posts | null =
       await this.postsQueryRepository.findPostById(dto.postId, userId);
     if (!getPostById) {

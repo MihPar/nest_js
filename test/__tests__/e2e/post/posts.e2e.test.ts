@@ -248,7 +248,7 @@ describe('/posts', () => {
     const getComment = await request(server)
       .get(`/comments/${id}`)
       .set('Authorization', `Bearer ${createAccessToken.body.accessToken}`);
-    console.log('getComment.body: ', getComment.body);
+    // console.log('getComment.body: ', getComment.body);
     expect(getComment.status).toBe(HTTP_STATUS.OK_200);
     expect(getComment.body).toEqual({
       id: id,
@@ -391,7 +391,7 @@ describe('/posts', () => {
       .post('/blogs')
       .auth('admin', 'qwerty')
       .send(inputDataBlog);
-    console.log('str 395: ', createBlog.body);
+    // console.log('str 395: ', createBlog.body);
     expect(createBlog.status).toBe(HTTP_STATUS.CREATED_201);
     expect(createBlog.body).toEqual({
       id: expect.any(String),
@@ -418,7 +418,7 @@ describe('/posts', () => {
       .auth('admin', 'qwerty')
       .send(inputDataPost);
     expect(createNewPost.status).toBe(HTTP_STATUS.CREATED_201);
-	
+
     expect(createNewPost.body).toEqual({
       id: expect.any(String),
       title: inputDataPost.title,
