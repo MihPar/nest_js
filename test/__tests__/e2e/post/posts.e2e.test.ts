@@ -411,11 +411,14 @@ describe('/posts', () => {
       blogId: blogId,
     };
 
+	
+
     const createNewPost = await request(server)
       .post('/posts')
       .auth('admin', 'qwerty')
       .send(inputDataPost);
     expect(createNewPost.status).toBe(HTTP_STATUS.CREATED_201);
+	
     expect(createNewPost.body).toEqual({
       id: expect.any(String),
       title: inputDataPost.title,
@@ -438,6 +441,23 @@ describe('/posts', () => {
       },
     });
 
+
+	const getPostId = await request(server)
+	.get(`/posts/${createNewPost.body.id}`)
+	.set(`Authorization`, `Bearer ${createAccessTokenBody.accessToken}`)
+	expect(getPostId.status).toBe(HTTP_STATUS.OK_200)
+
+	expect(getPostId.body.id).toEqual(expect.any(String))
+	expect(getPostId.body.title).toEqual(inputDataPost.title)
+	expect(getPostId.body.shortDescription).toEqual(inputDataPost.shortDescription)
+	expect(getPostId.body.content).toEqual(inputDataPost.content)
+	expect(getPostId.body.blogId).toEqual(blogId)
+	expect(getPostId.body.blogName).toEqual(createBlog.body.name)
+	expect(getPostId.body.createdAt).toEqual(expect.any(String))
+	expect(getPostId.body.extendedLikesInfo.likesCount).toEqual(0)
+	expect(getPostId.body.extendedLikesInfo.dislikesCount).toEqual(0)
+	expect(getPostId.body.extendedLikesInfo.myStatus).toEqual('None')
+	expect(getPostId.body.extendedLikesInfo.newestLikes).toEqual([])
     id = createNewPost.body.id;
   });
   it('create new post with incorrect input data => return 400 status code', async () => {

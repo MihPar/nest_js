@@ -26,7 +26,7 @@ export class CheckRefreshTokenForGet implements CanActivate {
 	try {
 		payload = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
 	} catch(error) {
-		throw new UnauthorizedException("401")
+		return false
 	}
 	console.log("userId: ", payload)
     if (payload) {

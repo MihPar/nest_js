@@ -10,7 +10,6 @@ import {
   Post,
   Put,
   Query,
-  UseFilters,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -54,7 +53,7 @@ export class PostController {
   async updateLikeStatus(
 	@Param() dto: InputModelClassPostId, 
 	@Body() status: InputModelLikeStatusClass,
-	@UserDecorator() user: UserClass, 
+	@UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
 	) {
 	if(!userId) return null
