@@ -12,6 +12,7 @@ import {
   Query,
   UseFilters,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { PaginationType } from '../../types/pagination.types';
 import { CommentViewModel, CommentViewType } from '../comment/comment.type';
@@ -108,7 +109,7 @@ export class PostController {
   @UseGuards(CheckRefreshTokenForPost)
   async createNewCommentByPostId(
 	@Param() dto: InputModelClassPostId, 
-	@Body() inputModelContent: InputModelContentePostClass,
+	@Body(new ValidationPipe({ validateCustomDecorators: true })) inputModelContent: InputModelContentePostClass,
   	@UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null
 	) {
@@ -161,7 +162,7 @@ export class PostController {
   @HttpCode(201)
   @UseGuards(AuthBasic)
 //   @UseFilters(new HttpExceptionFilter())
-  async createPost(@Body() inputModelPost: inputModelPostClass) {
+  async createPost(@Body(new ValidationPipe({ validateCustomDecorators: true })) inputModelPost: inputModelPostClass) {
 	// console.log("inputModelPost: ", inputModelPost)
     const findBlog: BlogClass | null = await this.blogsQueryRepository.findRawBlogById(
       inputModelPost.blogId,
@@ -203,7 +204,7 @@ export class PostController {
 //   @UseFilters(new HttpExceptionFilter())
   async updatePostById(
     @Param() dto: InputModelClassPostId, 
-    @Body() inputModelData: inputModelPostClass,
+    @Body(new ValidationPipe({ validateCustomDecorators: true })) inputModelData: inputModelPostClass,
   ) {
 	const command = new UpdateOldPostCommand(dto.postId, inputModelData)
 	const updatePost: boolean = await this.commandBus.execute(command)

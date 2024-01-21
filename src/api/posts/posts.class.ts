@@ -66,7 +66,7 @@ import { IsBlogExist } from "../../infrastructure/guards/post/pipe/blogIsExistDe
 // 		createdAt: this.createdAt,
 // 		extendedLikesInfo: {
 // 			dislikesCount: this.extendedLikesInfo.dislikesCount, 
-// 			likesCount: this.extendedLikesInfo.likesCount, 
+// 			likesCount: this.extendedLikesInfo.likesCount,
 // 			myStatus, 
 // 			newestLikes
 // 		},
@@ -82,29 +82,47 @@ export const IsCustomString = () => applyDecorators(IsString(), Trim(), IsNotEmp
 
 
   export class bodyPostsModelClass {
-	@IsCustomString()
+	// @IsCustomString()
+	@IsString()
+	@Trim() 
+	@IsNotEmpty()
 	@MaxLength(30)
 	title: string
 
-	@IsCustomString()
+	// @IsCustomString()
+	@IsString()
+	@Trim() 
+	@IsNotEmpty()
 	@MaxLength(100)
 	shortDescription: string
 
-	@IsCustomString()
+	// @IsCustomString()
+	@IsString()
+	@Trim() 
+	@IsNotEmpty()
 	@MaxLength(1000)
 	content: string
 }
 
 export class inputModelPostClass {
-	@IsCustomString()
+	// @IsCustomString()
+	@IsString()
+	@Trim() 
+	@IsNotEmpty()
 	@MaxLength(30)
 	title: string
 
-	@IsCustomString()
+	// @IsCustomString()
+	@IsString()
+	@Trim() 
+	@IsNotEmpty()
 	@MaxLength(100)
 	shortDescription: string
 
-	@IsCustomString()
+	// @IsCustomString()
+	@IsString()
+	@Trim() 
+	@IsNotEmpty()
 	@MaxLength(1000)
 	content: string
 	
@@ -119,7 +137,11 @@ export class inputModelPostClass {
   }
 
   export class InputModelContentePostClass {
-	@IsCustomString()
+	// @IsCustomString()
+	
+	@IsString()
+	@Trim() 
+	@IsNotEmpty()
 	@MaxLength(300)
     @MinLength(20)
 	content: string
