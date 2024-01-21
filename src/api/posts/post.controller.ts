@@ -35,6 +35,7 @@ import { UpdateOldPostCommand } from './use-case/updateOldPost-use-case';
 import { DeletePostByIdCommand } from './use-case/deletePostById-use-case';
 import { UpdateLikeStatusCommand } from './use-case/updateLikeStatus-use-case';
 import { InputModelLikeStatusClass } from '../comment/comment.class-pipe';
+import { CheckRefreshTokenForGet } from '../../infrastructure/guards/comments/bearer.authGetComment';
 
 @Controller('posts')
 export class PostController {
@@ -184,6 +185,7 @@ export class PostController {
 
   @Get(':postId')
   @HttpCode(200)
+  @UseGuards(CheckRefreshTokenForGet)
   async getPostById(
     @Param() dto: InputModelClassPostId, 
 	@UserIdDecorator() userId: string | null,

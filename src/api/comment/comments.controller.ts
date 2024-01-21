@@ -7,7 +7,7 @@ import { CheckRefreshTokenForComments } from '../../infrastructure/guards/commen
 import { commentDBToView } from '../../utils/helpers';
 import { CommentService } from './comment.service';
 import { CommentRepository } from './comment.repository';
-import { CheckRefreshTokenForGetComments } from '../../infrastructure/guards/comments/bearer.authGetComment';
+import { CheckRefreshTokenForGet } from '../../infrastructure/guards/comments/bearer.authGetComment';
 import { UserClass } from '../../schema/user.schema';
 import { UpdateLikestatusCommand } from './use-case/updateLikeStatus-use-case';
 import { CommandBus } from '@nestjs/cqrs';
@@ -98,7 +98,7 @@ export class CommentsController {
 
   @Get(':id')
   @HttpCode(200)
-  @UseGuards(CheckRefreshTokenForGetComments)
+  @UseGuards(CheckRefreshTokenForGet)
   async getCommentById(
     @Param() dto: inputModelId,
     @UserDecorator() user: UserClass,

@@ -9,7 +9,7 @@ import { Request } from 'express';
 import { UsersQueryRepository } from '../../../api/users/users.queryRepository';
 
 @Injectable()
-export class CheckRefreshTokenForGetComments implements CanActivate {
+export class CheckRefreshTokenForGet implements CanActivate {
   constructor(
     protected jwtService: JwtService,
     protected usersQueryRepository: UsersQueryRepository,
