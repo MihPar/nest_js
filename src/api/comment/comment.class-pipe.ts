@@ -58,15 +58,16 @@ import { applyDecorators } from "@nestjs/common";
 
 //   const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
 
-// function IsOptional() {
-// 	return applyDecorators(IsString(), IsNotEmpty())
-// }
+function IsOptional() {
+	return applyDecorators(IsString(), IsNotEmpty())
+}
 
 const allowedValues = ['Like', 'Dislike', 'None']
 
   export class InputModelLikeStatusClass {
-	@IsString()
-	@IsNotEmpty()
+	// @IsString()
+	// @IsNotEmpty()
+	@IsOptional()
 	@Matches(new RegExp(`^(${allowedValues.join('|')})$`))
 	likeStatus: string
   }
@@ -77,8 +78,9 @@ const allowedValues = ['Like', 'Dislike', 'None']
   }
 
   export class InputModelContent {
-	@IsString()
-	@IsNotEmpty()
+	// @IsString()
+	// @IsNotEmpty()
+	@IsOptional()
 	@MinLength(20)
 	@MaxLength(300)
 	content: string

@@ -444,8 +444,8 @@ describe('/posts', () => {
     const inputDataPost = {
       title: 123,
       shortDescription: 456,
-      content: true,
-      blogId: null,
+      content: "sls",
+      blogId: 123,
     };
     const createNewPost = await request(server)
       .post('/posts')
