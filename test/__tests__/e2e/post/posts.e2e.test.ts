@@ -554,7 +554,7 @@ describe('/posts', () => {
 
   it('get post by id => return 200 status code', async () => {
     const getPostById = await request(server).get(`/posts/${id}`);
-    console.log('id: ', id);
+    // console.log('id: ', id);
     //   .set("Authorization", `Bearer ${createAccessTokenBody.accessToken}`);
     expect(getPostById.status).toBe(HTTP_STATUS.OK_200);
     expect(getPostById.body).toStrictEqual({

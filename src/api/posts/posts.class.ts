@@ -108,21 +108,21 @@ export const IsCustomString = () => applyDecorators(IsString(), Trim(), IsNotEmp
 export class inputModelPostClass {
 	// @IsCustomString()
 	@IsString()
-	// @Trim() 
+	@Trim() 
 	@IsNotEmpty()
 	@MaxLength(30)
 	title: string
 
 	// @IsCustomString()
 	@IsString()
-	// @Trim() 
+	@Trim() 
 	@IsNotEmpty()
 	@MaxLength(100)
 	shortDescription: string
 
 	// @IsCustomString()
 	@IsString()
-	// @Trim() 
+	@Trim() 
 	@IsNotEmpty()
 	@MaxLength(1000)
 	content: string

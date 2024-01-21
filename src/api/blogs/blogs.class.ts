@@ -11,13 +11,13 @@ function IsCustomString() {
   export class bodyBlogsModel {
 	// @IsCustomString()
 	@IsString() 
-	// @Trim() 
+	@Trim() 
 	@IsNotEmpty()
 	@MaxLength(15)
 	name: string
 
 	@IsString() 
-	// @Trim() 
+	@Trim() 
 	@IsNotEmpty()
 	@MaxLength(500)
 	// @IsCustomString()
