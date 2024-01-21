@@ -1,5 +1,5 @@
 import { Transform, TransformFnParams } from "class-transformer";
-import { IsMongoId, IsNotEmpty, IsString, Length, Matches } from "class-validator";
+import { IsMongoId, IsNotEmpty, IsString, Length, Matches, MaxLength, MinLength } from "class-validator";
 import { applyDecorators } from "@nestjs/common";
 
 // export class Comment {
@@ -58,14 +58,15 @@ import { applyDecorators } from "@nestjs/common";
 
 //   const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
 
-function IsOptional() {
-	return applyDecorators(IsString(), IsNotEmpty())
-}
+// function IsOptional() {
+// 	return applyDecorators(IsString(), IsNotEmpty())
+// }
 
 const allowedValues = ['Like', 'Dislike', 'None']
 
   export class InputModelLikeStatusClass {
-	@IsOptional()
+	@IsString()
+	@IsNotEmpty()
 	@Matches(new RegExp(`^(${allowedValues.join('|')})$`))
 	likeStatus: string
   }
@@ -76,8 +77,10 @@ const allowedValues = ['Like', 'Dislike', 'None']
   }
 
   export class InputModelContent {
-	@IsOptional()
-	@Length(20, 300, {message: "Content should be lenght from 20 to 300 symbols"})
+	@IsString()
+	@IsNotEmpty()
+	@MinLength(20)
+	@MaxLength(300)
 	content: string
   }
 
