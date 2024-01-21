@@ -40,7 +40,7 @@ import { CheckRefreshToken } from '../infrastructure/guards/auth/checkRefreshTok
 import { Ratelimits } from '../infrastructure/guards/auth/rateLimits';
 import { RatelimitsRegistration } from '../infrastructure/guards/auth/rateLimitsRegistration';
 import { CheckRefreshTokenForComments } from '../infrastructure/guards/comments/bearer.authForComments';
-import { CheckRefreshTokenForGetComments } from '../infrastructure/guards/comments/bearer.authGetComment';
+import { CheckRefreshTokenForGet } from '../infrastructure/guards/comments/bearer.authGetComment';
 import { CheckRefreshTokenForPost } from '../infrastructure/guards/post/bearer.authForPost';
 import { ForbiddenCalss } from '../infrastructure/guards/securityDevice.ts/forbidden';
 import { AppService } from '../app.service';
@@ -134,7 +134,7 @@ const guards = [
   Ratelimits,
   RatelimitsRegistration,
   CheckRefreshTokenForComments,
-  CheckRefreshTokenForGetComments,
+  CheckRefreshTokenForGet,
   CheckRefreshTokenForPost,
   ForbiddenCalss,
   IsConfirmed,

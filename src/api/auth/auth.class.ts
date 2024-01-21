@@ -28,13 +28,16 @@ export class emailInputDataClass {
 export class InputModelNewPasswordClass {
 	// @RequiredString()
 	// @Length(6, 20, {message: "The length of password is incorrect"})
-	// newPassword: string
+	@IsString()
+	@Trim() 
+	@MinLength(6)
+	@MaxLength(20)
+	newPassword: string
+
 	// @RequiredString()
 	@IsString()
 	@Trim() 
 	@IsNotEmpty()
-	@MinLength(6)
-	@MaxLength(20)
 	recoveryCode: string
 }
 
