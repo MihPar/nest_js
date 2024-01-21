@@ -1,7 +1,8 @@
 import { Transform, TransformFnParams } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
-import { IsMongoId, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
+import { IsEnum, IsMongoId, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
 import { IsBlogExist } from "../../infrastructure/guards/post/pipe/blogIsExistDecorator";
+import { LikeStatusEnum } from "../likes/likes.emun";
 
 // export class Posts {
 // 	public createdAt: string;
@@ -146,3 +147,8 @@ export class inputModelPostClass {
     @MinLength(20)
 	content: string
   }
+
+  export class likesDto {
+    @IsEnum(LikeStatusEnum)
+    likeStatus: LikeStatusEnum
+}

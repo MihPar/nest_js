@@ -23,7 +23,6 @@ import { CommentQueryRepository } from '../comment/comment.queryRepository';
 import { PostsQueryRepository } from './postQuery.repository';
 import { BlogsQueryRepository } from '../blogs/blogs.queryReposity';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
-import { InputModelLikeStatusClass } from '../comment/comment.class-pipe';
 import { CheckRefreshTokenForPost } from '../../infrastructure/guards/post/bearer.authForPost';
 import { AuthBasic } from '../../infrastructure/guards/auth/basic.auth';
 import { UserClass } from '../../schema/user.schema';
@@ -35,6 +34,7 @@ import { Posts } from '../../schema/post.schema';
 import { UpdateOldPostCommand } from './use-case/updateOldPost-use-case';
 import { DeletePostByIdCommand } from './use-case/deletePostById-use-case';
 import { UpdateLikeStatusCommand } from './use-case/updateLikeStatus-use-case';
+import { InputModelLikeStatusClass } from '../comment/comment.class-pipe';
 
 @Controller('posts')
 export class PostController {

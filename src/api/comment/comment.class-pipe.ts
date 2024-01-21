@@ -1,6 +1,7 @@
 import { Transform, TransformFnParams } from "class-transformer";
-import { IsMongoId, IsNotEmpty, IsString, Length, Matches, MaxLength, MinLength } from "class-validator";
+import { IsEnum, IsIn, IsMongoId, IsNotEmpty, IsString, Length, Matches, MaxLength, MinLength } from "class-validator";
 import { applyDecorators } from "@nestjs/common";
+import { LikeStatusEnum } from "../likes/likes.emun";
 
 // export class Comment {
 // 	public createdAt: string;
@@ -71,6 +72,12 @@ const allowedValues = ['Like', 'Dislike', 'None']
 	@Matches(new RegExp(`^(${allowedValues.join('|')})$`))
 	likeStatus: string
   }
+
+export class updateLikeDto{
+    @IsIn(Object.values(LikeStatusEnum))
+    likeStatus: LikeStatusEnum
+
+}
 
   export class inputModelCommentId {
 	@IsMongoId()
