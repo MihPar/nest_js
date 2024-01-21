@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Put, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Put, UseGuards, ValidationPipe } from '@nestjs/common';
 import { CommentQueryRepository } from './comment.queryRepository';
 import { CommentViewModel } from './comment.type';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
@@ -28,7 +28,7 @@ export class CommentsController {
   @UseGuards(CheckRefreshTokenForComments)
 //   @UseFilters(new HttpExceptionFilter())
   async updateByCommentIdLikeStatus(
-    @Body() status: InputModelLikeStatusClass,
+    @Body(new ValidationPipe({ validateCustomDecorators: true })) status: InputModelLikeStatusClass,
     @Param() id: inputModelCommentId,
     @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string,
@@ -61,7 +61,7 @@ export class CommentsController {
 //   @UseFilters(new HttpExceptionFilter())
   async updataCommetById(
 	@Param() id: inputModelCommentId, 
-	@Body() dto: InputModelContent,
+	@Body(new ValidationPipe({ validateCustomDecorators: true })) dto: InputModelContent,
 	@UserDecorator() user: UserClass,
 	@UserIdDecorator() userId: string | null,
 	) {

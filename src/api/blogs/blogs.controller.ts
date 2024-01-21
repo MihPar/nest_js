@@ -1,5 +1,5 @@
 import { CommandBus } from '@nestjs/cqrs';
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, Query, UseFilters, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, Query, UseFilters, UseGuards, ValidationPipe } from "@nestjs/common";
 import { BlogsQueryRepository } from "./blogs.queryReposity";
 import { bodyBlogsModel, inputModelClass } from "./blogs.class";
 import { BlogsViewType } from "./blogs.type";
@@ -56,7 +56,7 @@ export class BlogsController {
   @HttpCode(201)
   @UseGuards(AuthBasic)
 //   @UseFilters(new HttpExceptionFilter())
-  async createBlog(@Body() inputDateModel: bodyBlogsModel) {
+  async createBlog(@Body(new ValidationPipe({ validateCustomDecorators: true })) inputDateModel: bodyBlogsModel) {
 	const command = new CreateNewBlogCommand(inputDateModel)
 	const createBlog: BlogsViewType = await this.commandBus.execute(command)
     // const createBlog: BlogsViewType = await this.blogsService.createNewBlog(
@@ -100,7 +100,7 @@ export class BlogsController {
   @UseGuards(AuthBasic)
   async createPostByBlogId(
     @Param() dto: inputModelClass,
-    @Body() inputDataModel: bodyPostsModelClass,
+    @Body(new ValidationPipe({ validateCustomDecorators: true })) inputDataModel: bodyPostsModelClass,
   ) {
     const findBlog: BlogsViewType | null = await this.blogsQueryRepository.findBlogById(dto.blogId);
     if (!findBlog) throw new NotFoundException('Blogs by id not found 404');
@@ -134,7 +134,7 @@ export class BlogsController {
   @UseFilters(new HttpExceptionFilter())
   async updateBlogsById(
     @Param() dto: inputModelClass,
-    @Body() inputDateMode: bodyBlogsModel,
+    @Body(new ValidationPipe({ validateCustomDecorators: true })) inputDateMode: bodyBlogsModel,
   ) {
 	const command = new UpdateBlogCommand(dto.blogId, inputDateMode)
 	const isUpdateBlog = await this.commandBus.execute(command)

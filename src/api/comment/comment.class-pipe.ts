@@ -57,18 +57,18 @@ import { LikeStatusEnum } from "../likes/likes.emun";
 // 	}
 //   }
 
-//   const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
+  const Trim = () => Transform(({value}: TransformFnParams) => value?.trim())
 
-function IsOptional() {
-	return applyDecorators(IsString(), IsNotEmpty())
-}
+// function IsOptional() {
+// 	return applyDecorators(IsString(), Trim(), IsNotEmpty())
+// }
 
 const allowedValues = ['Like', 'Dislike', 'None']
 
   export class InputModelLikeStatusClass {
-	// @IsString()
-	// @IsNotEmpty()
-	@IsOptional()
+	@IsString()
+	@IsNotEmpty()
+	// @IsOptional()
 	@Matches(new RegExp(`^(${allowedValues.join('|')})$`))
 	likeStatus: string
   }
@@ -87,7 +87,9 @@ export class updateLikeDto{
   export class InputModelContent {
 	// @IsString()
 	// @IsNotEmpty()
-	@IsOptional()
+	@IsString() 
+	@Trim()
+	@IsNotEmpty()
 	@MinLength(20)
 	@MaxLength(300)
 	content: string

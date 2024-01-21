@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, Length 	} from "class-validator";
+import { Transform, TransformFnParams } from "class-transformer";
+import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength 	} from "class-validator";
 
 // export class DbId {
 // 	_id: ObjectId
@@ -24,12 +25,28 @@ import { IsEmail, IsNotEmpty, Length 	} from "class-validator";
 // 	}
 // }
 
+const Trim = () => Transform(({value}: TransformFnParams) => {
+	return value?.trim()
+})
+
 export class InputModelClassCreateBody {
-	@Length(3, 10)
+	// @Length(3, 10)
+	@IsString()
+	@Trim()
+	@IsNotEmpty()
+	@MinLength(3)
+	@MaxLength(10)
 	login: string
-	@Length(6, 20)
+
+	// @Length(6, 20)
+	@IsString()
+	@Trim()
+	@IsNotEmpty()
+	@MinLength(6)
+	@MaxLength(20)
 	@IsNotEmpty()
 	password: string
+
 	@IsEmail({}, {
 		message: "incorrect email"
 	})
