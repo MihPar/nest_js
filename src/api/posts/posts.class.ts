@@ -1,6 +1,6 @@
 import { Transform, TransformFnParams } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
-import { IsMongoId, IsNotEmpty, IsString, Length, MaxLength } from "class-validator";
+import { IsMongoId, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
 import { IsBlogExist } from "../../infrastructure/guards/post/pipe/blogIsExistDecorator";
 
 // export class Posts {
@@ -120,6 +120,7 @@ export class inputModelPostClass {
 
   export class InputModelContentePostClass {
 	@IsCustomString()
-	@Length(20, 300, {message: "Content should be lenght from 20 to 300 symbols"})
+	@MaxLength(300)
+    @MinLength(20)
 	content: string
   }
