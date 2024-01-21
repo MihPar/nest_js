@@ -22,12 +22,13 @@ export class CheckRefreshTokenForGet implements CanActivate {
     // const userId = await this.jwtService.verifyAsync(token, {
     //   secret: process.env.JWT_SECRET!,
     // });
-	let payload
-	try {
-		payload = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
-	} catch(error) {
-		return false
-	}
+	// let payload
+	// try {
+	// 	payload = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
+	// } catch(error) {
+	// 	return false
+	// }
+	const payload = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
 	console.log("userId: ", payload)
     if (payload) {
       const resultAuth = await this.usersQueryRepository.findUserById(payload.userId);
