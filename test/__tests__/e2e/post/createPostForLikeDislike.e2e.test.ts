@@ -1,15 +1,11 @@
 import request from "supertest";
 import dotenv from "dotenv";
-import { stopDb } from "../../../db/db";
-import mongoose from "mongoose";
-import { HTTP_STATUS } from "../../../utils/utils";
-import { initApp } from "../../../settings";
+import { INestApplication } from "@nestjs/common";
+import { Test, TestingModule } from "@nestjs/testing";
+import { AppModule } from "../../../../src/modules/app.module";
+import { appSettings } from "../../../../src/setting";
+import { HTTP_STATUS } from "../../../../src/utils/utils";
 dotenv.config();
-
-const app = initApp();
-
-const mongoURI = process.env.MONGO_URL || "mongodb://0.0.0.0:27017";
-let dbName = process.env.mongoDBName || "mongoose-example";
 
 export function createErrorsMessageTest(fields: string[]) {
   const errorsMessages: any = [];
@@ -23,14 +19,25 @@ export function createErrorsMessageTest(fields: string[]) {
 }
 
 describe("/blogs", () => {
+	let app: INestApplication;
+	let server: any;
   beforeAll(async () => {
-    await mongoose.connect(mongoURI);
-    const wipeAllRes = await request(app).delete("/testing/all-data").send();
+	const moduleFixture: TestingModule = await Test.createTestingModule({
+		imports: [AppModule],
+	  }).compile();
+  
+	  app = moduleFixture.createNestApplication();
+	  appSettings(app);
+  
+	  await app.init();
+	  server = app.getHttpServer();
+
+    const wipeAllRes = await request(server).delete("/testing/all-data").send();
     expect(wipeAllRes.status).toBe(HTTP_STATUS.NO_CONTENT_204);
   });
 
   afterAll(async () => {
-    await stopDb();
+    await app.close();
   });
 
   afterAll((done) => {
@@ -58,6 +65,7 @@ describe("/blogs", () => {
 //     const wipeAllRes = await request(app).delete("/testing/all-data").send();
 //   });
 
+
   describe("POST -> /posts: should create new post for an existing blog; status 201; content: created post; used additional methods: POST -> /blogs, GET -> /posts/:id", () => {
     type PostType = {
       id: string;
@@ -80,7 +88,7 @@ describe("/blogs", () => {
         password: "qwerty",
         email: "mpara7473@gmail.com",
       };
-      const createUser = await request(app)
+      const createUser = await request(server)
         .post(`/users`)
         .auth("admin", "qwerty")
         .send(user);
@@ -104,7 +112,7 @@ describe("/blogs", () => {
         accessToken: expect.any(String),
       });
 
-      const createBlogs = await request(app)
+      const createBlogs = await request(server)
         .post("/blogs")
         .auth("admin", "qwerty")
         .send({
@@ -125,7 +133,7 @@ describe("/blogs", () => {
       const blogId = createBlogs.body.id;
       blogName = createBlogs.body.name;
 
-      const createPosts = await request(app)
+      const createPosts = await request(server)
         .post("/posts")
         .auth("admin", "qwerty")
         .send({
@@ -161,7 +169,7 @@ describe("/blogs", () => {
 			]
 		  }
       });
-	  const getPostById = await request(app)
+	  const getPostById = await request(server)
 	  .get(`/posts/${id}`)
 	  .set("Authorization", `Bearer ${token}`);
 
@@ -190,7 +198,7 @@ describe("/blogs", () => {
 	});
     });
     // it("get post by id => return 200 status code", async () => {
-    //   const getPostById = await request(app)
+    //   const getPostById = await request(server)
     //     .get(`/posts/${id}`)
     //     .set("Authorization", `Bearer ${token}`);
     //   expect(getPostById.status).toBe(HTTP_STATUS.OK_200);

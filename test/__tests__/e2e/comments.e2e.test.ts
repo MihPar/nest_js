@@ -1,5 +1,4 @@
 import request from "supertest";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";

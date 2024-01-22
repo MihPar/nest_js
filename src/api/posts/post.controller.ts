@@ -185,7 +185,7 @@ export class PostController {
 
   @Get(':postId')
   @HttpCode(200)
-//   @UseGuards(CheckRefreshTokenForGet)
+  @UseGuards(CheckRefreshTokenForGet)
   async getPostById(
     @Param() dto: InputModelClassPostId, 
 	@UserIdDecorator() userId: string | null,
@@ -196,7 +196,7 @@ export class PostController {
     if (!getPostById) {
       throw new NotFoundException('Post by id not found');
     }
-	console.log('getPostById: ', getPostById)
+	// console.log('getPostById: ', getPostById)
     return getPostById;
   }
 
