@@ -66,9 +66,9 @@ export class BlogsController {
     return createBlog;
   }
   
-  @HttpCode(200)
-  @UseGuards(CheckRefreshTokenForGet)
   @Get(':blogId/posts')
+  @HttpCode(200)
+//   @UseGuards(CheckRefreshTokenForGet) // to put guard
   async getPostsByBlogId(
     @Param() dto: inputModelClass,
 	@UserDecorator() user: UserClass,
