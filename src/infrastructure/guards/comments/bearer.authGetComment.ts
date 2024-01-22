@@ -1,9 +1,10 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import { JwtService } from '@nestjs/jwt';
 import {
   Injectable,
   CanActivate,
   ExecutionContext,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { UsersQueryRepository } from '../../../api/users/users.queryRepository';
@@ -19,38 +20,19 @@ export class CheckRefreshTokenForGet implements CanActivate {
     const req: Request = context.switchToHttp().getRequest();
 	// console.log("req.headers.authorization: ", req.headers.authorization)
     // if (!req.headers.authorization) throw new UnauthorizedException('401');
-
-	let token
 	let payload
-	if (!req.headers.authorization) {
-		req.user = null
-	} else {
-		token = req.headers.authorization.split(' ')[1];
+	let token = req.headers.authorization
+	if (!token) {
+			req.user = null 
+			return true
+		} try {
 		payload = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
-	}
-	
-    // const userId = await this.jwtService.verifyAsync(token, {
-    //   secret: process.env.JWT_SECRET!,
-    // });
-
-	// let payload
-	// try {
-	// 	payload = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
-	// } catch(error) {
-	// 	return false
-	// }
-	// const payload = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
-	// console.log("payload: ", payload)
-	// console.log("userId: ", payload)
-    if (payload) {
-      const resultAuth = await this.usersQueryRepository.findUserById(payload.userId);
-      if (resultAuth) {
-        req['user'] = resultAuth;
+		const resultAuth = await this.usersQueryRepository.findUserById(payload.userId);
+		req['user'] = resultAuth;
         return true;
-      }
-      return true;
-    } else {
-      return true;
-    }
+	} catch(error) {
+		console.log(error)
+		return true
+	}
   }
 }

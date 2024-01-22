@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import { JwtService } from '@nestjs/jwt';
 import {
   Injectable,
@@ -7,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { UsersQueryRepository } from '../../../api/users/users.queryRepository';
+dotenv.config();
 
 @Injectable()
 export class CheckRefreshTokenForComments implements CanActivate {
