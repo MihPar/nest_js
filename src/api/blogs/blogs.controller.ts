@@ -81,7 +81,7 @@ export class BlogsController {
       sortDirection: string;
     },
   ) {
-	if(!userId) return null
+	if(!userId) throw new NotFoundException("404")  //
     const blog = await this.blogsQueryRepository.findBlogById(dto.blogId);
     if (!blog) throw new NotFoundException('Blogs by id not found');
     const getPosts: PaginationType<Posts> =
