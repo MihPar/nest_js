@@ -17,6 +17,7 @@ import { CreateNewBlogCommand } from './use-case/createNewBlog-use-case';
 import { UpdateBlogCommand } from './use-case/updateBlog-use-case';
 import { Posts } from '../../schema/post.schema';
 import { CreateNewPostForBlogCommand } from './use-case/createNewPostForBlog-use-case';
+import { CheckRefreshTokenForGet } from '../../infrastructure/guards/comments/bearer.authGetComment';
 
 @Controller('blogs')
 export class BlogsController {
@@ -66,6 +67,7 @@ export class BlogsController {
   }
   
   @HttpCode(200)
+  @UseGuards(CheckRefreshTokenForGet)
   @Get(':blogId/posts')
   async getPostsByBlogId(
     @Param() dto: inputModelClass,
