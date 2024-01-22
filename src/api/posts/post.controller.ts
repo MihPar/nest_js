@@ -137,6 +137,7 @@ export class PostController {
 
   @Get()
   @HttpCode(200)
+  @UseGuards(CheckRefreshTokenForGet)
   async getPosts(
     @UserIdDecorator() userId: string | null,
     @Query()
