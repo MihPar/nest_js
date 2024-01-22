@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { CommentViewModel, CommentatorInfo } from "../api/comment/comment.type";
+import { CommentViewModel, CommentatorInfoType } from "../api/comment/comment.type";
 import { ObjectId } from "mongodb";
 import { LikeStatusEnum } from "../api/likes/likes.emun";
 
@@ -11,7 +11,7 @@ export class Comment {
   constructor(
     public content: string,
     public postId: string,
-    public commentatorInfo: CommentatorInfo,
+    public commentatorInfo: CommentatorInfoType,
   ) {
     this.createdAt = new Date().toISOString();
     this.likesCount = 0;
@@ -36,7 +36,7 @@ export class CommentClass extends Comment {
 	constructor(
 	  content: string,
 	  postId: string,
-	  commentatorInfo: CommentatorInfo,
+	  commentatorInfo: CommentatorInfoType,
 	) {
 	  super(content, postId, commentatorInfo);
 	  this._id = new ObjectId();

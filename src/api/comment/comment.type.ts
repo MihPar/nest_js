@@ -4,13 +4,13 @@ import { likeInfoType } from "../../api/likes/likes.type"
 export type CommentViewModel = {
 	id: string
 	content: string,
-	commentatorInfo: CommentatorInfo
+	commentatorInfo: CommentatorInfoType
 	createdAt: string
 	likesInfo: likeInfoType
 }
 
 
-export type CommentatorInfo = {
+export type CommentatorInfoType = {
 	userId: string;
 	userLogin: string;
   };

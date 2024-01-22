@@ -100,6 +100,5 @@ export class CommentQueryRepository {
       return null;
     }
 	return commentById
-	
   }
 }

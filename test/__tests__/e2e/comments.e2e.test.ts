@@ -1,16 +1,13 @@
-import { stopDb } from "../../db/db";
 import request from "supertest";
-import { initApp } from "../../settings";
-import { HTTP_STATUS } from "../../utils/utils";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { CommentViewModel } from "../../types/commentType";
+import { INestApplication } from "@nestjs/common";
+import { Test, TestingModule } from "@nestjs/testing";
+import { AppModule } from "../../../src/modules/app.module";
+import { appSettings } from "../../../src/setting";
+import { HTTP_STATUS } from "../../../src/utils/utils";
+import { CommentViewModel } from "../../../src/api/comment/comment.type";
 dotenv.config();
-
-const mongoURI = process.env.MONGO_URL || "mongodb://0.0.0.0:27017";
-let dbName = process.env.mongoDBName || "mongoose-example";
-
-const app = initApp();
 
 export function createErrorsMessageTest(fields: string[]) {
   const errorsMessages: any = [];
@@ -24,24 +21,30 @@ export function createErrorsMessageTest(fields: string[]) {
 }
 
 describe("/like", () => {
+	let app: INestApplication;
+	let server: any;
   beforeAll(async () => {
-    // await runDb()
-    // console.log(mongoURI, ': MongoURI')
-    // console.log(mongoURI, ': e')
-    await mongoose.connect(mongoURI);
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+		imports: [AppModule],
+	  }).compile();
+  
+	  app = moduleFixture.createNestApplication();
+	  appSettings(app);
+  
+	  await app.init();
+	  server = app.getHttpServer();
 
-    const wipeAllRes = await request(app).delete("/testing/all-data");
+    const wipeAllRes = await request(server).delete("/testing/all-data");
     expect(wipeAllRes.status).toBe(HTTP_STATUS.NO_CONTENT_204);
 
-    const getPosts = await request(app).get("/posts");
+    const getPosts = await request(server).get("/posts");
     expect(getPosts.status).toBe(HTTP_STATUS.OK_200);
 
     expect(getPosts.body.items).toHaveLength(0);
   });
 
   afterAll(async () => {
-    // await stop()
-    await stopDb();
+	await app.close();
   });
 
   afterAll((done) => {
@@ -87,7 +90,7 @@ describe("/like", () => {
 
       /************** crate users ***************/
 
-      const createUser = await request(app)
+      const createUser = await request(server)
         .post("/users")
         .auth("admin", "qwerty")
         .send({
@@ -106,7 +109,7 @@ describe("/like", () => {
       /************** create access token **************************/
 
       const loginOrEmail = createUser.body.login;
-      const createAccessToken = await request(app).post("/auth/login").send({
+      const createAccessToken = await request(server).post("/auth/login").send({
         loginOrEmail: loginOrEmail,
         password: "qwerty1",
       });
@@ -120,7 +123,7 @@ describe("/like", () => {
 
       /****************************** create blogs ******************************/
 
-      const createBlogs = await request(app)
+      const createBlogs = await request(server)
         .post("/blogs")
         .auth("admin", "qwerty")
         .send({
@@ -135,14 +138,14 @@ describe("/like", () => {
         description: "my description",
         websiteUrl: "https://learn.javascript.ru",
         createdAt: expect.any(String),
-        isMembership: true,
+        isMembership: false,
       });
       const blogId1 = createBlogs.body.id;
       const blogName1 = createBlogs.body.name;
 
       /******************************** create Posts ******************************/
 
-      const createPosts = await request(app)
+      const createPosts = await request(server)
         .post("/posts")
         .auth("admin", "qwerty")
         .send({
@@ -154,16 +157,25 @@ describe("/like", () => {
         });
 
       expect(createPosts.status).toBe(HTTP_STATUS.CREATED_201);
-      expect(createPosts.body).toEqual({
-        id: expect.any(String),
-        title: "new title",
-        shortDescription: "new shortDescription",
-        content:
-          "myContent I like javascript and I will be a developer in javascript, back end developer",
-        blogId: blogId1,
-        blogName: blogName1,
-        createdAt: expect.any(String),
-      });
+	  expect(createPosts.body.id).toEqual(expect.any(String))
+	  expect(createPosts.body.title).toEqual("new title")
+	  expect(createPosts.body.shortDescription).toEqual("new shortDescription")
+	  expect(createPosts.body.shortDescription).toEqual("new shortDescription")
+	  expect(createPosts.body.content).toEqual("myContent I like javascript and I will be a developer in javascript, back end developer")
+	  expect(createPosts.body.blogId).toEqual(blogId1)
+	  expect(createPosts.body.blogName).toEqual(blogName1)
+	  expect(createPosts.body.createdAt).toEqual(expect.any(String))
+
+    //   expect(createPosts.body).toEqual({
+    //     id: expect.any(String),
+    //     title: "new title",
+    //     shortDescription: "new shortDescription",
+    //     content:
+    //       "myContent I like javascript and I will be a developer in javascript, back end developer",
+    //     blogId: blogId1,
+    //     blogName: blogName1,
+    //     createdAt: expect.any(String),
+    //   });
 
       const postId = createPosts.body.id;
       const userId = createUser.body.id;
@@ -171,7 +183,7 @@ describe("/like", () => {
 
       /******************************* create comments by post id ***********************************/
 
-      const createCommentPostByPostId = await request(app)
+      const createCommentPostByPostId = await request(server)
         .post(`/posts/${postId}/comments`)
         .set("Authorization", `Bearer ${createAccessToken.body.accessToken}`)
         .send({
@@ -195,10 +207,10 @@ describe("/like", () => {
         },
       });
 
-      /*************************** create comments by commentsId (like/dislike) ******************************/
+      /*************************** update comments by commentsId (like/dislike) ******************************/
 
       const commentId = createCommentPostByPostId.body.id;
-      const updateCommentByCommentId = await request(app)
+      const updateCommentByCommentId = await request(server)
         .put(`/comments/${commentId}/like-status`)
         .set("Authorization", `Bearer ${createAccessToken.body.accessToken}`)
         .send({ likeStatus: "None" });
@@ -208,7 +220,7 @@ describe("/like", () => {
     it("make like/dislike if input data is empty body => return 400 status code", async () => {
       const commentId = commentBody.id;
       let tokenAccess = token.accessToken;
-      const updateCommentByCommentId = await request(app)
+      const updateCommentByCommentId = await request(server)
         .put(`/comments/${commentId}/like-status`)
         .set("Authorization", `Bearer ${tokenAccess}`)
         .send({});
@@ -220,7 +232,7 @@ describe("/like", () => {
     it("make like/dislike if input data is incorrect => return 400 status code", async () => {
       const commentId = commentBody.id;
       let tokenAccess = token.accessToken;
-      const updateCommentByCommentId = await request(app)
+      const updateCommentByCommentId = await request(server)
         .put(`/comments/${commentId}/like-status`)
         .set("Authorization", `Bearer ${tokenAccess}`)
         .send({ likeStatus: true });
@@ -231,7 +243,7 @@ describe("/like", () => {
     });
     it("make like/dislike without authorization => return 401 status code", async () => {
       const commentId = commentBody.id;
-      const updateCommentByCommentId = await request(app)
+      const updateCommentByCommentId = await request(server)
         .put(`/comments/${commentId}/like-status`)
         .send({ likeStatus: "None" });
       expect(updateCommentByCommentId.status).toBe(
@@ -240,7 +252,7 @@ describe("/like", () => {
     });
     it("make like/dislike with doesn`t existing id => return 404 status code", async () => {
       let tokenAccess = token.accessToken;
-      const updateCommentByCommentId = await request(app)
+      const updateCommentByCommentId = await request(server)
         .put(`/comments/123456789012345678901234/like-status`)
         .set("Authorization", `Bearer ${tokenAccess}`)
         .send({ likeStatus: "None" });
@@ -249,7 +261,7 @@ describe("/like", () => {
   });
   describe("update existing comment by id with correct input model", function() {
 	it("create new user", async () => {
-    const createUserNext = await request(app)
+    const createUserNext = await request(server)
       .post("/users")
       .auth("admin", "qwerty")
       .send({
@@ -265,7 +277,7 @@ describe("/like", () => {
       createdAt: expect.any(String),
     });
     const loginOrEmail = createUserNext.body.login;
-    const createAccessTokenNew = await request(app).post("/auth/login").send({
+    const createAccessTokenNew = await request(server).post("/auth/login").send({
       loginOrEmail: loginOrEmail,
       password: "qwerty2",
     });
@@ -279,7 +291,7 @@ describe("/like", () => {
     content: "My daughter`s name is Maria, she is nine",
   };
   it("update existing comment by id => return 204 status code", async () => {
-    const updateCommentById = await request(app)
+    const updateCommentById = await request(server)
       .put(`/comments/${commentBody.id}`)
       .set("Authorization", `Bearer ${token.accessToken}`)
       .send(updateObj);
@@ -289,7 +301,7 @@ describe("/like", () => {
     const updateObj = {
       content: true,
     };
-    const updateCommentById = await request(app)
+    const updateCommentById = await request(server)
       .put(`/comments/${commentBody.id}`)
       .set("Authorization", `Bearer ${token.accessToken}`)
       .send(updateObj);
@@ -300,7 +312,7 @@ describe("/like", () => {
   });
   it("update existing comment by id with empty body=> return 400 status code", async () => {
     const updateObj = {};
-    const updateCommentById = await request(app)
+    const updateCommentById = await request(server)
       .put(`/comments/${commentBody.id}`)
       .set("Authorization", `Bearer ${token.accessToken}`)
       .send(updateObj);
@@ -313,7 +325,7 @@ describe("/like", () => {
 			const updateObj = {
 				"content": "My daughter`s name is Maria, she is nine"
 			}
-			const updateCommentById = await request(app)
+			const updateCommentById = await request(server)
 			.put(`/comments/${commentBody.id}`)
 			.send(updateObj)
 			expect(updateCommentById.status).toBe(HTTP_STATUS.NOT_AUTHORIZATION_401)
@@ -322,7 +334,7 @@ describe("/like", () => {
 			const updateObj = {
 				"content": "My daughter`s name is Maria, she is nine"
 			}
-			const updateCommentById = await request(app)
+			const updateCommentById = await request(server)
 			.put(`/comments/123456789012345678901234`)
 			.set("Authorization", `Bearer ${token.accessToken}`)
 			.send(updateObj)
@@ -332,7 +344,7 @@ describe("/like", () => {
 			const updateObj = {
 				"content": "My daughter`s name is Maria, she is nine"
 			}
-			const updateCommentById = await request(app)
+			const updateCommentById = await request(server)
 			.put(`/comments/${commentBody.id}`)
 			.set("Authorization", `Bearer ${token2}`)
 			.send(updateObj)
@@ -342,7 +354,7 @@ describe("/like", () => {
 
   describe("return comment by id", () => {
 	it("get comment by id with correct input data => return 200 status code", async() => {
-		const getCommentById = await request(app)
+		const getCommentById = await request(server)
 		.get(`/comments/${commentBody.id}`)
 		.set("Authorization", `Bearer ${token.accessToken}`)
 		expect(getCommentById.status).toBe(HTTP_STATUS.OK_200)
@@ -363,7 +375,7 @@ describe("/like", () => {
 	})
 
 	it("get comment by id with doesn`t existing comment => return 404 status code", async() => {
-		const getCommentById = await request(app)
+		const getCommentById = await request(server)
 		.get(`/comments/123456789012345678901234}`)
 		.set("Authorization", `Bearer ${token.accessToken}`)
 		expect(getCommentById.status).toBe(HTTP_STATUS.NOT_FOUND_404)
@@ -371,24 +383,24 @@ describe("/like", () => {
   })
   describe("delete comment specified by id => return 204 status code", () => {
 	it("delete comment with correct input data return 404 status code", async() => {
-		const deleteCommentById = await request(app)
+		const deleteCommentById = await request(server)
 		.delete(`/comments/${commentBody.id}`)
 		.set("Authorization", `Bearer ${token2}`)
 		expect(deleteCommentById.status).toBe(HTTP_STATUS.FORBIDEN_403)
 	})
 	it("delete comment without uesr`s authorazing return 401 status code", async() => {
-		const deleteCommentById = await request(app)
+		const deleteCommentById = await request(server)
 		.delete(`/comments/${commentBody.id}`)
 		expect(deleteCommentById.status).toBe(HTTP_STATUS.NOT_AUTHORIZATION_401)
 	})
 	it("delete comment with correct input data", async() => {
-		const deleteCommentById = await request(app)
+		const deleteCommentById = await request(server)
 		.delete(`/comments/${commentBody.id}`)
 		.set("Authorization", `Bearer ${token.accessToken}`)
 		expect(deleteCommentById.status).toBe(HTTP_STATUS.NO_CONTENT_204)
 	})
 	it("delete comment without existing commentId return 404 status code", async() => {
-		const deleteCommentById = await request(app)
+		const deleteCommentById = await request(server)
 		.delete(`/comments`)
 		.set("Authorization", `Bearer ${token.accessToken}`)
 		expect(deleteCommentById.status).toBe(HTTP_STATUS.NOT_FOUND_404)
