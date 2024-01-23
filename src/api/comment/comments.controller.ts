@@ -27,15 +27,15 @@ export class CommentsController {
   @HttpCode(204)
   @Put(':commentId/like-status')
 //   @UseGuards(CheckRefreshTokenForComments)
-//   @UseGuards(CheckRefreshTokenForGet)
-  @UseGuards(authMiddleware)
+  @UseGuards(CheckRefreshTokenForGet)
+//   @UseGuards(authMiddleware)
   async updateByCommentIdLikeStatus(
     @Body(new ValidationPipe({ validateCustomDecorators: true })) status: InputModelLikeStatusClass,
     @Param() id: inputModelCommentId,
     @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string,
   ) {
-	if(!userId) throw new UnauthorizedException("401")
+	// if(!userId) throw new UnauthorizedException("401")
     const findCommentById: CommentClass | null =
       await this.commentQueryRepository.findCommentByCommentId(id.commentId);
     if (!findCommentById) throw new NotFoundException('404');
