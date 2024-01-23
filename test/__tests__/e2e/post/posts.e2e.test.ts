@@ -651,6 +651,7 @@ describe('/posts', () => {
             content:
               "My profession is a programmer, I work in javascript and I work for back end developer",
           });
+		  console.log("postId: ", postId)
         expect(createCommentWithIncorrectData.status).toBe(
           HTTP_STATUS.NOT_AUTHORIZATION_401
         );

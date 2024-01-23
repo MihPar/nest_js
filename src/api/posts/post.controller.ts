@@ -107,8 +107,8 @@ export class PostController {
   @Post(':postId/comments')
   @HttpCode(201)
 //   @UseFilters(new HttpExceptionFilter())
-//   @UseGuards(CheckRefreshTokenForPost)
-	@UseGuards(CheckRefreshTokenForGet)
+  @UseGuards(CheckRefreshTokenForPost)
+	// @UseGuards(CheckRefreshTokenForGet)
   async createNewCommentByPostId(
 	@Param() dto: InputModelClassPostId, 
 	@Body(new ValidationPipe({ validateCustomDecorators: true })) inputModelContent: InputModelContentePostClass,
