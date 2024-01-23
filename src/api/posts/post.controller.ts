@@ -90,6 +90,7 @@ export class PostController {
   ) {
 	// if(!userId) return null
     const isExistPots = await this.postsQueryRepository.findPostById(dto.postId);
+	console.log("isExistPots: ", isExistPots)
     if (!isExistPots) throw new NotFoundException('Blogs by id not found');
     const commentByPostsId: PaginationType<CommentViewType> | null =
       await this.commentQueryRepository.findCommentByPostId(
@@ -117,13 +118,14 @@ export class PostController {
 	) {
 	// console.log("dto: ", dto)
     const post: Posts | null = await this.postsQueryRepository.findPostById(dto.postId)
-	// console.log("post", post)
+	console.log("post", post)
 
     if (!post) throw new NotFoundException('Blogs by id not found 404')
 		// console.log("userId: ", userId)
 	// if(!userId) return null
 	const command = new CreateNewCommentByPostIdCommnad(dto.postId, inputModelContent, user, userId)
 	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(command)
+	console.log("createNewCommentByPostId: ", createNewCommentByPostId)
 
 	// console.log("createNewCommentByPostId: ", createNewCommentByPostId)
     // const createNewCommentByPostId: CommentViewModel | null =
@@ -133,7 +135,7 @@ export class PostController {
     //     userId,
     //     user.accountData.userName
     //   );
-    if (!createNewCommentByPostId) throw new NotFoundException('Blogs by id not found 404')
+    // if (!createNewCommentByPostId) throw new NotFoundException('Blogs by id not found 404')
 	return createNewCommentByPostId
   }
 

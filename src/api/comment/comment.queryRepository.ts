@@ -19,7 +19,7 @@ export class CommentQueryRepository {
 
   async findCommentById(
     commentId: string,
-    userId: string,
+    userId: string | null,
   ): Promise<CommentViewModel | null> {
 	// console.log(userId)
 	if(!ObjectId.isValid(commentId)) return null
@@ -40,7 +40,7 @@ export class CommentQueryRepository {
     }
   }
 
-  async findLikeCommentByUser(commentId: string, userId: string) {
+  async findLikeCommentByUser(commentId: string, userId: string | null) {
     const likeModel: Like | null = await this.likeModel.findOne({
       $and: [{ userId: userId }, { commentId: commentId }],
     });

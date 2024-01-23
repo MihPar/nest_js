@@ -104,7 +104,7 @@ export class CommentsController {
     @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
   ) {
-    if (!userId) return null;
+    // if (!userId) return null;
     const getCommentById: CommentViewModel | null =
       await this.commentQueryRepository.findCommentById(dto.id, userId);
     if (!getCommentById) throw new NotFoundException('Blogs by id not found');

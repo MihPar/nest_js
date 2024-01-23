@@ -579,6 +579,7 @@ describe('/posts', () => {
       },
     });
   });
+/**************************** create comment by postId *************************/
 
   let content: string;
   let createdAt: string;
@@ -591,6 +592,8 @@ describe('/posts', () => {
     // expect(getPostByIdWithIncorrectData.body).toStrictEqual(createErrorsMessageTest(["id"]))
   });
   let createCommentByPostId: PostsViewModel;
+
+
   it('create comment by postId', async () => {
     postId = firstPost.id;
     const createCommentPostByPostId = await request(server)
@@ -651,7 +654,7 @@ describe('/posts', () => {
             content:
               "My profession is a programmer, I work in javascript and I work for back end developer",
           });
-		  console.log("postId: ", postId)
+		//   console.log("postId: ", postId)
         expect(createCommentWithIncorrectData.status).toBe(
           HTTP_STATUS.NOT_AUTHORIZATION_401
         );
@@ -686,10 +689,10 @@ describe('/posts', () => {
           });
         expect(getCommentByPost.status).toBe(HTTP_STATUS.OK_200);
         expect(getCommentByPost.body).toEqual({
-          pagesCount: 0,
-          page: 0,
-          pageSize: 0,
-          totalCount: 0,
+          pagesCount: 1,
+          page: 1,
+          pageSize: 10,
+          totalCount: 2,
         //   items: expect.any(Array),
 		// items: getCommentByPost.body.items[0]
 		items: getCommentByPost.body.items
@@ -702,26 +705,26 @@ describe('/posts', () => {
             userId: userId,
             userLogin: login,
           },
-        //   createdAt: createdAt,
-        //   likesInfo: {
-        //     likesCount: 0,
-        //     dislikesCount: 0,
-        //     myStatus: "None",
-        //   },
+          createdAt: createdAt,
+          likesInfo: {
+            likesCount: 0,
+            dislikesCount: 0,
+            myStatus: "None",
+          },
         });
       });
-    //   it("get comment by specified postId with incorrect postId => return 404 status code", async() => {
-    // 	const postId = createCommentByPostId.id;
-    // 	const pageNumber = "1"
-    // 	const pageSize = "10"
-    // 	const sortBy = "createdAt"
-    // 	const sortDirection = "desc"
+      it("get comment by specified postId with incorrect postId => return 404 status code", async() => {
+    	const postId = createCommentByPostId.id;
+    	const pageNumber = "1"
+    	const pageSize = "10"
+    	const sortBy = "createdAt"
+    	const sortDirection = "desc"
 
-    //     const getCommentByPost = await request(server)
-    // 	.get(`/comments/123456789012345678901234`)
-    // 	.query({pageNumber: "1", pageSize: "10", sortBy: "createdAt", sortDirection: "desc"})
-    //     expect(getCommentByPost.status).toBe(HTTP_STATUS.NOT_FOUND_404);
-    //   })
+        const getCommentByPost = await request(server)
+    	.get(`/comments/123456789012345678901234`)
+    	.query({pageNumber: "1", pageSize: "10", sortBy: "createdAt", sortDirection: "desc"})
+        expect(getCommentByPost.status).toBe(HTTP_STATUS.NOT_FOUND_404);
+      })
 
       it("update existign post by id with input data => return 204 staus code", async() => {
     	const objUpdate = {

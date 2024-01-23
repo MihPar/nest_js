@@ -40,7 +40,7 @@ export class CheckRefreshToken implements CanActivate {
 		throw new UnauthorizedException("401")
 	}
 	if (result.userId) {
-	  const user = await this.usersQueryRepository.findUserById(new ObjectId(result.userId));
+	  const user = await this.usersQueryRepository.findUserById(result.userId)
 	  if (!user) {
 		throw new UnauthorizedException("401")
 	  }

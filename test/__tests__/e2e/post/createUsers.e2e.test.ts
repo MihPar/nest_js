@@ -6,7 +6,18 @@ import { AppModule } from '../../../../src/modules/app.module';
 import { appSettings } from '../../../../src/setting';
 import { HTTP_STATUS } from '../../../../src/utils/utils';
 import { PostsViewModel } from '../../../../src/api/posts/posts.type';
+import { InputModelClassCreateBody } from '../../../../src/api/users/user.class';
 dotenv.config();
+
+const createAddUser = async (server: any, body: InputModelClassCreateBody) => {
+	  createUser = await request(server)
+		.post(`/users`)
+		.auth('admin', 'qwerty')
+		.send(body)
+		.expect(200)
+
+		return createUser
+}
 
 export function createErrorsMessageTest(fields: string[]) {
   const errorsMessages: any = [];
@@ -102,10 +113,7 @@ describe('/blogs', () => {
       password: 'qwerty1',
       email: '1mpara7473@gmail.com',
     };
-    createUser = await request(server)
-      .post(`/users`)
-      .auth('admin', 'qwerty')
-      .send(user);
+    createUser = await createAddUser(server, user)
 
     userLogin = createUser.body.login;
     userId = createUser.body.id;
