@@ -60,7 +60,9 @@ export class CommentsController {
 
   @Put(':commentId')
   @HttpCode(204)
-  @UseGuards(CheckRefreshTokenForComments)
+//   @UseGuards(CheckRefreshTokenForComments)
+  @UseGuards(CheckRefreshTokenForGet) // !!!!!!!!!!!
+
   async updataCommetById(
 	@Param() id: inputModelCommentId, 
 	@Body(new ValidationPipe({ validateCustomDecorators: true })) dto: InputModelContent,
