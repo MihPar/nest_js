@@ -1,5 +1,7 @@
+import request from 'supertest';
 import { CommentViewModel } from "../api/comment/comment.type";
 import { LikeStatusEnum } from "../api/likes/likes.emun";
+import { InputModelClassCreateBody } from "../api/users/user.class";
 import { CommentClass } from "../schema/comment.schema";
 
 export const commentDBToView = (item: CommentClass, myStatus: LikeStatusEnum | null): CommentViewModel => {
@@ -15,3 +17,22 @@ export const commentDBToView = (item: CommentClass, myStatus: LikeStatusEnum | n
 	  }
 	};
   };
+
+  export const createAddUser = async (server: any, body: InputModelClassCreateBody) => {
+	const createUser = await request(server)
+	  .post(`/users`)
+	  .auth('admin', 'qwerty')
+	  .send(body)
+	  .expect(200)
+	  return createUser
+}
+
+export const createToken = async (server: any, loginOrEmail: string, password: string) => {
+	const createAccessToken = await request(server)
+		.post('/auth/login')
+		.send({
+		  loginOrEmail,
+		  password
+		});
+	return createAccessToken
+}

@@ -7,17 +7,9 @@ import { appSettings } from '../../../../src/setting';
 import { HTTP_STATUS } from '../../../../src/utils/utils';
 import { PostsViewModel } from '../../../../src/api/posts/posts.type';
 import { InputModelClassCreateBody } from '../../../../src/api/users/user.class';
+import { createAddUser, createToken } from '../../../../src/utils/helpers';
 dotenv.config();
 
-const createAddUser = async (server: any, body: InputModelClassCreateBody) => {
-	  createUser = await request(server)
-		.post(`/users`)
-		.auth('admin', 'qwerty')
-		.send(body)
-		.expect(200)
-
-		return createUser
-}
 
 export function createErrorsMessageTest(fields: string[]) {
   const errorsMessages: any = [];
@@ -30,15 +22,15 @@ export function createErrorsMessageTest(fields: string[]) {
   return { errorsMessages: errorsMessages };
 }
 
-export let createUser
-export let createUser2
-export let createUser3
-export let createUser4
+let createUser
+let createUser2
+let createUser3
+let createUser4
 
-export let createAccessToken
-export let createAccessToken2
-export let createAccessToken3
-export let createAccessToken4
+let createAccessToken
+let createAccessToken2
+let createAccessToken3
+let createAccessToken4
 
 
 describe('/blogs', () => {
@@ -123,10 +115,12 @@ describe('/blogs', () => {
       email: user.email,
       createdAt: expect.any(String),
     });
-    createAccessToken = await request(server).post('/auth/login').send({
-      loginOrEmail: user.login,
-      password: user.password,
-    })
+    // createAccessToken = await request(server).post('/auth/login').send({
+    //   loginOrEmail: user.login,
+    //   password: user.password,
+    // })
+
+	createAccessToken = await createToken(server, user.login,  user.password)
 
 	expect(createAccessToken.body).toEqual({
 		accessToken: expect.any(String)
@@ -140,38 +134,26 @@ describe('/blogs', () => {
 
     /***************************** create user2 ********************************************/
 
-     createUser2 = await request(server)
-      .post(`/users`)
-      .auth('admin', 'qwerty')
-      .send({
-        login: 'Mickle2',
-        password: 'qwerty2',
-        email: '2mpara7473@gmail.com',
-      });
-
-    createAccessToken2 = await request(server).post('/auth/login').send({
-      loginOrEmail: user.login,
-      password: user.password,
-    });
-	token2 = createAccessToken2.body.accessToken
+	const user2 = {
+    login: 'Mickle2',
+    password: 'qwerty2',
+    email: '2mpara7473@gmail.com',
+  };
+  createUser2 = await createAddUser(server, user2);
+  createAccessToken2 = await createToken(server, user2.login, user2.password);
+  token2 = createAccessToken2.body.accessToken;
 
     /***************************** create user3 ********************************************/
 
-     createUser3 = await request(server)
-      .post(`/users`)
-      .auth('admin', 'qwerty')
-      .send({
-        login: 'Mickle3',
-        password: 'qwerty3',
-        email: '3mpara7473@gmail.com',
-      });
+	const user3 = {
+    login: 'Mickle3',
+    password: 'qwerty3',
+    email: '3mpara7473@gmail.com',
+  };
 
-    createAccessToken3 = await request(server).post('/auth/login').send({
-      loginOrEmail: user.login,
-      password: user.password,
-    });
-
-	token3 = createAccessToken3.body.accessToken
+  createUser3 = await createAddUser(server, user3);
+  createAccessToken3 = await createToken(server, user3.login, user3.password);
+  token3 = createAccessToken3.body.accessToken;
 
     /***************************** create user4 ********************************************/
 

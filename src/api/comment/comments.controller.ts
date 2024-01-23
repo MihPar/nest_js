@@ -25,7 +25,8 @@ export class CommentsController {
 
   @HttpCode(204)
   @Put(':commentId/like-status')
-  @UseGuards(CheckRefreshTokenForComments)
+//   @UseGuards(CheckRefreshTokenForComments)
+  @UseGuards(CheckRefreshTokenForGet)
 //   @UseFilters(new HttpExceptionFilter())
   async updateByCommentIdLikeStatus(
     @Body(new ValidationPipe({ validateCustomDecorators: true })) status: InputModelLikeStatusClass,
