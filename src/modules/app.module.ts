@@ -82,6 +82,7 @@ import { UpdateLikestatusUseCase } from '../api/comment/use-case/updateLikeStatu
 import { IsConfirmed } from '../infrastructure/guards/auth/isCodeConfirmed';
 import { IsExistEmailUser } from '../infrastructure/guards/auth/isExixtEmailUser';
 import { IsBlogExistConstraint } from '../infrastructure/guards/post/pipe/blogIsExistDecorator';
+import { authMiddleware } from '../infrastructure/guards/comments/checkRefreshTokenForComments';
 
 const useCase = [
   UpdateBlogUseCase,
@@ -138,7 +139,8 @@ const guards = [
   CheckRefreshTokenForPost,
   ForbiddenCalss,
   IsConfirmed,
-  IsExistEmailUser
+  IsExistEmailUser,
+  authMiddleware
 ];
 const reposponse = [
   BlogsQueryRepository,
