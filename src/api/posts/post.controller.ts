@@ -75,6 +75,7 @@ export class PostController {
 
   @Get(':postId/comments')
   @HttpCode(200)
+  @UseGuards(CheckRefreshTokenForGet)
   async getCommentByPostId(
     @Param() dto: InputModelClassPostId, 
     @UserDecorator() user: UserClass,
@@ -106,7 +107,8 @@ export class PostController {
   @Post(':postId/comments')
   @HttpCode(201)
 //   @UseFilters(new HttpExceptionFilter())
-  @UseGuards(CheckRefreshTokenForPost)
+//   @UseGuards(CheckRefreshTokenForPost)
+	@UseGuards(CheckRefreshTokenForGet)
   async createNewCommentByPostId(
 	@Param() dto: InputModelClassPostId, 
 	@Body(new ValidationPipe({ validateCustomDecorators: true })) inputModelContent: InputModelContentePostClass,
