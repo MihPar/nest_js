@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Put, UseGuards, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Put, UnauthorizedException, UseGuards, ValidationPipe } from '@nestjs/common';
 import { CommentQueryRepository } from './comment.queryRepository';
 import { CommentViewModel } from './comment.type';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
@@ -25,14 +25,15 @@ export class CommentsController {
 
   @HttpCode(204)
   @Put(':commentId/like-status')
-  @UseGuards(CheckRefreshTokenForComments)
-//   @UseGuards(CheckRefreshTokenForGet)
+//   @UseGuards(CheckRefreshTokenForComments)
+  @UseGuards(CheckRefreshTokenForGet)
   async updateByCommentIdLikeStatus(
     @Body(new ValidationPipe({ validateCustomDecorators: true })) status: InputModelLikeStatusClass,
     @Param() id: inputModelCommentId,
     @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string,
   ) {
+	if(!userId) throw new UnauthorizedException("401")
     const findCommentById: CommentClass | null =
       await this.commentQueryRepository.findCommentByCommentId(id.commentId);
     if (!findCommentById) throw new NotFoundException('404');
