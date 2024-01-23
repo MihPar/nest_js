@@ -27,7 +27,7 @@ export class CommentsController {
   @HttpCode(204)
   @Put(':commentId/like-status')
 //   @UseGuards(CheckRefreshTokenForComments)
-//   @UseGuards(CheckRefreshTokenForGet)
+//   @UseGuards(CheckRefreshTokenForGet) !!!!!!!!!!!
   @UseGuards(authMiddleware)
   async updateByCommentIdLikeStatus(
     @Body(new ValidationPipe({ validateCustomDecorators: true })) status: InputModelLikeStatusClass,
@@ -100,7 +100,8 @@ export class CommentsController {
 
   @Get(':id')
   @HttpCode(200)
-  @UseGuards(CheckRefreshTokenForGet)
+//   @UseGuards(CheckRefreshTokenForGet)
+  @UseGuards(authMiddleware)
   async getCommentById(
     @Param() dto: inputModelId,
     @UserDecorator() user: UserClass,

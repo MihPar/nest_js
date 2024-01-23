@@ -16,7 +16,7 @@ export class  authMiddleware implements CanActivate {
     ): Promise<boolean>  {
         const request = context.switchToHttp().getRequest();
         if (!request.headers.authorization) {
-            throw new UnauthorizedException()
+            throw new UnauthorizedException('401')
         }
 
         const token = request.headers.authorization.split(' ')[1];
@@ -32,6 +32,6 @@ export class  authMiddleware implements CanActivate {
             })
             return true
         }
-         else  throw new UnauthorizedException()
+         else  throw new UnauthorizedException('401')
     }
 }
