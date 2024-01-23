@@ -53,7 +53,7 @@ export class CommentQueryRepository {
     pageSize: string,
     sortBy: string,
     sortDirection: string,
-    userId: string,
+    userId: string | null,
   ): Promise<PaginationType<CommentViewModel> | null> {
     const filter = { postId: postId };
     const commentByPostId: CommentClass[] = await this.commentModel
