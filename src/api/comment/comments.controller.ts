@@ -35,7 +35,7 @@ export class CommentsController {
     @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string,
   ) {
-	// if(!userId) throw new UnauthorizedException("401")
+	if(!userId) throw new UnauthorizedException("401")
     const findCommentById: CommentClass | null =
       await this.commentQueryRepository.findCommentByCommentId(id.commentId);
     if (!findCommentById) throw new NotFoundException('404');
