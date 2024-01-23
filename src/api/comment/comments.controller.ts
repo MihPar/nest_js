@@ -13,6 +13,7 @@ import { UpdateLikestatusCommand } from './use-case/updateLikeStatus-use-case';
 import { CommandBus } from '@nestjs/cqrs';
 import { UpdateCommentByCommentIdCommand } from './use-case/updateCommentByCommentId-use-case';
 import { CommentClass } from '../../schema/comment.schema';
+import { authMiddleware } from '../../infrastructure/guards/comments/checkRefreshTokenForComments';
 
 @Controller('comments')
 export class CommentsController {
@@ -26,7 +27,8 @@ export class CommentsController {
   @HttpCode(204)
   @Put(':commentId/like-status')
 //   @UseGuards(CheckRefreshTokenForComments)
-  @UseGuards(CheckRefreshTokenForGet)
+//   @UseGuards(CheckRefreshTokenForGet)
+  @UseGuards(authMiddleware)
   async updateByCommentIdLikeStatus(
     @Body(new ValidationPipe({ validateCustomDecorators: true })) status: InputModelLikeStatusClass,
     @Param() id: inputModelCommentId,
