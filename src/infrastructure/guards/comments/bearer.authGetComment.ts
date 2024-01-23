@@ -41,7 +41,11 @@ export class CheckRefreshTokenForGet implements CanActivate {
 		req.user = null
 	} else {
 		token = req.headers.authorization.split(' ')[1];
-		payload = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
+		try {
+			payload = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
+		} catch(err) {
+			payload = null
+		}
 	}
     if (payload) {
       const resultAuth = await this.usersQueryRepository.findUserById(payload.userId);
