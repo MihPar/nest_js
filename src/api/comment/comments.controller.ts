@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Put, UnauthorizedException, UseGuards, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, Put, UseGuards, ValidationPipe } from '@nestjs/common';
 import { CommentQueryRepository } from './comment.queryRepository';
 import { CommentViewModel } from './comment.type';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
@@ -71,7 +71,7 @@ export class CommentsController {
 	) {
 	// if(!userId) return null
     const isExistComment = await this.commentQueryRepository.findCommentById(id.commentId, userId);
-    if (!isExistComment) throw new BadRequestException("400")
+    if (!isExistComment) throw new NotFoundException('404');
     if (userId.toString() !== isExistComment.commentatorInfo.userId) { throw new ForbiddenException("403")}
 	const command = new UpdateCommentByCommentIdCommand(id.commentId, dto)
 	const updateComment: boolean = await this.commandBus.execute(command)
@@ -90,7 +90,9 @@ export class CommentsController {
 	@UserIdDecorator() userId: string // | null
 	) {
 		// if(!userId) return null
+		console.log("dto.commentId: ", dto.commentId)
     	const isExistComment = await this.commentQueryRepository.findCommentById(dto.commentId, userId);
+		console.log("isExistComment: ", isExistComment)
     if (!isExistComment) throw new NotFoundException("404")
 
     if (userId.toString() !== isExistComment.commentatorInfo.userId) { throw new ForbiddenException("403")}
@@ -98,6 +100,7 @@ export class CommentsController {
     const deleteCommentById: boolean =
       await this.commentRepository.deleteComment(dto.commentId);
     if (!deleteCommentById) throw new NotFoundException('404');
+	return 
   }
 
   @Get(':id')
@@ -112,6 +115,7 @@ export class CommentsController {
     // if (!userId) return null;
     const getCommentById: CommentViewModel | null =
       await this.commentQueryRepository.findCommentById(dto.id, userId);
+	  console.log("getCommentById: ", getCommentById)
     if (!getCommentById) throw new NotFoundException('Blogs by id not found');
     return getCommentById;
   }

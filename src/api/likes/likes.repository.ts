@@ -36,7 +36,6 @@ export class LikesRepository {
 	async saveLikeForComment(commentId: string, userId: string, likeStatus: string) {
 		const saveResult = await this.likeModel.create({commentId: commentId, userId: userId, myStatus: likeStatus, postId: null})
 		const usesrComment = await this.likeModel.findOne({userId: userId, commentId: commentId}).lean() //
-		
 	}
 
 	async updateLikeStatusForComment(commentId: string, userId: string, likeStatus: string){
