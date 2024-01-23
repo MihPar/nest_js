@@ -60,8 +60,8 @@ export class CommentsController {
 
   @Put(':commentId')
   @HttpCode(204)
-//   @UseGuards(CheckRefreshTokenForComments)
-  @UseGuards(CheckRefreshTokenForGet) // !!!!!!!!!!!
+  @UseGuards(CheckRefreshTokenForComments)
+//   @UseGuards(CheckRefreshTokenForGet) // !!!!!!!!!!!
 
   async updataCommetById(
 	@Param() id: inputModelCommentId, 
