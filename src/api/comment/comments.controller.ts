@@ -87,9 +87,9 @@ export class CommentsController {
   async deleteCommentById(
 	@Param() dto: inputModelCommentId,
 	@UserDecorator() user: UserClass,
-	@UserIdDecorator() userId: string | null
+	@UserIdDecorator() userId: string
 	) {
-		if(!userId) return null
+		// if(!userId) return null
     	const isExistComment = await this.commentQueryRepository.findCommentById(dto.commentId, userId);
     if (!isExistComment) throw new NotFoundException("404")
 
