@@ -56,19 +56,15 @@ export class BlogsController {
   @Post()
   @HttpCode(201)
   @UseGuards(AuthBasic)
-//   @UseFilters(new HttpExceptionFilter())
   async createBlog(@Body(new ValidationPipe({ validateCustomDecorators: true })) inputDateModel: bodyBlogsModel) {
 	const command = new CreateNewBlogCommand(inputDateModel)
 	const createBlog: BlogsViewType = await this.commandBus.execute(command)
-    // const createBlog: BlogsViewType = await this.blogsService.createNewBlog(
-    //   inputDateModel,
-    // );
     return createBlog;
   }
   
   @Get(':blogId/posts')
   @HttpCode(200)
-  @UseGuards(CheckRefreshTokenForGet) // to put guard
+  @UseGuards(CheckRefreshTokenForGet)
   async getPostsByBlogId(
     @Param() dto: inputModelClass,
 	@UserDecorator() user: UserClass,
@@ -82,7 +78,6 @@ export class BlogsController {
     },
   ) {
     const blog = await this.blogsQueryRepository.findBlogById(dto.blogId);
-	// console.log("blog: ", blog)
     if (!blog) throw new NotFoundException('Blogs by id not found');
     const getPosts: PaginationType<Posts> =
       await this.postsQueryRepository.findPostsByBlogsId(
@@ -108,13 +103,6 @@ export class BlogsController {
     if (!findBlog) throw new NotFoundException('Blogs by id not found 404');
 	const command = new CreateNewPostForBlogCommand( dto.blogId, inputDataModel, findBlog.name)
 	const createNewPost: Posts | null = await this.commandBus.execute(command)
-    // const isCreatePost = await this.postsService.createPost(
-    //   blogId,
-    //   inputDataModel.title,
-    //   inputDataModel.shortDescription,
-    //   inputDataModel.content,
-    //   findBlog.name,
-    // );
     if (!createNewPost) throw new NotFoundException('Blogs by id not found 404');
     return createNewPost;
   }
@@ -140,12 +128,6 @@ export class BlogsController {
   ) {
 	const command = new UpdateBlogCommand(dto.blogId, inputDateMode)
 	const isUpdateBlog = await this.commandBus.execute(command)
-    // const isUpdateBlog: boolean = await this.blogsService.updateBlog(
-    //   id,
-    //   inputDateMode.name,
-    //   inputDateMode.description,
-    //   inputDateMode.websiteUrl,
-    // );
     if (!isUpdateBlog) throw new NotFoundException('Blogs by id not found 404');
 	return isUpdateBlog
   }

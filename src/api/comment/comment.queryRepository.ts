@@ -21,7 +21,6 @@ export class CommentQueryRepository {
     commentId: string,
     userId: string | null,
   ): Promise<CommentViewModel | null> {
-	// console.log(userId)
 	if(!ObjectId.isValid(commentId)) return null
     try {
       const commentById: CommentClass | null = await this.commentModel.findOne({

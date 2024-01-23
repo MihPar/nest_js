@@ -518,7 +518,6 @@ describe('/like', () => {
 		.expect(204)
 
 		console.log("createCommmentByPostId.body: ", createCommmentByPostId.body)
-      // get comment by user 1
       const getCommentUser1 = await request(server)
 	  .get(`/comments/${createCommmentByPostId.body.id}`,)
 	  .set('Authorization', `Bearer ${token4.body.accessToken}`)

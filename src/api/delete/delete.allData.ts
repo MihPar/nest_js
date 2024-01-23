@@ -29,11 +29,5 @@ export class DeleteAllDataController {
 		await this.commandBus.execute(new DeleteAllUsersCommnad())
 		await this.commandBus.execute(new DeleteAllCommentsCommand())
 		await this.commandBus.execute(new DeleteAllLikesCommnad())
-
-    // await this.postsService.deleteAllPosts();
-    // await this.blogsService.deleteAllBlogs();
-    // await this.userService.deleteAllUsers();
-    // await this.commentService.deleteAllComments();
-	// await this.likesService.deleteAllLikes()
   }
 }

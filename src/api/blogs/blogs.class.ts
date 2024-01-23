@@ -9,7 +9,6 @@ function IsCustomString() {
 }
 
   export class bodyBlogsModel {
-	// @IsCustomString()
 	@IsString() 
 	@Trim() 
 	@IsNotEmpty()
@@ -20,7 +19,6 @@ function IsCustomString() {
 	@Trim() 
 	@IsNotEmpty()
 	@MaxLength(500)
-	// @IsCustomString()
     description: string
 	
 	@IsUrl()

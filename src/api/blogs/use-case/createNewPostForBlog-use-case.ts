@@ -34,27 +34,8 @@ export class CreateNewPostForBlogUseCase
     const createPost: PostClass | null = await this.postsRepository.createNewPosts(newPost)
 	if(!createPost) return null
 	const post = await this.postsRepository.findPostById(command.blogId)
-    // const post = await this.postModel
-    //   .findOne({ blogId: new ObjectId(blogId) }, { __v: 0 }) //
-    //   .lean();
     if (!post) return null;
 	const result = await this.likesRepository.getNewLike(post._id.toString(), command.blogId)
-    // const newestLikes = await this.likeModel
-    //   .find({ postId: post._id }) //
-    //   .sort({ addedAt: -1 })
-    //   .limit(3)
-    //   .skip(0)
-    //   .lean();
-    // let myStatus: LikeStatusEnum = LikeStatusEnum.None;
-    // if (blogId) {
-    //   const reaction = await this.likeModel.findOne(
-    //     { blogId: new ObjectId(blogId) },
-    //     { __v: 0 },
-    //   ); //
-    //   myStatus = reaction
-    //     ? (reaction.myStatus as unknown as LikeStatusEnum)
-    //     : LikeStatusEnum.None;
-    // }
     return createPost.getPostViewModel(result.myStatus, result.newestLikes);
   }
 }

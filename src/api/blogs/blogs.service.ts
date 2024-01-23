@@ -8,27 +8,4 @@ export class BlogsService {
     @InjectModel(BlogClass.name) private blogModel: Model<BlogDocument>,
     protected blogsRepository: BlogsRepository,
   ) {}
-//   async createNewBlog(inputDateModel: bodyBlogsModel): Promise<BlogsViewType> {
-//     const newBlog: BlogClass = new BlogClass (inputDateModel.name, inputDateModel.description, inputDateModel.websiteUrl, false)
-//     const createBlog: BlogClass = await this.blogsRepository.createNewBlogs(newBlog);
-//     return createBlog.getBlogViewModel();
-//   }
-
-//   async updateBlog(
-//     id: string,
-//     name: string,
-//     description: string,
-//     websiteUrl: string,
-//   ): Promise<boolean> {
-//     return await this.blogsRepository.updateBlogById(
-//       id,
-//       name,
-//       description,
-//       websiteUrl,
-//     );
-//   }
-
-//   async deleteAllBlogs() {
-//     return await this.blogsRepository.deleteRepoBlogs();
-//   }
 }

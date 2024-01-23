@@ -138,8 +138,6 @@ export class inputModelPostClass {
   }
 
   export class InputModelContentePostClass {
-	// @IsCustomString()
-	
 	@IsString()
 	@Trim() 
 	@IsNotEmpty()

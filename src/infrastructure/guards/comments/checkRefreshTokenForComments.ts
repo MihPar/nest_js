@@ -1,4 +1,4 @@
-import {CanActivate, createParamDecorator, ExecutionContext, Injectable, UnauthorizedException} from "@nestjs/common";
+import {CanActivate, ExecutionContext, Injectable, UnauthorizedException} from "@nestjs/common";
 import jwt from 'jsonwebtoken'
 import { UsersRepository } from "../../../api/users/user.repository";
 

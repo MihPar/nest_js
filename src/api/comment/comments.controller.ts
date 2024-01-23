@@ -26,8 +26,6 @@ export class CommentsController {
 
   @HttpCode(204)
   @Put(':commentId/like-status')
-//   @UseGuards(CheckRefreshTokenForComments)
-//   @UseGuards(CheckRefreshTokenForGet) !!!!!!!!!!!
   @UseGuards(authMiddleware)
   async updateByCommentIdLikeStatus(
     @Body(new ValidationPipe({ validateCustomDecorators: true })) status: InputModelLikeStatusClass,
@@ -35,7 +33,6 @@ export class CommentsController {
     @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string,
   ) {
-	// if(!userId) throw new UnauthorizedException("401")
     const findCommentById: CommentClass | null =
       await this.commentQueryRepository.findCommentByCommentId(id.commentId);
     if (!findCommentById) throw new NotFoundException('404');
@@ -50,33 +47,23 @@ export class CommentsController {
 
 	const command = new UpdateLikestatusCommand(status, id, userId)
 	await this.commandBus.execute(command)
-    // await this.commentService.updateLikeStatus(
-    //   status.likeStatus,
-    //   id.commentId,
-    //   userId,
-    // );
 	return 
   }
 
   @Put(':commentId')
   @HttpCode(204)
   @UseGuards(CheckRefreshTokenForComments)
-//   @UseGuards(CheckRefreshTokenForGet) // !!!!!!!!!!!
-
   async updataCommetById(
 	@Param() id: inputModelCommentId, 
 	@Body(new ValidationPipe({ validateCustomDecorators: true })) dto: InputModelContent,
 	@UserDecorator() user: UserClass,
 	@UserIdDecorator() userId: string,
 	) {
-	// if(!userId) return null
     const isExistComment = await this.commentQueryRepository.findCommentById(id.commentId, userId);
     if (!isExistComment) throw new NotFoundException('404');
     if (userId.toString() !== isExistComment.commentatorInfo.userId) { throw new ForbiddenException("403")}
 	const command = new UpdateCommentByCommentIdCommand(id.commentId, dto)
 	const updateComment: boolean = await this.commandBus.execute(command)
-    // const updateComment: boolean =
-    //   await this.commentService.updateCommentByCommentId(id.commentId, dto.content);
     if (!updateComment) throw new NotFoundException('404');
 	return
   }
@@ -89,14 +76,9 @@ export class CommentsController {
 	@UserDecorator() user: UserClass,
 	@UserIdDecorator() userId: string // | null
 	) {
-		// if(!userId) return null
-		// console.log("dto.commentId: ", dto.commentId)
     	const isExistComment = await this.commentQueryRepository.findCommentById(dto.commentId, userId);
-		// console.log("isExistComment: ", isExistComment)
     if (!isExistComment) throw new NotFoundException("404")
-
     if (userId.toString() !== isExistComment.commentatorInfo.userId) { throw new ForbiddenException("403")}
-
     const deleteCommentById: boolean =
       await this.commentRepository.deleteComment(dto.commentId);
     if (!deleteCommentById) throw new NotFoundException('404');
@@ -106,13 +88,11 @@ export class CommentsController {
   @Get(':id')
   @HttpCode(200)
   @UseGuards(CheckRefreshTokenForGet)
-//   @UseGuards(authMiddleware)
   async getCommentById(
     @Param() dto: inputModelId,
     @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
   ) {
-    // if (!userId) return null;
     const getCommentById: CommentViewModel | null =
       await this.commentQueryRepository.findCommentById(dto.id, userId);
 	  console.log("getCommentById: ", getCommentById)

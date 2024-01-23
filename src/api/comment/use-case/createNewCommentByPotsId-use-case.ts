@@ -22,7 +22,6 @@ export class CreateNewCommentByPostIdUseCase implements ICommandHandler<CreateNe
 		protected readonly commentRepository: CommentRepository
 	) {}
 	async execute(command: CreateNewCommentByPostIdCommnad): Promise<CommentViewModel | null> {
-		// console.log("1: ", 1)
 			const userLogin = command.user.accountData.userName;
 			if(!command.userId) return null
 			const userId = command.userId

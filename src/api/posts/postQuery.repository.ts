@@ -40,8 +40,6 @@ export class PostsQueryRepository {
         ? (reaction.myStatus as unknown as LikeStatusEnum)
         : LikeStatusEnum.None;
     }
-	// console.log("newestLikes: ", newestLikes)
-
     return post ? PostClass.getPostsViewModel(post, myStatus, newestLikes) : null;
   }
 

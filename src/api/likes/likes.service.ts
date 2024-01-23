@@ -6,8 +6,4 @@ export class LikesService {
 	constructor(
 		protected likesRepository: LikesRepository
 	) {}
-
-	// async deleteAllLikes() {
-	// 	return await this.likesRepository.deleteLikes()
-	// }
 }

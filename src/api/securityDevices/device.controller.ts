@@ -1,8 +1,6 @@
 import { Controller, Delete, Get, HttpCode, NotFoundException, Param, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { DeviceQueryRepository } from "./deviceQuery.repository";
-import { DeviceService } from './device.service';
 import { DeviceRepository } from './device.repository';
-import { JwtService } from "@nestjs/jwt";
 import { UserDecorator, UserIdDecorator } from "../../infrastructure/decorator/decorator.user";
 import { Request } from "express";
 import { CheckRefreshToken } from "../../infrastructure/guards/auth/checkRefreshToken";
@@ -49,11 +47,6 @@ export class SecurityDeviceController {
 	const command = new TerminateAllCurrentSessionCommand(userId, payload.deviceId)
 	  const findAllCurrentDevices =
       await this.commandBus.execute(command)
-    // const findAllCurrentDevices =
-    //   await this.deviceService.terminateAllCurrentSessions(
-    //     userId,
-    //     payload.deviceId,
-    //   );
     if (!findAllCurrentDevices) throw new UnauthorizedException('401');
   }
 

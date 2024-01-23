@@ -26,15 +26,12 @@ export class emailInputDataClass {
 }
 
 export class InputModelNewPasswordClass {
-	// @RequiredString()
-	// @Length(6, 20, {message: "The length of password is incorrect"})
 	@IsString()
 	@Trim() 
 	@MinLength(6)
 	@MaxLength(20)
 	newPassword: string
 
-	// @RequiredString()
 	@IsString()
 	@Trim() 
 	@IsNotEmpty()
@@ -49,8 +46,6 @@ export class InputDateReqConfirmClass {
 }
 
 export class InputDataReqClass {
-	// @RequiredString()
-	// @Length(3, 10, {message: "The length is more than need"})
 	@IsString()
 	@Trim() 
 	@IsNotEmpty()
@@ -58,8 +53,6 @@ export class InputDataReqClass {
 	@MaxLength(10)
 	login: string
 	
-	// @RequiredString()
-	// @Length(6, 20, {message: "The length is more than need"})
 	@IsString()
 	@Trim() 
 	@IsNotEmpty()
@@ -67,7 +60,6 @@ export class InputDataReqClass {
 	@MaxLength(20)
 	password: string
 
-	// @RequiredString()
 	@IsEmail()
 	@IsString()
 	@Trim() 

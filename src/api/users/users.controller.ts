@@ -20,7 +20,6 @@ export class UsersController {
 
   @Get()
   @HttpCode(200)
-//   @UseGuards(AuthBasic)
   async getAllUsers(
     @Query()
     query: {
@@ -52,23 +51,18 @@ export class UsersController {
 
   @HttpCode(201)
   @Post()
-//   @UseGuards(AuthBasic)
   @UseFilters(new HttpExceptionFilter())
   async createUser(@Body() body: InputModelClassCreateBody) {
-	// console.log("1:", 1)
 	const command = new CreateNewUserCommand(body)
 	const createUser = await this.commandBus.execute(command)
-	// const createUser = await this.usersService.createNewUser(body.login, body.password, body.email)
 	return createUser
   }
 
   @Delete(':id')
   @HttpCode(204)
-//   @UseGuards(AuthBasic)
   async deleteUserById(@Param('id') id: string) {
 	const command = new DeleteUserByIdCommnad(id)
 	const deleteUserById = await this.commandBus.execute(command)
-	// const deleteUserById = await this.usersService.deleteUserById(userId)
 	if (!deleteUserById) throw new NotFoundException("Blogs by id not found 404")
   }
 }

@@ -4,7 +4,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { DeviceClass, DeviceDocument } from '../../schema/device.schema';
 import { CollectionIP } from '../../api/CollectionIP/collection.class';
 import { IPCollectionClass, IPCollectionDocument } from '../../schema/IP.Schema';
-import { log } from 'console';
 
 @Injectable()
 export class DeviceRepository {
@@ -19,7 +18,6 @@ export class DeviceRepository {
 
   async deleteAllDevices() {
     const deletedAll = this.deviceModel.deleteMany({});
-    // return deletedAll.acknowledged;
 	return deletedAll.deleteMany()
   }
 

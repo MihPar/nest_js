@@ -67,23 +67,15 @@ export class AuthController {
 		@Headers() Headers: any,
 		@Res({passthrough: true}) res: Response) {
 			const command = new CreateLoginCommand(inutDataModel)
-		// const user: UserClass |null = await this.userService.setNewPassword(inutDataModel)
 		const user: UserClass | null = await this.commandBus.execute(command);
 		  if (!user) {
 			throw new UnauthorizedException("Not authorization 401")
 		  } else {
-			// const token: string = await this.jwtService.signAsync({userId: user._id.toString()}, {expiresIn: "60s"});
-			// const ip = IP || "unknown";
-			// const title = Headers["user-agent"] || "unknown";
-			// const refreshToken = await this.jwtService.signAsync({userId: user._id.toString(), deviceId: randomUUID()}, {expiresIn: "600s"});
-			// await this.commandBus.execute(new CreateDevice(ip, title, refreshToken))
 			const command = new CreateDeviceCommand(IP, Headers, user)
 			const tokens = await this.commandBus.execute(command)
-
 			if(!tokens){
 				throw new UnauthorizedException("Not authorization 401")
 			}
-			// await this.deviceService.createDevice(ip, title, refreshToken);
 			res.cookie('refreshToken', tokens.refreshToken, {
                 httpOnly: true,
                 secure: true,
@@ -103,24 +95,9 @@ export class AuthController {
 		const refreshToken: string = req.cookies.refreshToken;
 		const command = new RefreshTokenCommand(refreshToken, user)
 		const result: { newToken: string, newRefreshToken: string} = await this.commandBus.execute(command)
-		// const refreshToken: string = req.cookies.refreshToken;
-		// // const userId = req.user._id.toString();
-		// const payload = await this.jwtService.decode(refreshToken);
-		// if (!result.payload) {
-		//   throw new UnauthorizedException("Not authorization 401")
-		// }
-		// const newToken: string = await this.jwtService.signAsync(user);
-		// const newRefreshToken: string = await this.jwtService.signAsync(
-		// 	{payload: user._id.toString()},
-		//   	payload.deviceId
-		// );
 		if(!userId) return null
 		const command2 = new UpdateDeviceCommand(userId, result.newRefreshToken)
 		await this.commandBus.execute(command2)
-		// const updateDeviceUser = await this.deviceService.updateDevice(
-		//   userId,
-		//   result.newRefreshToken
-		// );
 		res.cookie('refreshToken', refreshToken, {
 			httpOnly: true,
 			secure: true,
@@ -134,7 +111,6 @@ export class AuthController {
 	async createRegistrationConfirmation(@Body() inputDateRegConfirm: InputDateReqConfirmClass) {
 		const command = new RegistrationConfirmationCommand(inputDateRegConfirm)
 		await this.commandBus.execute(command)
-		// await this.usersService.findUserByConfirmationCode(inputDateRegConfirm.code);
 	}
 
 	@Post("registration")
@@ -143,11 +119,6 @@ export class AuthController {
 	async creteRegistration(@Req() req: Request, @Body() inputDataReq: InputDataReqClass) {
 		const command = new RegistrationCommand(inputDataReq)
 		const user = await this.commandBus.execute(command)
-		// const user = await this.usersService.createNewUser(
-		// 	inputDataReq.login,
-		// 	inputDataReq.password,
-		// 	inputDataReq.email
-		//   );
 		  if (!user) throw new BadRequestException("400")
 		  return
 	}
@@ -160,9 +131,6 @@ export class AuthController {
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
 		const command = new RegistrationEmailResendingCommand(inputDateReqEmailResending)
 		const confirmUser = await this.commandBus.execute(command)
-		// const confirmUser = await this.usersService.confirmEmailResendCode(
-		// 	inputDateReqEmailResending.email
-		//   );
 		  if (!confirmUser) throw new BadRequestException("400")
 		  return true
 	}
@@ -174,7 +142,6 @@ export class AuthController {
 		const refreshToken: string = req.cookies.refreshToken;
 		const command = new LogoutCommand(refreshToken)
 		const isDeleteDevice = await this.commandBus.execute(command)
-		// const isDeleteDevice = await this.deviceService.logoutDevice(refreshToken);
 		if (!isDeleteDevice) throw new UnauthorizedException('Not authorization 401')
 	}
 
@@ -185,13 +152,6 @@ export class AuthController {
 		if (!req.headers.authorization) throw new UnauthorizedException('Not authorization 401')
 		const command = new GetUserIdByTokenCommand(req)
 		const findUserById: UserClass = await this.commandBus.execute(command)
-		//   const token: string = req.headers.authorization!.split(" ")[1];
-		//   const userId: ObjectId = await this.jwtService.verifyAsync(token);
-		//   if (!userId) throw new UnauthorizedException('Not authorization 401')
-		//   const currentUser: UserClass | null = await this.usersQueryRepository.findUserById(
-		// 	getUserIdByToken.userId
-		//   );
-		//   if (!currentUser) throw new UnauthorizedException('Not authorization 401')
 		  return {
 			userId: findUserById._id.toString(),
 			email: findUserById.accountData.email,

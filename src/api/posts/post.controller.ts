@@ -57,18 +57,10 @@ export class PostController {
     @UserIdDecorator() userId: string | null,
 	) {
 	if(!userId) return null
-	// console.log(userId, "userId")
     const findPost = await this.postsQueryRepository.findPostById(dto.postId);
-	// console.log(findPost, "findPost 62 str")
     if (!findPost) throw new NotFoundException('404')
 	const commnad = new UpdateLikeStatusCommand(status, dto.postId, userId, user)
 	const result = await this.commandBus.execute(commnad)
-    // const result = await this.postsService.updateLikeStatus(
-    //   status.likeStatus,
-    //   dto.postId,
-    //   new ObjectId(userId),
-    //   userLogin
-    // );
     if (!result) throw new NotFoundException('404')
 	return result
   }
@@ -88,7 +80,6 @@ export class PostController {
       sortDirection: string;
     },
   ) {
-	// if(!userId) return null
     const isExistPots = await this.postsQueryRepository.findPostById(dto.postId);
 	console.log("isExistPots: ", isExistPots)
     if (!isExistPots) throw new NotFoundException('Blogs by id not found');
@@ -107,35 +98,17 @@ export class PostController {
 
   @Post(':postId/comments')
   @HttpCode(201)
-//   @UseFilters(new HttpExceptionFilter())
   @UseGuards(CheckRefreshTokenForPost)
-	// @UseGuards(CheckRefreshTokenForGet)
   async createNewCommentByPostId(
 	@Param() dto: InputModelClassPostId, 
 	@Body(new ValidationPipe({ validateCustomDecorators: true })) inputModelContent: InputModelContentePostClass,
   	@UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null
 	) {
-	// console.log("dto: ", dto)
     const post: Posts | null = await this.postsQueryRepository.findPostById(dto.postId)
-	// console.log("post", post)
-
     if (!post) throw new NotFoundException('Blogs by id not found 404')
-		// console.log("userId: ", userId)
-	// if(!userId) return null
 	const command = new CreateNewCommentByPostIdCommnad(dto.postId, inputModelContent, user, userId)
 	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(command)
-	// console.log("createNewCommentByPostId: ", createNewCommentByPostId)
-
-	// console.log("createNewCommentByPostId: ", createNewCommentByPostId)
-    // const createNewCommentByPostId: CommentViewModel | null =
-    //   await this.commentService.createNewCommentByPostId(
-    //     dto.postId,
-    //     inputModelContent.content,
-    //     userId,
-    //     user.accountData.userName
-    //   );
-    // if (!createNewCommentByPostId) throw new NotFoundException('Blogs by id not found 404')
 	return createNewCommentByPostId
   }
 
@@ -166,24 +139,13 @@ export class PostController {
   @Post()
   @HttpCode(201)
   @UseGuards(AuthBasic)
-//   @UseFilters(new HttpExceptionFilter())
   async createPost(@Body(new ValidationPipe({ validateCustomDecorators: true })) inputModelPost: inputModelPostClass) {
-	// console.log("inputModelPost: ", inputModelPost)
     const findBlog: BlogClass | null = await this.blogsQueryRepository.findRawBlogById(
       inputModelPost.blogId,
     );
-
     if (!findBlog) throw new BadRequestException('Blogs by id not found 400');
 	const command = new CreatePostCommand(inputModelPost, findBlog.name)
 	const createNewPost: Posts | null = await this.commandBus.execute(command)
-	// console.log("createNewPost: ", createNewPost)
-    // const createNewPost: Posts | null = await this.postsService.createPost(
-    //   inputModelPost.blogId,
-    //   inputModelPost.title,
-    //   inputModelPost.shortDescription,
-    //   inputModelPost.content,
-    //   findBlog.name,
-    // );
 	if(!createNewPost) throw new BadRequestException('Blogs by id not found 400');
     return createNewPost;
   }
@@ -195,33 +157,23 @@ export class PostController {
     @Param() dto: InputModelClassPostId, 
 	@UserIdDecorator() userId: string | null,
   ) {
-	// console.log('postId: ', dto.postId)
     const getPostById: Posts | null =
       await this.postsQueryRepository.findPostById(dto.postId, userId);
     if (!getPostById) {
       throw new NotFoundException('Post by id not found');
     }
-	// console.log('getPostById: ', getPostById)
     return getPostById;
   }
 
   @Put(':postId')
   @HttpCode(204)
   @UseGuards(AuthBasic)
-//   @UseFilters(new HttpExceptionFilter())
   async updatePostById(
     @Param() dto: InputModelClassPostId, 
     @Body(new ValidationPipe({ validateCustomDecorators: true })) inputModelData: inputModelPostClass,
   ) {
 	const command = new UpdateOldPostCommand(dto.postId, inputModelData)
 	const updatePost: boolean = await this.commandBus.execute(command)
-    // const updatePost: boolean = await this.postsService.updateOldPost(
-    //   postId,
-    //   inputModelData.title,
-    //   inputModelData.shortDescription,
-    //   inputModelData.content,
-    //   inputModelData.blogId,
-    // );
     if (!updatePost) throw new NotFoundException('Blogs by id not found 404');
     return
   }
@@ -232,7 +184,6 @@ export class PostController {
   async deletePostById(@Param('id') id: string, ): Promise<boolean> {
 	const command = new DeletePostByIdCommand(id)
 	const deletPost: boolean = await this.commandBus.execute(command)
-    // const deletPost: boolean = await this.postsService.deletePostId(postId);
     if (!deletPost) throw new NotFoundException('Blogs by id not found 404');
     return true;
   }

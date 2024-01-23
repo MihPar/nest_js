@@ -9,9 +9,7 @@ import { DeviceClass } from '../../../schema/device.schema';
 
 export class CreateDeviceCommand {
 	constructor(
-		// public ip: string, 
 		public IP: string, 
-		// public title: any,
 		public Headers: any,
 		public user: UserClass
 	) {}
@@ -35,12 +33,10 @@ export class CreateDeviceUseCase implements ICommandHandler<CreateDeviceCommand>
 		const title = command.Headers["user-agent"] || "unknown";
 
 		const device  = new DeviceClass()
-		// device.ip = command.ip
 		device.ip = ip
 		device._id = new mongoose.Types.ObjectId()
 		device.deviceId = deviceId
 		device.lastActiveDate = new Date().toISOString()
-		// device.title = command.title
 		device.title = title
 		device.userId = command.user._id.toString()
 		
@@ -49,7 +45,6 @@ export class CreateDeviceUseCase implements ICommandHandler<CreateDeviceCommand>
 		if(!createdDeviceId){
 			return null
 		}
-
 		return {
 			refreshToken,
 			token

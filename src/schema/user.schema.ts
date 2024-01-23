@@ -44,19 +44,13 @@ export class UserClass {
 		accountData: AccountDataClass
 	@Prop({require: true})
 		emailConfirmation: EmailConfirmationClass
-		// id: ObjectId;
 	 getViewUser(): UserViewType {
-		// const user = new this()
 		return {
 			id: this._id.toString(),
 			login: this.accountData.userName,
 			email: this.accountData.email,
 			createdAt: this.accountData.createdAt
 		}
-		// user.id = _id
-		// user.accountData.userName = login
-		// user.accountData.email = email
-		// user.accountData.createdAt = createdAt
 	}
 }
 export const UserSchema = SchemaFactory.createForClass(UserClass);

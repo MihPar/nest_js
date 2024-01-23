@@ -43,7 +43,6 @@ export class BlogsQueryRepository {
 
 	async findBlogById(blogId: string, userId?: string): Promise<BlogsViewType | null> {
 		const blog: BlogClass | null =  await this.blogModel.findOne({ _id: new Object(blogId)}, {__v: 0})
-		// console.log("blogFindBlogId: ", blog)
 		return blog ? BlogClass.getBlogsViewModel(blog) : null;
 	  }
 }
