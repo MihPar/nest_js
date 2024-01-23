@@ -100,8 +100,8 @@ export class CommentsController {
 
   @Get(':id')
   @HttpCode(200)
-//   @UseGuards(CheckRefreshTokenForGet)
-  @UseGuards(authMiddleware)
+  @UseGuards(CheckRefreshTokenForGet)
+//   @UseGuards(authMiddleware)
   async getCommentById(
     @Param() dto: inputModelId,
     @UserDecorator() user: UserClass,
