@@ -9,15 +9,15 @@ export class LikeClass {
 	_id: mongoose.Types.ObjectId;
   @Prop({required: true})
   	userId: string;
-  @Prop({required: true})
+  @Prop({required: false})
   	login: string;
   @Prop({required: false})
   	commentId: string;
-  @Prop({required: true})
+  @Prop({required: false})
   	postId: string;
   @Prop({required: true, type: String, default: LikeStatusEnum.None, enum: ["None", "Like", "Dislike"]})
   	myStatus: LikeStatusEnum
-  @Prop({required: true})
+  @Prop({required: false})
   	addedAt: string;
 }
 
