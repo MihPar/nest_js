@@ -90,9 +90,9 @@ export class CommentsController {
 	@UserIdDecorator() userId: string // | null
 	) {
 		// if(!userId) return null
-		console.log("dto.commentId: ", dto.commentId)
+		// console.log("dto.commentId: ", dto.commentId)
     	const isExistComment = await this.commentQueryRepository.findCommentById(dto.commentId, userId);
-		console.log("isExistComment: ", isExistComment)
+		// console.log("isExistComment: ", isExistComment)
     if (!isExistComment) throw new NotFoundException("404")
 
     if (userId.toString() !== isExistComment.commentatorInfo.userId) { throw new ForbiddenException("403")}
@@ -105,7 +105,7 @@ export class CommentsController {
 
   @Get(':id')
   @HttpCode(200)
-//   @UseGuards(CheckRefreshTokenForGet)
+  @UseGuards(CheckRefreshTokenForGet)
 //   @UseGuards(authMiddleware)
   async getCommentById(
     @Param() dto: inputModelId,

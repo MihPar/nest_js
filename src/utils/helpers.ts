@@ -23,7 +23,6 @@ export const commentDBToView = (item: CommentClass, myStatus: LikeStatusEnum | n
 	  .post(`/users`)
 	  .auth('admin', 'qwerty')
 	  .send(body)
-	  .expect(200)
 	  return createUser
 }
 

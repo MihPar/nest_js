@@ -118,14 +118,14 @@ export class PostController {
 	) {
 	// console.log("dto: ", dto)
     const post: Posts | null = await this.postsQueryRepository.findPostById(dto.postId)
-	console.log("post", post)
+	// console.log("post", post)
 
     if (!post) throw new NotFoundException('Blogs by id not found 404')
 		// console.log("userId: ", userId)
 	// if(!userId) return null
 	const command = new CreateNewCommentByPostIdCommnad(dto.postId, inputModelContent, user, userId)
 	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(command)
-	console.log("createNewCommentByPostId: ", createNewCommentByPostId)
+	// console.log("createNewCommentByPostId: ", createNewCommentByPostId)
 
 	// console.log("createNewCommentByPostId: ", createNewCommentByPostId)
     // const createNewCommentByPostId: CommentViewModel | null =
