@@ -80,7 +80,7 @@ export class UsersQueryRepository {
 
 	  async findUserById(userId: string): Promise<UserClass | null> {
 		console.log(userId)
-		let user: UserClass | null = await this.userModel.findOne({ _id: userId }).lean();
+		let user: UserClass | null = await this.userModel.findOne({ _id: new ObjectId(userId) }).lean();
 		return user;
 	  }
 }
