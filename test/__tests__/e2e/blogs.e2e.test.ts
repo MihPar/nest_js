@@ -7,6 +7,7 @@ import request from "supertest";
 import dotenv from "dotenv";
 import { UserViewType } from '../../../src/api/users/user.type';
 import { PostsViewModel } from '../../../src/api/posts/posts.type';
+import { InputDataModelClassAuth } from '../../../src/api/auth/auth.class';
 dotenv.config();
 
 export function createErrorsMessageTest(fields: string[]) {
@@ -73,6 +74,8 @@ describe("/blogs", () => {
   let websiteUrl: string;
   let blogId: string;
   let userId: string;
+  let token: InputDataModelClassAuth
+  let login: string
 
   describe("get and create blog tests", () => {
     describe("create user and acces token", () => {
@@ -88,6 +91,8 @@ describe("/blogs", () => {
           password: "qwerty",
           email: "mpara7274@gamil.com",
         };
+
+		login = testUser.login
         const createUserResponse = await request(server)
           .post("/users")
           .auth("admin", "qwerty")
@@ -102,10 +107,11 @@ describe("/blogs", () => {
         });
 
         const loginOrEmail = createUser.login;
-        const createAccessToken = await request(server).post("/auth/login").send({
+        let createAccessToken = await request(server).post("/auth/login").send({
           loginOrEmail: loginOrEmail,
           password: "qwerty",
         });
+		token = createAccessToken.body.accessToken
         expect(createAccessToken.status).toBe(HTTP_STATUS.OK_200);
         expect(createAccessToken.body).toEqual({
           accessToken: expect.any(String),
@@ -114,57 +120,57 @@ describe("/blogs", () => {
       });
     });
 
-//     describe("create new blog", () => {
-//       it("create new blog", async () => {
-//         const getBlogsBefore = await request(server).get("/blogs").send();
-//         expect(getBlogsBefore.status).toBe(HTTP_STATUS.OK_200);
-//         expect(getBlogsBefore.body.items).toHaveLength(0);
+    describe("create new blog", () => {
+      it("create new blog", async () => {
+        const getBlogsBefore = await request(server).get("/blogs").send();
+        expect(getBlogsBefore.status).toBe(HTTP_STATUS.OK_200);
+        expect(getBlogsBefore.body.items).toHaveLength(0);
 
-//         const createBlogs = await request(server)
-//           .post("/blogs")
-//           .auth("admin", "qwerty")
-//           .send({
-//             name: "Mickle",
-//             description: "I am a programmer",
-//             websiteUrl: "https://google.com",
-//           });
+        const createBlogs = await request(server)
+          .post("/blogs")
+          .auth("admin", "qwerty")
+          .send({
+            name: "Mickle",
+            description: "I am a programmer",
+            websiteUrl: "https://google.com",
+          });
 
-//         description = createBlogs.body.description;
-//         websiteUrl = createBlogs.body.websiteUrl;
-//         name = createBlogs.body.name;
-//         blogId = createBlogs.body.id;
+        description = createBlogs.body.description;
+        websiteUrl = createBlogs.body.websiteUrl;
+        name = createBlogs.body.name;
+        blogId = createBlogs.body.id;
 
-//         expect(createBlogs.status).toBe(HTTP_STATUS.CREATED_201);
-//         expect(createBlogs.body).toEqual({
-//           id: expect.any(String),
-//           name: name,
-//           description: description,
-//           websiteUrl: websiteUrl,
-//           createdAt: expect.any(String),
-//           isMembership: true,
-//         });
+        expect(createBlogs.status).toBe(HTTP_STATUS.CREATED_201);
+        expect(createBlogs.body).toEqual({
+          id: expect.any(String),
+          name: name,
+          description: description,
+          websiteUrl: websiteUrl,
+          createdAt: expect.any(String),
+          isMembership: false,
+        });
 
-//         const getBlogsAfter = await request(server).get("/blogs").send();
-//         expect(getBlogsAfter.status).toBe(HTTP_STATUS.OK_200);
-//         expect(getBlogsAfter.body.items).toHaveLength(1);
-//       });
+        const getBlogsAfter = await request(server).get("/blogs").send();
+        expect(getBlogsAfter.status).toBe(HTTP_STATUS.OK_200);
+        expect(getBlogsAfter.body.items).toHaveLength(1);
+      });
 
-//       it("create new blogs with incorrect input data (body), should return status 400 and errorMessage", async () => {
-//         const createBlogsWithIncorrectData = await request(server)
-//           .post("/blogs")
-//           .auth("admin", "qwerty")
-//           .send({
-//             name: 102,
-//             description: true,
-//             webseiteUrl: false,
-//           });
-//         expect(createBlogsWithIncorrectData.status).toBe(
-//           HTTP_STATUS.BAD_REQUEST_400
-//         );
-//         expect(createBlogsWithIncorrectData.body).toStrictEqual(
-//           blogsValidationErrRes
-//         );
-//       });
+    //   it("create new blogs with incorrect input data (body), should return status 400 and errorMessage", async () => {
+    //     const createBlogsWithIncorrectData = await request(server)
+    //       .post("/blogs")
+    //       .auth("admin", "qwerty")
+    //       .send({
+    //         name: 102,
+    //         description: true,
+    //         webseiteUrl: false,
+    //       });
+    //     expect(createBlogsWithIncorrectData.status).toBe(
+    //       HTTP_STATUS.BAD_REQUEST_400
+    //     );
+    //     expect(createBlogsWithIncorrectData.body).toStrictEqual(
+    //       blogsValidationErrRes
+    //     );
+    //   });
 
 //       it("create blog with empty body => should return 400 status code and createErrorsMessageTest", async () => {
 //         const createBlogWithEmptyBody = await request(server)
@@ -239,64 +245,90 @@ describe("/blogs", () => {
 //       });
 //     });
 
-/************************************** get all post by blogId ************************************/
+/************************************** create and get post by blogId ************************************/
 
-    // describe("return all posts for specified blog", () => {
-    //   it("return all posts for specified blog", async () => {
-    //     const createPost = await request(server)
-    //       .post("/posts")
-    //       .auth("admin", "qwerty")
-    //       .send({
-    //         title: "PROGRAMMER",
-    //         shortDescription: "My profession the back end developer!",
-    //         content:
-    //           "I am a programmere and work at backend, I like javascript!!!",
-    //         blogId: blogId,
-    //       })
-	// 	  console.log(createPost.body)
-    //       expect(createPost.status).toBe(HTTP_STATUS.CREATED_201)
+    describe("return all posts for specified blog", () => {
+      it("return all posts for specified blog", async () => {
+        const createPostByBlogId = await request(server)
+          .post("/posts")
+          .auth("admin", "qwerty")
+          .send({
+            title: "PROGRAMMER",
+            shortDescription: "My profession the back end developer!",
+            content:
+              "I am a programmere and work at backend, I like javascript!!!",
+            blogId: blogId,
+          })
+		//   console.log(createPostByBlogId.body)
+          expect(createPostByBlogId.status).toBe(HTTP_STATUS.CREATED_201)
 		  
 
-    //     const title = createPost.body.title;
-    //     const shortDescription = createPost.body.shortDescription;
-    //     const content = createPost.body.content;
-    //     const postIdBy = createPost.body.blogId;
+        const title = createPostByBlogId.body.title;
+        const shortDescription = createPostByBlogId.body.shortDescription;
+        const content = createPostByBlogId.body.content;
+        const postIdBy = createPostByBlogId.body.blogId;
 
-    //     const pageNumber = "1";
-    //     const pageSize = "10";
-    //     const sortBy = "desc";
-    //     const getAllPostForBlogs = await request(server)
-	// 	.get(`/blogs/${blogId}/posts`);
-    //     console.log("getAllPostForBlogs.body: ", getAllPostForBlogs.body);
+		const pageNumber = '1';
+		const pageSize = '10';
+		const sortBy = 'createAt';
+		const sortDirection = 'desc';
 
-    //     expect(getAllPostForBlogs.status).toBe(HTTP_STATUS.OK_200);
-    //     expect(getAllPostForBlogs.body).toEqual({
-    //       pagesCount: 1,
-    //       page: 1,
-    //       pageSize: 10,
-    //       totalCount: 1,
-    //       items: [
-    //         {
-    //           id: expect.any(String),
-    //           title: title,
-    //           shortDescription: shortDescription,
-    //           content: content,
-    //           blogId: blogId,
-    //           blogName: name,
-    //           createdAt: expect.any(String),
-    //         },
-    //       ],
-    //     });
-    //   });
-    //   it("if specified blog is not exist", async () => {
-    //     const getAllPostForBlogs = await request(server).get(
-    //       `/blogs/147896321598741563258745/posts`
-    //     );
-    //     expect(getAllPostForBlogs.status).toBe(HTTP_STATUS.NOT_FOUND_404);
-    //   });
-    // });
+        const getPostByBlogId = await request(server)
+		.get(`/blogs/${blogId}/posts`)
+		.set(`Authorization`, `Bearer ${token}`)
+		.query({pageNumber: "1", pageSize: "10", sortBy: "createAt", sortDirection: "desc"})
 
-    // let reqBodyResponse: PostsViewModel;
+        // console.log("getPostByBlogId.body: ", getPostByBlogId.body);
+
+        expect(getPostByBlogId.status).toBe(HTTP_STATUS.OK_200);
+		// console.log("getPostByBlogId.body.items: ", getPostByBlogId.body.items)
+        expect(getPostByBlogId.body).toEqual({
+          pagesCount: 1,
+          page: 1,
+          pageSize: 10,
+          totalCount: 1,
+          items: [
+            {
+              id: expect.any(String),
+              title: title,
+              shortDescription: shortDescription,
+              content: content,
+              blogId: blogId,
+              blogName: name,
+              createdAt: expect.any(String),
+			  "extendedLikesInfo": {
+				"likesCount": 0,
+				"dislikesCount": 0,
+				"myStatus": "None",
+				"newestLikes": [
+				//   {
+				// 	"addedAt": expect.any(String),
+				// 	"userId": userId,
+				// 	"login": login
+				//   }
+				]
+			  }
+            },
+          ],
+        });
+      });
+
+      it("if specified blog is not exist", async () => {
+        const getAllPostByBlogId = await request(server)
+		.get(
+          `/blogs/123456789012345678901234/posts`
+        //   `/blogs/${blogId}/posts`
+        )
+		// .set(`Authorization`, `Bearer ${token}`)
+		.query({pageNumber: "1", pageSize: "10", sortBy: "createAt", sortDirection: "desc"})
+
+		console.log(getAllPostByBlogId.body)
+
+        expect(getAllPostByBlogId.status).toBe(HTTP_STATUS.NOT_FOUND_404);
+      });
+    });
+
+    let reqBodyResponse: PostsViewModel;
 
 	// /*********************************** create new post by blogId *****************************************/
 	
@@ -608,3 +640,4 @@ describe("/blogs", () => {
 //     });
   });
 });
+})

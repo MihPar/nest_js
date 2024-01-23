@@ -110,7 +110,7 @@ export class PostsQueryRepository {
     sortBy: string,
     sortDirection: string,
     blogId: string,
-    userId: string,
+    userId: string | null,
   ): Promise<PaginationType<Posts>> {
     const filter = { blogId: new ObjectId(blogId) };
     const posts: PostClass[] = await this.postModel
