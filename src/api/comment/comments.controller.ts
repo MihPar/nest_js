@@ -67,9 +67,9 @@ export class CommentsController {
 	@Param() id: inputModelCommentId, 
 	@Body(new ValidationPipe({ validateCustomDecorators: true })) dto: InputModelContent,
 	@UserDecorator() user: UserClass,
-	@UserIdDecorator() userId: string | null,
+	@UserIdDecorator() userId: string,
 	) {
-	if(!userId) return null
+	// if(!userId) return null
     const isExistComment = await this.commentQueryRepository.findCommentById(id.commentId, userId);
     if (!isExistComment) throw new BadRequestException("400")
     if (userId.toString() !== isExistComment.commentatorInfo.userId) { throw new ForbiddenException("403")}
@@ -87,7 +87,7 @@ export class CommentsController {
   async deleteCommentById(
 	@Param() dto: inputModelCommentId,
 	@UserDecorator() user: UserClass,
-	@UserIdDecorator() userId: string
+	@UserIdDecorator() userId: string // | null
 	) {
 		// if(!userId) return null
     	const isExistComment = await this.commentQueryRepository.findCommentById(dto.commentId, userId);
