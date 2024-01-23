@@ -121,7 +121,7 @@ export class PostController {
 
     if (!post) throw new NotFoundException('Blogs by id not found 404')
 		// console.log("userId: ", userId)
-	if(!userId) return null
+	// if(!userId) return null
 	const command = new CreateNewCommentByPostIdCommnad(dto.postId, inputModelContent, user, userId)
 	const createNewCommentByPostId: CommentViewModel | null = await this.commandBus.execute(command)
 
