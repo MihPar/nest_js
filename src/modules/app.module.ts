@@ -84,6 +84,11 @@ import { IsExistEmailUser } from '../infrastructure/guards/auth/isExixtEmailUser
 import { IsBlogExistConstraint } from '../infrastructure/guards/post/pipe/blogIsExistDecorator';
 import { authMiddleware } from '../infrastructure/guards/comments/checkRefreshTokenForComments';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ApiJwtModule } from '../infrastructure/strategy/local.strategy';
+import { ApiConfigModule } from '../infrastructure/config/apiConfigModule';
+import { JWTService } from '../api/jwt/jwt.service';
+import { ApiConfigService } from '../infrastructure/config/apiConfigService';
+import { ConfigServce } from '../infrastructure/config/configService';
 
 const useCase = [
   UpdateBlogUseCase,
@@ -127,7 +132,10 @@ const services = [
   DeviceService,
   UsersService,
   AppService,
-  JwtService
+  JwtService,
+  JWTService,
+  ApiConfigService,
+  ConfigServce
 ];
 const guards = [
   AuthBasic,
@@ -163,6 +171,8 @@ const manager = [EmailManager];
 
 @Module({
   imports: [
+	ApiJwtModule,
+	ApiConfigModule,
 	CqrsModule,
     ConfigModule.forRoot({
       isGlobal: true,
