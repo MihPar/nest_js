@@ -79,6 +79,7 @@ export class AuthController {
             return {accessToken: tokens.token};
 		  }
 	}
+	
 	@HttpCode(200)
 	@Post("refresh-token")
 	@UseGuards(CheckRefreshToken)
