@@ -3,7 +3,6 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { JwtService } from "@nestjs/jwt";
 import { UsersQueryRepository } from "../../../api/users/users.queryRepository";
 import { Request } from "express";
-import { ObjectId } from "mongodb";
 import { UserClass } from "../../../schema/user.schema";
 
 export class GetUserIdByTokenCommand {

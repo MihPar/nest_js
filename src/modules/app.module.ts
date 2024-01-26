@@ -83,6 +83,7 @@ import { IsConfirmed } from '../infrastructure/guards/auth/isCodeConfirmed';
 import { IsExistEmailUser } from '../infrastructure/guards/auth/isExixtEmailUser';
 import { IsBlogExistConstraint } from '../infrastructure/guards/post/pipe/blogIsExistDecorator';
 import { authMiddleware } from '../infrastructure/guards/comments/checkRefreshTokenForComments';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 const useCase = [
   UpdateBlogUseCase,
@@ -167,10 +168,14 @@ const manager = [EmailManager];
       envFilePath: '.env',
     }),
 	PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '600s' },
-    }),
+    // JwtModule.register({
+    //   secret: process.env.JWT_SECRET,
+    //   signOptions: { expiresIn: '600s' },
+    // }),
+	// ThrottlerModule.forRoot([{
+	// 	ttl: 60000,
+	// 	limit: 10,
+	//   }]),
     MongooseModule.forRoot(process.env.MONGO_URL || 'mongodb://0.0.0.0:27017'),
     MongooseModule.forFeature([
       { name: PostClass.name, schema: PostSchema },
