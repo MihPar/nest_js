@@ -27,7 +27,7 @@ import { PostClass, PostSchema } from '../schema/post.schema';
 import { LikesService } from '../api/likes/likes.service';
 import { UsersService } from '../api/users/user.service';
 import { EmailAdapter } from '../api/adapter/email.adapter';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { DeviceClass, DeviceSchema } from '../schema/device.schema';
 import { SecurityDeviceController } from '../api/securityDevices/device.controller';
 import { DeviceQueryRepository } from '../api/securityDevices/deviceQuery.repository';
@@ -128,6 +128,7 @@ const services = [
   DeviceService,
   UsersService,
   AppService,
+  JwtService
 ];
 const guards = [
   AuthBasic,

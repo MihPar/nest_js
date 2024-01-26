@@ -26,7 +26,7 @@ import { RegistrationCommand } from '../../api/users/use-case/registration-use-c
 import { RegistrationEmailResendingCommand } from '../../api/users/use-case/registrationEmailResending-use-case';
 import { LogoutCommand } from '../../api/securityDevices/use-case/logout-use-case';
 import { GetUserIdByTokenCommand } from './use-case/getUserIdByToken-use-case';
-import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
