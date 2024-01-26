@@ -10,8 +10,8 @@ import { DeviceClass } from '../../../schema/device.schema';
 export class CreateDeviceCommand {
 	constructor(
 		public IP: string, 
-		public Headers: any,
-		public user: UserClass
+		public deviceName: string,
+		public user: UserClass,
 	) {}
 }
 
@@ -25,29 +25,38 @@ export class CreateDeviceUseCase implements ICommandHandler<CreateDeviceCommand>
 	async execute(
 		command: CreateDeviceCommand
 	  ): Promise<{refreshToken: string, token: string} | null> {
-		const deviceId  = randomUUID()
-		const token: string = await this.jwtService.signAsync({userId: command.user._id.toString()}, {expiresIn: "10s"});
-		const refreshToken = await this.jwtService.signAsync({userId: command.user._id.toString(), deviceId}, {expiresIn: "20s"});
+		try {
+			console.log("command.user._id: ", command.user._id)
 
-		const ip = command.IP || "unknown";
-		const title = command.Headers["user-agent"] || "unknown";
+			const deviceId  = randomUUID()
+			const token: string = await this.jwtService.signAsync({userId: command.user._id.toString()}, { secret: process.env.JWT_SECRET, expiresIn: '10s' });
 
-		const device  = new DeviceClass()
-		device.ip = ip
-		device._id = new mongoose.Types.ObjectId()
-		device.deviceId = deviceId
-		device.lastActiveDate = new Date().toISOString()
-		device.title = title
-		device.userId = command.user._id.toString()
-		
-		const createdDeviceId: string | null = await this.deviceRepository.createDevice(device);
-
-		if(!createdDeviceId){
-			return null
+			const refreshToken = await this.jwtService.signAsync({userId: command.user._id.toString(), deviceId}, { secret: process.env.REFRESH_JWT_SECRET, expiresIn: '10s' });
+	
+			console.log("catch: ")
+			const ip = command.IP || "unknown";
+			// const title = command.Headers["user-agent"] || "unknown";
+	
+			const device  = new DeviceClass()
+			device.ip = ip
+			device._id = new mongoose.Types.ObjectId()
+			device.deviceId = deviceId
+			device.lastActiveDate = new Date().toISOString()
+			device.title = command.deviceName
+			device.userId = command.user._id.toString()
+			
+			const createdDeviceId: string | null = await this.deviceRepository.createDevice(device);
+	
+			if(!createdDeviceId){
+				return null
+			}
+			return {
+				refreshToken,
+				token
+			};
+		} catch(error) {
+			console.log("WIOERUWEFJSDKFJSDFSDIFSFISFISEISEF: ", error)
 		}
-		return {
-			refreshToken,
-			token
-		};
+		return null
 	  }
 }

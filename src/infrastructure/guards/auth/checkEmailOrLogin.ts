@@ -20,9 +20,6 @@ import { UsersQueryRepository } from '../../../api/users/users.queryRepository';
 		const req = context.switchToHttp().getRequest()
 		const login = req.body.login
 		const email = req.body.email
-
-	console.log(login, email, 'email login')
-
 		const userByLogin: UserClass | null = await this.usersQueryRepository.findByLoginOrEmail(login)
 		const userByEmail: UserClass | null = await this.usersQueryRepository.findByLoginOrEmail(email)
 

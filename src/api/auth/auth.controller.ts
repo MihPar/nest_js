@@ -1,5 +1,5 @@
 import { DeviceService } from '../securityDevices/device.service';
-import { BadRequestException, Body, Controller, Headers, HttpCode, Ip, Post, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Headers, HttpCode, HttpException, Ip, Post, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { InputDataModelClassAuth, InputDataReqClass, InputDateReqConfirmClass, InputModelNewPasswordClass, emailInputDataClass } from "./auth.class";
 import { UsersService } from "../../api/users/user.service";
 import { JwtService } from "@nestjs/jwt";
@@ -60,17 +60,17 @@ export class AuthController {
 	async createLogin(
 		@Body() inutDataModel: InputDataModelClassAuth,
 		@Ip() IP: string, 
-		@Headers() Headers: any,
+		@Headers("user-agent") deviceName = "unknown",
 		@Res({passthrough: true}) res: Response) {
-			const command = new CreateLoginCommand(inutDataModel)
+		const command = new CreateLoginCommand(inutDataModel)
 		const user: UserClass | null = await this.commandBus.execute(command);
 		  if (!user) {
 			throw new UnauthorizedException("Not authorization 401")
 		  } else {
-			const command = new CreateDeviceCommand(IP, Headers, user)
+			const command = new CreateDeviceCommand(IP, deviceName, user)
 			const tokens = await this.commandBus.execute(command)
 			if(!tokens){
-				throw new UnauthorizedException("Not authorization 401")
+				throw new HttpException("Errror", 500)
 			}
 			res.cookie('refreshToken', tokens.refreshToken, {
                 httpOnly: true,
