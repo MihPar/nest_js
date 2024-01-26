@@ -169,10 +169,10 @@ const manager = [EmailManager];
       envFilePath: '.env',
     }),
 	PassportModule,
-    // JwtModule.register({
-    //   secret: process.env.JWT_SECRET,
-    //   signOptions: { expiresIn: '600s' },
-    // }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '600s' },
+    }),
 	// ThrottlerModule.forRoot([{
 	// 	ttl: 60000,
 	// 	limit: 10,
