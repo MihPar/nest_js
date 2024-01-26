@@ -83,6 +83,8 @@ import { IsConfirmed } from '../infrastructure/guards/auth/isCodeConfirmed';
 import { IsExistEmailUser } from '../infrastructure/guards/auth/isExixtEmailUser';
 import { IsBlogExistConstraint } from '../infrastructure/guards/post/pipe/blogIsExistDecorator';
 import { authMiddleware } from '../infrastructure/guards/comments/checkRefreshTokenForComments';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 const useCase = [
   UpdateBlogUseCase,
@@ -161,16 +163,20 @@ const manager = [EmailManager];
 
 @Module({
   imports: [
-	CqrsModule,
+    CqrsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
-	PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '600s' },
-    }),
+    PassportModule,
+    // JwtModule.register({
+    //   secret: process.env.JWT_SECRET,
+    //   signOptions: { expiresIn: '600s' },
+    // }),
+    // ThrottlerModule.forRoot([{
+    // 	ttl: 10000,
+    // 	limit: 5,
+    //   }]),
     MongooseModule.forRoot(process.env.MONGO_URL || 'mongodb://0.0.0.0:27017'),
     MongooseModule.forFeature([
       { name: PostClass.name, schema: PostSchema },
@@ -189,10 +195,18 @@ const manager = [EmailManager];
     BlogsController,
     DeleteAllDataController,
     SecurityDeviceController,
-	AuthController
+    AuthController,
   ],
   providers: [
-  ...services, ...guards, ...reposponse, ...adapter, ...manager, ...useCase, ...pipe],
+    ...services,
+    ...guards,
+    ...reposponse,
+    ...adapter,
+    ...manager,
+    ...useCase,
+    ...pipe,
+    // { provide: APP_GUARD, useClass: ThrottlerGuard },
+  ],
 })
 export class AppModule {}
 

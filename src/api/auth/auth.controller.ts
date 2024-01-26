@@ -26,6 +26,7 @@ import { RegistrationCommand } from '../../api/users/use-case/registration-use-c
 import { RegistrationEmailResendingCommand } from '../../api/users/use-case/registrationEmailResending-use-case';
 import { LogoutCommand } from '../../api/securityDevices/use-case/logout-use-case';
 import { GetUserIdByTokenCommand } from './use-case/getUserIdByToken-use-case';
+import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
@@ -41,7 +42,6 @@ export class AuthController {
 	@Post("password-recovery")
 	@UseGuards(Ratelimits)
 	async createPasswordRecovery(@Body() emailInputData: emailInputDataClass) {
-		// const passwordRecovery = await this.usersService.recoveryPassword(emailInputData.email);
 		const command = new RecoveryPasswordCommand(emailInputData.email)
 		const passwordRecovery = await this.commandBus.execute(command)
 	}
@@ -52,10 +52,6 @@ export class AuthController {
 	async createNewPassword(@Body() inputDataNewPassword: InputModelNewPasswordClass) {
 		const command = new NewPasswordCommand(inputDataNewPassword)
 		const resultUpdatePassword = await this.commandBus.execute(command)
-		// const resultUpdatePassword = await this.usersService.setNewPassword(
-		// 	inputDataNewPassword.newPassword,
-		// 	inputDataNewPassword.recoveryCode
-		//   );
 		  if (!resultUpdatePassword) throw new BadRequestException("recovery code is incorrect, 400")
 	}
 
@@ -83,6 +79,8 @@ export class AuthController {
             return {accessToken: tokens.token};
 		  }
 	}
+
+	@SkipThrottle()
 	@HttpCode(200)
 	@Post("refresh-token")
 	@UseGuards(CheckRefreshToken)
@@ -124,10 +122,11 @@ export class AuthController {
 	}
 
 	@HttpCode(204)
+	@Throttle({default: {ttl: 10000, limit: 5}})
 	@Post("registration-email-resending")
-	@UseGuards(RatelimitsRegistration, IsExistEmailUser)
+	@UseGuards(IsExistEmailUser)
+	// @UseGuards(RatelimitsRegistration)
 	// @UseGuards(ThrottlerGuard)
-	//@Throttle({default: {ttl: 10000, limit: 5}})
 	async createRegistrationEmailResending(@Req() req: Request, @Body() inputDateReqEmailResending: emailInputDataClass) {
 		const command = new RegistrationEmailResendingCommand(inputDateReqEmailResending)
 		const confirmUser = await this.commandBus.execute(command)
