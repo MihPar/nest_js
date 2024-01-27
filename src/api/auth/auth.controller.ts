@@ -28,6 +28,7 @@ import { LogoutCommand } from '../../api/securityDevices/use-case/logout-use-cas
 import { GetUserIdByTokenCommand } from './use-case/getUserIdByToken-use-case';
 import { Throttle } from '@nestjs/throttler';
 import { CheckRefreshTokenForGet } from '../../infrastructure/guards/comments/bearer.authGetComment';
+import { CheckRefreshTokenForComments } from '../../infrastructure/guards/comments/bearer.authForComments';
 
 @Controller('auth')
 export class AuthController {
@@ -147,7 +148,8 @@ export class AuthController {
 	@HttpCode(200)
 	@Get("me")
 	// @UseGuards(CheckRefreshTokenFindMe)
-	@UseGuards(CheckRefreshTokenForGet)
+	// @UseGuards(CheckRefreshTokenForGet)
+	@UseGuards(CheckRefreshTokenForComments)
 	async findMe(@Req() req: Request) {
 		if (!req.headers.authorization) throw new UnauthorizedException('Not authorization 401')
 		console.log("req.headers.authorization: ", req.headers.authorization)

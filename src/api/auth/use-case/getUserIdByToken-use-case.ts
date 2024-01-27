@@ -4,6 +4,7 @@ import { JwtService } from "@nestjs/jwt";
 import { UsersQueryRepository } from "../../../api/users/users.queryRepository";
 import { Request } from "express";
 import { UserClass } from "../../../schema/user.schema";
+import { ApiConfigService } from "../../../infrastructure/config/configService";
 
 export class GetUserIdByTokenCommand {
 	constructor(
@@ -15,7 +16,8 @@ export class GetUserIdByTokenCommand {
 export class GetUserIdByTokenUseCase implements ICommandHandler<GetUserIdByTokenCommand> {
 	constructor(
 		protected readonly jwtService: JwtService,
-		protected readonly usersQueryRepository:  UsersQueryRepository
+		protected readonly usersQueryRepository:  UsersQueryRepository,
+		protected readonly apiConfigService: ApiConfigService
 	) {}
 	async execute(command: GetUserIdByTokenCommand): Promise<UserClass> {
 	const token: string = command.req.headers.authorization!.split(" ")[1];
