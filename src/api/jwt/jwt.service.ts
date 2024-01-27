@@ -3,7 +3,7 @@ import { JwtService } from "@nestjs/jwt"
 import { ApiConfigService } from "../../infrastructure/config/apiConfigService"
 
 @Injectable()
-export class JWTService {
+export class ApiJwtService {
 	constructor(
 		private jwtService: JwtService,
 		private apiConfigService: ApiConfigService,
@@ -17,18 +17,22 @@ export class JWTService {
 	//    }
 	// }
 
-	async createJWT(userId: number, deviceId: number): Promise<any> {
-		const secretRT = this.apiConfigService.REFRESH_JWT_SECRET
-		const expiresInRT = this.apiConfigService.EXPIRED_REFRESH_JWT_SECRET
+	async createJWT(userId: string, deviceId: string): Promise<any> {
 
-		const accessToken = this.jwtService.sign({userId})
+		const expiredJwt = this.apiConfigService.EXPIRED_JWT
+		const secretJwo = this.apiConfigService.JWT_SECRET
+		const accessToken = this.jwtService.sign({userId}, {secret: secretJwo, expiresIn: expiredJwt})
+
+
+		const secretRT = this.apiConfigService.REFRESH_JWT_SECRET
+		const expiresInRT = this.apiConfigService.EXPIRED_REFRESH_JWT
 		const refreshToken = this.jwtService.sign({userId, deviceId}, {secret: secretRT, expiresIn: expiresInRT})
 
 		return {
 			accessToken,
 			refreshToken
 		}
-		// const token: string = await jwt.sign({userId: user._id}, process.env.JWT_SECRET!, {expiresIn: '5m'})
+		// const token: string = await jwt.sign({userId: user._id}, {process.env.JWT_SECRET!, expiresIn: '5m'})
 		// return token
 	}
 
@@ -37,6 +41,15 @@ export class JWTService {
 	// 	const refreshToken: string = await jwt.sign({deviceId: existDeviceId ?? deviceId, userId}, process.env.REFRESH_JWT_SECRET as string, {expiresIn: '10m'})
 	// 	return refreshToken
 	// }
+
+	async refreshToken(refreshToken: string):Promise<any> {
+		try {
+			const secretRT = this.apiConfigService.REFRESH_JWT_SECRET
+			return this.jwtService.verify(refreshToken, {secret: secretRT})
+		} catch(error) {
+			return null
+		}
+	}
 
 	// getLastActiveDate(token: string) {
 	// 	const result: any = jwt.decode(token)

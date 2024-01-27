@@ -4,7 +4,7 @@ import { CommentViewModel } from './comment.type';
 import { UserDecorator, UserIdDecorator } from '../../infrastructure/decorator/decorator.user';
 import { InputModelContent, InputModelLikeStatusClass, inputModelCommentId, inputModelId } from './comment.class-pipe';
 import { CheckRefreshTokenForComments } from '../../infrastructure/guards/comments/bearer.authForComments';
-import { commentDBToView } from '../../utils/helpers';
+import { commentDBToView } from '../../helpers/helpers';
 import { CommentService } from './comment.service';
 import { CommentRepository } from './comment.repository';
 import { CheckRefreshTokenForGet } from '../../infrastructure/guards/comments/bearer.authGetComment';

@@ -6,13 +6,12 @@ import { UserViewType } from "../../../src/api/users/user.type";
 import { Test, TestingModule } from "@nestjs/testing";
 import { AppModule } from "../../../src/modules/app.module";
 import { appSettings } from "../../../src/setting";
+import { HTTP_STATUS } from "../../../src/utils/utils";
+import { AuthController } from "../../../src/api/auth/auth.controller";
+import { NewPasswordUseCase } from "../../../src/api/users/use-case/createNewPassword-use-case";
+import { aDescribe } from "../../../src/helpers/helpers";
 
 dotenv.config();
-
-const mongoURI = process.env.MONGO_URL || "mongodb://0.0.0.0:27017";
-let dbName = process.env.mongoDBName || "mongoose-example";
-
-// const app = initApp();
 
 export function createErrorsMessageTest(fields: string[]) {
   const errorsMessages: any = [];
@@ -28,30 +27,62 @@ export function createErrorsMessageTest(fields: string[]) {
 describe("/auth", () => {
 
 	let app: INestApplication
-  	let httpServer
+  	// let httpServer: any
+  	let server: any
 
   beforeAll(async () => {
-    // await mongoose.connect(mongoURI);
-    // const wipeAllRes = await request(app).delete("/testing/all-data");
-    // expect(wipeAllRes.status).toBe(HttpStatus.NO_CONTENT);
+    // const moduleFixture: TestingModule = await Test.createTestingModule({imports: [AppModule]}).compile()
+    // app = moduleFixture.createNestApplication()
+    // appSettings(app)
+    // await app.init()
+    // httpServer = app.getHttpServer()
 
-	const moduleFixture: TestingModule = await Test.createTestingModule({imports: [AppModule]}).compile()
-	app = moduleFixture.createNestApplication()
-	appSettings(app)
-	await app.init()
-	httpServer = app.getHttpServer()
 
+	// const fooMock = () => { return  true }
+	const fooMock = () => {
+    sendMessage: jest.fn().mockImplementation(async () => {
+      console.log('Call mock create new password');
+      return true;
+    });
+  };
+	// class MockClass {
+	// 	sendMessage: () => true
+	// }
+	class MockClass {
+		constructor(
+			private newPasswordUseCase: NewPasswordUseCase
+		) {}
+		sendMessage: () => true
+	}
+
+
+
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).overrideProvider(NewPasswordUseCase)
+	//   .useValue(fooMock)
+	//   .useClass(MockClass)
+	  .useFactory({
+		factory: (userCase: NewPasswordUseCase) => {
+			return new MockClass(userCase)
+		},
+		inject: [NewPasswordUseCase]
+	  })
+	  .compile();
+
+    app = moduleFixture.createNestApplication();
+    appSettings(app);
+    await app.init();
+    server = app.getHttpServer();
   });
 
   afterAll(async () => {
-    // await stop()
-    // await stopDb();
 	await app.close()
   });
 
-//   afterAll((done) => {
-//     done();
-//   });
+  afterAll((done) => {
+    done();
+  });
 
   const authValidationErrRes = {
     errorsMessages: expect.arrayContaining([
@@ -494,7 +525,7 @@ describe("/auth", () => {
 		  expect(resendEmailForConfirmation.status).toBe(HttpStatus.CREATED)
 	})
   })
-  describe("/auth/logout", () => {
+  aDescribe(true) ("/auth/logout", () => {
 	it("in cookie client must send correct refresh token that will be revoked => return 204 status code", async() => {
 
 	})

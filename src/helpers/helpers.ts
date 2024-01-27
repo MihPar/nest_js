@@ -35,3 +35,8 @@ export const createToken = async (server: any, loginOrEmail: string, password: s
 		});
 	return createAccessToken
 }
+
+export const aDescribe = (skip: boolean): jest.Describe => {
+	if(skip) {return describe.skip}
+	return describe
+}

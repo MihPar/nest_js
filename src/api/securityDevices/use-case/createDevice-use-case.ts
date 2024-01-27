@@ -6,6 +6,7 @@ import { UserClass } from '../../../schema/user.schema';
 import { randomUUID } from 'crypto';
 import { PayloadAdapter } from '../../../api/adapter/payload.adapter';
 import { DeviceClass } from '../../../schema/device.schema';
+import { ApiJwtService } from '../../jwt/jwt.service';
 
 export class CreateDeviceCommand {
 	constructor(
@@ -20,7 +21,9 @@ export class CreateDeviceUseCase implements ICommandHandler<CreateDeviceCommand>
 	constructor(
 		protected readonly deviceRepository: DeviceRepository,
 		protected readonly jwtService: JwtService,
-		protected readonly payloadAdapter: PayloadAdapter
+		protected readonly payloadAdapter: PayloadAdapter,
+		protected readonly apiJwtService: ApiJwtService,
+
 	) {}
 	async execute(
 		command: CreateDeviceCommand
@@ -29,10 +32,12 @@ export class CreateDeviceUseCase implements ICommandHandler<CreateDeviceCommand>
 			console.log("command.user._id: ", command.user._id)
 
 			const deviceId  = randomUUID()
-			const token: string = await this.jwtService.signAsync({userId: command.user._id.toString()}, { secret: process.env.JWT_SECRET, expiresIn: '10s' });
+			// const accessToken: string = await this.jwtService.signAsync({userId: command.user._id.toString()}, { secret: process.env.JWT_SECRET, expiresIn: '10s' });
 
-			const refreshToken = await this.jwtService.signAsync({userId: command.user._id.toString(), deviceId}, { secret: process.env.REFRESH_JWT_SECRET, expiresIn: '10s' });
+			// const refreshToken = await this.jwtService.signAsync({userId: command.user._id.toString(), deviceId}, { secret: process.env.REFRESH_JWT_SECRET, expiresIn: '20s' });
 	
+			const {refreshToken, accessToken} = await this.apiJwtService.createJWT(command.user._id.toString(), deviceId)
+				
 			console.log("catch: ")
 			const ip = command.IP || "unknown";
 			// const title = command.Headers["user-agent"] || "unknown";
@@ -52,7 +57,7 @@ export class CreateDeviceUseCase implements ICommandHandler<CreateDeviceCommand>
 			}
 			return {
 				refreshToken,
-				token
+				token: accessToken
 			};
 		} catch(error) {
 			console.log("WIOERUWEFJSDKFJSDFSDIFSFISFISEISEF: ", error)

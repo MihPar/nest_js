@@ -83,12 +83,10 @@ import { IsConfirmed } from '../infrastructure/guards/auth/isCodeConfirmed';
 import { IsExistEmailUser } from '../infrastructure/guards/auth/isExixtEmailUser';
 import { IsBlogExistConstraint } from '../infrastructure/guards/post/pipe/blogIsExistDecorator';
 import { authMiddleware } from '../infrastructure/guards/comments/checkRefreshTokenForComments';
-import { ThrottlerModule } from '@nestjs/throttler';
-import { ApiJwtModule } from '../infrastructure/strategy/local.strategy';
-import { ApiConfigModule } from '../infrastructure/config/apiConfigModule';
-import { JWTService } from '../api/jwt/jwt.service';
+import { ApiJwtModule } from '../api/jwt/app.jwtModule';
+import { ApiJwtService } from '../api/jwt/jwt.service';
 import { ApiConfigService } from '../infrastructure/config/apiConfigService';
-import { ConfigServce } from '../infrastructure/config/configService';
+import { ConfigType } from '../infrastructure/config/configServiceType';
 
 const useCase = [
   UpdateBlogUseCase,
@@ -133,9 +131,10 @@ const services = [
   UsersService,
   AppService,
   JwtService,
-  JWTService,
+//   JWTService,
   ApiConfigService,
-  ConfigServce
+  ConfigType,
+  ApiJwtService
 ];
 const guards = [
   AuthBasic,
@@ -172,7 +171,7 @@ const manager = [EmailManager];
 @Module({
   imports: [
 	ApiJwtModule,
-	ApiConfigModule,
+	// ApiConfigModule,
 	CqrsModule,
     ConfigModule.forRoot({
       isGlobal: true,
