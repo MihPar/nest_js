@@ -36,7 +36,7 @@ export class CreateDeviceUseCase implements ICommandHandler<CreateDeviceCommand>
 	
 			const {refreshToken, accessToken} = await this.apiJwtService.createJWT(command.user._id.toString(), deviceId)
 				
-			console.log("catch: ")
+			// console.log("catch: ")
 			const ip = command.IP || "unknown";
 			// const title = command.Headers["user-agent"] || "unknown";
 	

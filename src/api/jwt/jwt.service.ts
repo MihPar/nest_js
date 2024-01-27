@@ -1,3 +1,4 @@
+import jwt  from 'jsonwebtoken';
 import { Injectable } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
 import { ApiConfigService } from "../../infrastructure/config/configService"
@@ -51,10 +52,10 @@ export class ApiJwtService {
 		}
 	}
 
-	// getLastActiveDate(token: string) {
-	// 	const result: any = jwt.decode(token)
-	// 	return new Date(result.iat * 1000).toISOString()
-	// }
+	getLastActiveDate(token: string) {
+		const result: any = jwt.decode(token)
+		return new Date(result.iat * 1000).toISOString()
+	}
 
 	// async getUserIdByToken(token: string) {
 	// 	try {

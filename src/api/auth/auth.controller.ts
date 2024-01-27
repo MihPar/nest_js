@@ -92,8 +92,10 @@ export class AuthController {
 		@UserIdDecorator() userId: string | null,
 	) {
 		const refreshToken: string = req.cookies.refreshToken;
+		console.log("refreshToken: ", refreshToken)
 		const command = new RefreshTokenCommand(refreshToken, user)
 		const result: { newToken: string, newRefreshToken: string} = await this.commandBus.execute(command)
+		console.log("result: ", result)
 		if(!userId) return null
 		const command2 = new UpdateDeviceCommand(userId, result.newRefreshToken)
 		await this.commandBus.execute(command2)
@@ -152,7 +154,7 @@ export class AuthController {
 	@UseGuards(CheckRefreshTokenForComments)
 	async findMe(@Req() req: Request) {
 		if (!req.headers.authorization) throw new UnauthorizedException('Not authorization 401')
-		console.log("req.headers.authorization: ", req.headers.authorization)
+		// console.log("req.headers.authorization: ", req.headers.authorization)
 		const command = new GetUserIdByTokenCommand(req)
 		const findUserById: UserClass = await this.commandBus.execute(command)
 		  return {

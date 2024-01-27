@@ -21,10 +21,12 @@ export class RefreshTokenUseCase implements ICommandHandler<RefreshTokenCommand>
 		command: RefreshTokenCommand,
 		) {
 		const payload = await this.payloadAdapter.getPayload(command.refreshToken);
+		console.log("payload: ", payload)
 		if(!payload) throw new UnauthorizedException("Not authorization 401")
-		const newToken: string = await this.jwtService.signAsync(command.user);
+		const newToken: string = await this.jwtService.signAsync(command.user,  {secret: process.env.JWT_SECRET!, expiresIn: '10s'});
 		const newRefreshToken: string = await this.jwtService.signAsync(
 			{userId: command.user._id.toString(), deviceId:	payload.deviceId},
+			{secret: process.env.REFRESH_JWT_SECRET, expiresIn: '20s'}
 		);
 		const result = { newToken, newRefreshToken }
 		return result
