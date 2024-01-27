@@ -83,9 +83,9 @@ import { IsConfirmed } from '../infrastructure/guards/auth/isCodeConfirmed';
 import { IsExistEmailUser } from '../infrastructure/guards/auth/isExixtEmailUser';
 import { IsBlogExistConstraint } from '../infrastructure/guards/post/pipe/blogIsExistDecorator';
 import { authMiddleware } from '../infrastructure/guards/comments/checkRefreshTokenForComments';
-import { ApiJwtModule } from '../api/jwt/app.jwtModule';
+import { ApiJwtModule } from './jwtModule';
 import { ApiJwtService } from '../api/jwt/jwt.service';
-import { ApiConfigService } from '../infrastructure/config/apiConfigService';
+import { ApiConfigService } from '../infrastructure/config/configService';
 import { ConfigType } from '../infrastructure/config/configServiceType';
 
 const useCase = [

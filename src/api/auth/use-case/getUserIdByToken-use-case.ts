@@ -19,9 +19,9 @@ export class GetUserIdByTokenUseCase implements ICommandHandler<GetUserIdByToken
 	) {}
 	async execute(command: GetUserIdByTokenCommand): Promise<UserClass> {
 	const token: string = command.req.headers.authorization!.split(" ")[1];
-	const userId = await this.jwtService.verifyAsync(token);
-	if (!userId) throw new UnauthorizedException('Not authorization 401')
-	const currentUser: UserClass | null = await this.usersQueryRepository.findUserById(userId)
+	const payload = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!});
+	if (!payload) throw new UnauthorizedException('Not authorization 401')
+	const currentUser: UserClass | null = await this.usersQueryRepository.findUserById(payload.userId)
 	if (!currentUser) throw new UnauthorizedException('Not authorization 401')
 	return currentUser
 	}

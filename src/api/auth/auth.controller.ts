@@ -1,5 +1,5 @@
 import { DeviceService } from '../securityDevices/device.service';
-import { BadRequestException, Body, Controller, Headers, HttpCode, HttpException, Ip, Post, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Get, Headers, HttpCode, HttpException, Ip, Post, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { InputDataModelClassAuth, InputDataReqClass, InputDateReqConfirmClass, InputModelNewPasswordClass, emailInputDataClass } from "./auth.class";
 import { UsersService } from "../../api/users/user.service";
 import { JwtService } from "@nestjs/jwt";
@@ -27,6 +27,7 @@ import { RegistrationEmailResendingCommand } from '../../api/users/use-case/regi
 import { LogoutCommand } from '../../api/securityDevices/use-case/logout-use-case';
 import { GetUserIdByTokenCommand } from './use-case/getUserIdByToken-use-case';
 import { Throttle } from '@nestjs/throttler';
+import { CheckRefreshTokenForGet } from '../../infrastructure/guards/comments/bearer.authGetComment';
 
 @Controller('auth')
 export class AuthController {
@@ -144,10 +145,12 @@ export class AuthController {
 	}
 
 	@HttpCode(200)
-	@Post("me")
-	@UseGuards(CheckRefreshTokenFindMe)
+	@Get("me")
+	// @UseGuards(CheckRefreshTokenFindMe)
+	@UseGuards(CheckRefreshTokenForGet)
 	async findMe(@Req() req: Request) {
 		if (!req.headers.authorization) throw new UnauthorizedException('Not authorization 401')
+		console.log("req.headers.authorization: ", req.headers.authorization)
 		const command = new GetUserIdByTokenCommand(req)
 		const findUserById: UserClass = await this.commandBus.execute(command)
 		  return {

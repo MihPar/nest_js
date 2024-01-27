@@ -1,14 +1,12 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
-import { ApiConfigService } from "../../infrastructure/config/apiConfigService";
-import { ApiJwtService } from "./jwt.service";
+import { ApiConfigService } from "../infrastructure/config/configService";
+import { ApiJwtService } from "../api/jwt/jwt.service";
 
 @Module({
 	imports: [
 		JwtModule.registerAsync({
-			imports: [
-				// ApiConfigModule
-			],
+			imports: [],
 			extraProviders: [ApiConfigService],
 			inject: [ApiConfigService],
 			useFactory: (apiConfigService: ApiConfigService) => {

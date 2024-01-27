@@ -29,8 +29,6 @@ export class CreateDeviceUseCase implements ICommandHandler<CreateDeviceCommand>
 		command: CreateDeviceCommand
 	  ): Promise<{refreshToken: string, token: string} | null> {
 		try {
-			console.log("command.user._id: ", command.user._id)
-
 			const deviceId  = randomUUID()
 			// const accessToken: string = await this.jwtService.signAsync({userId: command.user._id.toString()}, { secret: process.env.JWT_SECRET, expiresIn: '10s' });
 
