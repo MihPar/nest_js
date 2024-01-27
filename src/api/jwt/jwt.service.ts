@@ -52,7 +52,7 @@ export class ApiJwtService {
 		}
 	}
 
-	getLastActiveDate(token: string) {
+	getLastActiveDate(token: string): string {
 		const result: any = jwt.decode(token)
 		return new Date(result.iat * 1000).toISOString()
 	}
@@ -65,4 +65,14 @@ export class ApiJwtService {
 	// 		return null
 	// 	}
 	// }
+
+	getDeviceIdByToken(token: string) {
+        try {
+            const result: any = jwt.verify(token, process.env.REFRESH_JWT_SECRET!)
+            return result //==={userId: user._id, deviceId: deviceId}
+
+        } catch (error) {
+            return null
+        }
+    }
 }
