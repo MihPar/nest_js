@@ -19,13 +19,8 @@ export class CheckRefreshToken implements CanActivate {
   async canActivate(
     context: ExecutionContext,
   ): Promise<boolean>  {
-
-	// console.log('refresh token')
 	const req: Request = context.switchToHttp().getRequest();
-	// console.log("req: ", req.cookies.refreshToken)
-
 	const refreshToken = req.cookies.refreshToken;
-	// console.log("refreshToken: ", refreshToken)
 	if (!refreshToken) throw new UnauthorizedException("401")
 	let result: any;
 	try {
@@ -33,13 +28,10 @@ export class CheckRefreshToken implements CanActivate {
 	} catch (err) { 
 		throw new UnauthorizedException("401")
 	}
-	// console.log("result: ", result)
 	const session = await this.deviceQueryRepository.findDeviceByDeviceId(
 	  result.deviceId
 	);
-	// console.log("session: ", session)
 	const payload = await this.jwtService.decode(refreshToken);
-	// console.log("payload: ", payload)
 
 	// if (
 	//   !session ||
@@ -49,14 +41,13 @@ export class CheckRefreshToken implements CanActivate {
 	// ) {
 	// 	throw new UnauthorizedException("401")
 	// }
-	console.log("payload: ", payload)
 
 	if (result.userId) {
 	  const user = await this.usersQueryRepository.findUserById(result.userId)
 	  if (!user) {
 		throw new UnauthorizedException("401")
 	  }
-	  console.log("user: ", user)
+	//   console.log("user: ", user)
 	  req['user'] = user;
 	  return true
 	}

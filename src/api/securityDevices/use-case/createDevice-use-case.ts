@@ -34,7 +34,7 @@ export class CreateDeviceUseCase implements ICommandHandler<CreateDeviceCommand>
 
 			// const refreshToken = await this.jwtService.signAsync({userId: command.user._id.toString(), deviceId}, { secret: process.env.REFRESH_JWT_SECRET, expiresIn: '20s' });
 	
-			const {refreshToken, accessToken} = await this.apiJwtService.createJWT(command.user._id.toString(), deviceId)
+			const {accessToken, refreshToken} = await this.apiJwtService.createJWT(command.user._id.toString(), deviceId)
 				
 			// console.log("catch: ")
 			const ip = command.IP || "unknown";

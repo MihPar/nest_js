@@ -20,9 +20,9 @@ export class ApiJwtService {
 
 	async createJWT(userId: string, deviceId: string): Promise<any> {
 
+		const secretJwt = this.apiConfigService.JWT_SECRET
 		const expiredJwt = this.apiConfigService.EXPIRED_JWT
-		const secretJwo = this.apiConfigService.JWT_SECRET
-		const accessToken = this.jwtService.sign({userId}, {secret: secretJwo, expiresIn: expiredJwt})
+		const accessToken = this.jwtService.sign({userId}, {secret: secretJwt, expiresIn: expiredJwt})
 
 
 		const secretRT = this.apiConfigService.REFRESH_JWT_SECRET
