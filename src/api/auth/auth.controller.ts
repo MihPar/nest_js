@@ -94,7 +94,7 @@ export class AuthController {
 		const refreshToken: string = req.cookies.refreshToken;
 		const command = new RefreshTokenCommand(refreshToken, user)
 		const result: { newToken: string, newRefreshToken: string} = await this.commandBus.execute(command)
-		console.log("result: ", result)
+		// console.log("result: ", result)
 		if(!userId) return null
 		const command2 = new UpdateDeviceCommand(userId, result.newRefreshToken)
 		await this.commandBus.execute(command2)
@@ -141,9 +141,12 @@ export class AuthController {
 	@UseGuards(CheckRefreshToken)
 	async cretaeLogout(@Req() req: Request) {
 		const refreshToken: string = req.cookies.refreshToken;
+		// console.log("refreshToken: ", refreshToken)
 		const command = new LogoutCommand(refreshToken)
 		const isDeleteDevice = await this.commandBus.execute(command)
 		if (!isDeleteDevice) throw new UnauthorizedException('Not authorization 401')
+		// console.log('res.clearCookie("refreshToken"): ', res.clearCookie("refreshToken"))
+		// res.clearCookie("refreshToken")
 	}
 
 	@HttpCode(200)

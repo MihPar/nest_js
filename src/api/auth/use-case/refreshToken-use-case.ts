@@ -32,8 +32,8 @@ export class RefreshTokenUseCase implements ICommandHandler<RefreshTokenCommand>
 
 		const {accessToken: newToken, refreshToken: newRefreshToken} = await this.apiJwtService.createJWT(command.user._id.toString(), payload.deviceId)
 
-		console.log(newToken)
-		console.log(newRefreshToken)
+		// console.log(newToken)
+		// console.log(newRefreshToken)
 		
 		const result = { newToken, newRefreshToken }
 		return result

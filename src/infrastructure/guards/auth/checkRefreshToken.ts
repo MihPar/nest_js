@@ -21,14 +21,17 @@ export class CheckRefreshToken implements CanActivate {
   ): Promise<boolean>  {
 	const req: Request = context.switchToHttp().getRequest();
 	const refreshToken = req.cookies.refreshToken;
+	// console.log("refreshToken: ", refreshToken)
 	if (!refreshToken) throw new UnauthorizedException("401")
 
 	let result: any;
+	// console.log("result: ", result)
 	try {
 		result = await this.jwtService.verify(refreshToken, {secret: process.env.REFRESH_JWT_SECRET!});
 	} catch (err) { 
 		throw new UnauthorizedException("401")
 	}
+	// console.log("result: ", result)
 	const session = await this.deviceQueryRepository.findDeviceByDeviceId(
 	  result.deviceId
 	);
