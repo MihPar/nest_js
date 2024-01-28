@@ -20,12 +20,14 @@ export class CheckRefreshTokenForPost implements CanActivate {
 	const req: Request = context.switchToHttp().getRequest();
     if (!req.headers.authorization) throw new UnauthorizedException("401")
     const token = req.headers.authorization.split(' ')[1];
-	let result
+	let result: any
+	console.log("result: ", result)
 	try {
 		result = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET!})
 	} catch(error) {
 		throw new UnauthorizedException("401")
 	}
+	console.log("result: ", result)
     if (result) {
       const user = await this.usersQueryRepository.findUserById(result.userId);
       if (user) {

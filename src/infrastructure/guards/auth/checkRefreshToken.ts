@@ -28,6 +28,7 @@ export class CheckRefreshToken implements CanActivate {
 	// console.log("result: ", result)
 	try {
 		result = await this.jwtService.verify(refreshToken, {secret: process.env.REFRESH_JWT_SECRET!});
+		// result = await jwt.verify(refreshToken, process.env.REFRESH_JWT_SECRET!);
 	} catch (err) { 
 		throw new UnauthorizedException("401")
 	}

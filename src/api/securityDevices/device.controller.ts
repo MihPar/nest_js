@@ -9,6 +9,7 @@ import { UserClass } from "../../schema/user.schema";
 import { CommandBus } from "@nestjs/cqrs";
 import { TerminateAllCurrentSessionCommand } from "./use-case/terminateAllCurrentSeccion-use-case";
 import { PayloadAdapter } from "../adapter/payload.adapter";
+import { CheckRefreshTokenForPost } from "../../infrastructure/guards/post/bearer.authForPost";
 
 @Controller('security/devices')
 export class SecurityDeviceController {
@@ -18,9 +19,11 @@ export class SecurityDeviceController {
 	protected commandBus: CommandBus,
 	protected payloadAdapter: PayloadAdapter
   ) {}
+  
   @Get('')
   @HttpCode(200)
   @UseGuards(CheckRefreshToken)
+//   @UseGuards(CheckRefreshTokenForPost)
   async getDevicesUser(
     @UserDecorator() user: UserClass,
     @UserIdDecorator() userId: string | null,
@@ -52,10 +55,11 @@ export class SecurityDeviceController {
 
   @Delete(':deviceId')
   @HttpCode(204)
-  @UseGuards(CheckRefreshToken)
-  @UseGuards(ForbiddenCalss)
+  @UseGuards(CheckRefreshToken, ForbiddenCalss)
+//   @UseGuards(ForbiddenCalss)
   async terminateSessionById(@Param('deviceId') deviceId: string) {
 	const deleteDeviceById = await this.deviceRepository.terminateSession(deviceId);
 	if (!deleteDeviceById) throw new NotFoundException("404")
+	return
   }
 }
