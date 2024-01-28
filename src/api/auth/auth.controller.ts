@@ -59,6 +59,7 @@ export class AuthController {
 
 	@Post('login')
 	@HttpCode(200)
+	@UseGuards(RatelimitsRegistration)
 	async createLogin(
 		@Body() inutDataModel: InputDataModelClassAuth,
 		@Ip() IP: string, 
