@@ -35,7 +35,7 @@ export class DeviceRepository {
   async updateDeviceUser(
     userId: string,
     deviceId: string,
-    newLastActiveDate: Date,
+    newLastActiveDate: string
   ) {
     await this.deviceModel.updateOne(
       { userId, deviceId },

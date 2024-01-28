@@ -31,7 +31,7 @@ export class CheckRefreshToken implements CanActivate {
 	} catch (err) { 
 		throw new UnauthorizedException("401")
 	}
-	// console.log("result: ", result)
+	console.log("result: ", result)
 	const session = await this.deviceQueryRepository.findDeviceByDeviceId(
 	  result.deviceId
 	);
