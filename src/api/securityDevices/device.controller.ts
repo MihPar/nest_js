@@ -45,8 +45,7 @@ export class SecurityDeviceController {
     const refreshToken = req.cookies.refreshToken;
     const payload = await this.payloadAdapter.getPayload(refreshToken);
     if (!payload) throw new UnauthorizedException('401');
-    if (!/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(payload.deviceId))
-      throw new NotFoundException('404');
+    // if (!/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(payload.deviceId)) throw new NotFoundException('404');
 	const command = new TerminateAllCurrentSessionCommand(userId, payload.deviceId)
 	  const findAllCurrentDevices =
       await this.commandBus.execute(command)
