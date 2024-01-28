@@ -24,13 +24,14 @@ export class RefreshTokenUseCase implements ICommandHandler<RefreshTokenCommand>
 		) {
 		const payload = await this.payloadAdapter.getPayload(command.refreshToken);
 		if(!payload) throw new UnauthorizedException("Not authorization 401")
-		const newToken: string = await this.jwtService.signAsync(command.user,  {secret: process.env.JWT_SECRET!, expiresIn: '10s'});
-		const newRefreshToken: string = await this.jwtService.signAsync(
-			{userId: command.user._id.toString(), deviceId:	payload.deviceId},
-			{secret: process.env.REFRESH_JWT_SECRET, expiresIn: '20s'}
-		);
+		// const newToken: string = await this.jwtService.signAsync(command.user,  {secret: process.env.JWT_SECRET!, expiresIn: '10s'});
+		// const newRefreshToken: string = await this.jwtService.signAsync(
+		// 	{userId: command.user._id.toString(), deviceId:	payload.deviceId},
+		// 	{secret: process.env.REFRESH_JWT_SECRET, expiresIn: '20s'}
+		// );
 
-		// const {newToken, newRefreshToken} = await this.apiJwtService.createJWT(command.user._id.toString(), payload.deviceId)
+		const {accessToken: newToken, refreshToken: newRefreshToken} = await this.apiJwtService.createJWT(command.user._id.toString(), payload.deviceId)
+
 		console.log(newToken)
 		console.log(newRefreshToken)
 		

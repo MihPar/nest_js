@@ -26,7 +26,7 @@ export class UpdateDeviceUseCase implements ICommandHandler<UpdateDeviceCommand>
     await this.deviceRepository.updateDeviceUser(
       command.userId,
       payload.deviceId,
-      new Date(payload.iat * 1000).toISOString(),
+      new Date(payload.iat * 1000),
     );
     return;
   }

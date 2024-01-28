@@ -52,9 +52,9 @@ export class ApiJwtService {
 		}
 	}
 
-	getLastActiveDate(token: string): string {
+	getLastActiveDate(token: string): Date {
 		const result: any = jwt.decode(token)
-		return new Date(result.iat * 1000).toISOString()
+		return new Date(result.iat * 1000)
 	}
 
 	// async getUserIdByToken(token: string) {

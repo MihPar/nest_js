@@ -30,17 +30,23 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
 
-// console.log('exeption')
+    // console.log('exeption')
 
     if (status === 400) {
       const errorResponse = {
         errorsMessages: [] as any[],
       };
       const responseBody: any = exception.getResponse();
-      responseBody.message.forEach((m: any) => errorResponse.errorsMessages.push(m));
+      if (typeof responseBody === 'string') {
+        errorResponse.errorsMessages.push(responseBody);
+      } else if (typeof responseBody !== undefined) {
+        responseBody.message.forEach((m: any) =>
+          errorResponse.errorsMessages.push(m),
+        );
+      }
       response.status(status).json(errorResponse);
     } else {
-		console.log((exception.getResponse() as any))
+      console.log(exception.getResponse() as any);
       response.status(status).json({
         statusCode: status,
         timestamp: new Date().toISOString(),

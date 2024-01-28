@@ -79,7 +79,7 @@ describe("/blogs", () => {
         {
           ip: expect.any(String),
           title: expect.any(String),
-          lastActiveDate: expect.any(String),
+          lastActiveDate: expect.any(Date),
           deviceId: expect.any(String),
         },
       ]);
@@ -173,7 +173,7 @@ describe("/blogs", () => {
         {
           ip: expect.any(String),
           title: expect.any(String),
-          lastActiveDate: expect.any(String),
+          lastActiveDate: expect.any(Date),
           deviceId: expect.any(String),
         },
       ]);
@@ -226,7 +226,7 @@ describe("/blogs", () => {
         {
           ip: expect.any(String),
           title: expect.any(String),
-          lastActiveDate: expect.any(String),
+          lastActiveDate: expect.any(Date),
           deviceId: expect.any(String),
         },
       ]);
@@ -272,7 +272,7 @@ describe("/blogs", () => {
 			{
 			  ip: expect.any(String),
 			  title: expect.any(String),
-			  lastActiveDate: expect.any(String),
+			  lastActiveDate: expect.any(Date),
 			  deviceId: expect.any(String),
 			},
 		  ]);

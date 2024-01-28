@@ -94,6 +94,7 @@ export class AuthController {
 		const refreshToken: string = req.cookies.refreshToken;
 		const command = new RefreshTokenCommand(refreshToken, user)
 		const result: { newToken: string, newRefreshToken: string} = await this.commandBus.execute(command)
+		console.log("result: ", result)
 		if(!userId) return null
 		const command2 = new UpdateDeviceCommand(userId, result.newRefreshToken)
 		await this.commandBus.execute(command2)

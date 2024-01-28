@@ -35,7 +35,8 @@ export class CreateDeviceUseCase implements ICommandHandler<CreateDeviceCommand>
 			// const refreshToken = await this.jwtService.signAsync({userId: command.user._id.toString(), deviceId}, { secret: process.env.REFRESH_JWT_SECRET, expiresIn: '20s' });
 	
 			const {accessToken, refreshToken} = await this.apiJwtService.createJWT(command.user._id.toString(), deviceId)
-				
+			const payload = await this.jwtService.decode(refreshToken);
+			const date = payload.iat * 1000
 			// console.log("catch: ")
 			const ip = command.IP || "unknown";
 			// const title = command.Headers["user-agent"] || "unknown";
@@ -44,7 +45,7 @@ export class CreateDeviceUseCase implements ICommandHandler<CreateDeviceCommand>
 			device.ip = ip
 			device._id = new mongoose.Types.ObjectId()
 			device.deviceId = deviceId
-			device.lastActiveDate = new Date().toISOString()
+			device.lastActiveDate = new Date(date).toISOString()
 			device.title = command.deviceName
 			device.userId = command.user._id.toString()
 			

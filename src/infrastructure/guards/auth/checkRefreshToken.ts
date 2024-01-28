@@ -22,6 +22,7 @@ export class CheckRefreshToken implements CanActivate {
 	const req: Request = context.switchToHttp().getRequest();
 	const refreshToken = req.cookies.refreshToken;
 	if (!refreshToken) throw new UnauthorizedException("401")
+
 	let result: any;
 	try {
 		result = await this.jwtService.verify(refreshToken, {secret: process.env.REFRESH_JWT_SECRET!});
@@ -33,14 +34,14 @@ export class CheckRefreshToken implements CanActivate {
 	);
 	const payload = await this.jwtService.decode(refreshToken);
 
-	// if (
-	//   !session ||
-	//   session.lastActiveDate !==
-	// 	// (new Date(payload.iat * 1000).toISOString())
-	// 	(await this.apiJwtService.getLastActiveDate(refreshToken))
-	// ) {
-	// 	throw new UnauthorizedException("401")
-	// }
+	const oldActiveDate = new Date(payload.iat * 1000).toISOString()
+	if (
+	  !session ||
+	  session!.lastActiveDate !== oldActiveDate
+		// (await this.apiJwtService.getLastActiveDate(refreshToken))
+	) {
+		throw new UnauthorizedException("401")
+	}
 
 	if (result.userId) {
 	  const user = await this.usersQueryRepository.findUserById(result.userId)
