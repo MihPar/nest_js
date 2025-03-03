@@ -7,7 +7,7 @@ import { appSettings } from '../../../../src/setting';
 import { HTTP_STATUS } from '../../../../src/utils/utils';
 import { PostsViewModel } from '../../../../src/api/posts/posts.type';
 import { InputModelClassCreateBody } from '../../../../src/api/users/user.class';
-import { createAddUser, createToken } from '../../../../src/utils/helpers';
+import { createAddUser, createToken } from '../../../../src/helpers/helpers';
 dotenv.config();
 
 
